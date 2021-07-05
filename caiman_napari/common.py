@@ -4,9 +4,21 @@ import numpy as np
 from matplotlib import cm as matplotlib_color_map
 from functools import wraps
 import os
+from stat import S_IEXEC
 from typing import *
 
-# Useful functions from mesmerize
+
+# Useful functions adapted from mesmerize
+
+
+# to use powershell to run the CNMF process using QProcess
+# napari's built in @thread_worker locks up the entire application
+if os.name == 'nt':
+    IS_WINDOWS = True
+    HOME = 'USERPROFILE'
+else:
+    IS_WINDOWS = False
+    HOME = 'HOME'
 
 
 qualitative_colormaps = ['Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1',
@@ -119,3 +131,75 @@ def auto_colormap(
             colors.append(c)
 
     return colors
+
+
+def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Optional[str] = None) -> str:
+    """
+    Make an executable bash script. Used for running python scripts in external processes.
+
+    :param module_path: absolute module path
+    :type module_path:  str
+
+    :param args_str:    str of args that is directly passed with the python command in the bash script
+    :type args_str:     str
+
+    :param savedir:     working directory
+    :type savedir:      Optional[str]
+
+    :param filename:    optional, specific filename for the script
+    :type filename:     Optional[str]
+
+    :param pre_run:     optional, str to run before module is ran
+    :type pre_run:      Optional[str]
+
+    :param post_run:    optional, str to run after module has run
+    :type post_run:     Optional[str]
+
+    :return: path to the shell script that can be run
+    :rtype:  str
+    """
+
+    if filename is None:
+        if IS_WINDOWS:
+            sh_file = os.path.join(os.environ[HOME], 'run.ps1')
+        else:
+            sh_file = os.path.join(os.environ[HOME], 'run.sh')
+    else:
+        if IS_WINDOWS:
+            if not filename.endswith('.ps1'):
+                filename = filename + '.ps1'
+
+    sh_file = filename
+
+    if args_str is None:
+        args_str = ''
+
+    if not IS_WINDOWS:
+        with open(sh_file, 'w') as f:
+            f.write(
+                f'#!/bin/bash\n'
+                f'export PATH={os.environ["PATH"]}\n'
+                f'export PYTHONPATH={os.environ["PYTHONPATH"]}\n'
+                f'export VIRTUAL_ENV={os.environ["VIRTUAL_ENV"]}\n'
+                f'export LD_LIBRARY_PATH={os.environ["LD_LIBRARY_PATH"]}\n'
+            )
+
+            # for k, v in os.environ.items():  # copy the current environment
+            #     if '\n' in v:
+            #         continue
+            #
+                # f.write(f'export {k}="{v}"\n')
+
+            f.write(f'python {module_path} {args_str}')  # call the script to run
+
+    else:
+        with open(sh_file, 'w') as f:
+            for k, v in os.environ.items():  # copy the current environment
+                f.write(f'$env:{k}="{v}";\n')
+
+            f.write(f'python {module_path} {args_str}')
+
+    st = os.stat(sh_file)
+    os.chmod(sh_file, st.st_mode | S_IEXEC)
+
+    return sh_file

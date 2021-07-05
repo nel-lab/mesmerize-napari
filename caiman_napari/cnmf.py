@@ -1,4 +1,7 @@
-from qtpy import QtWidgets
+import os.path
+
+import napari.viewer
+from qtpy import QtWidgets, QtCore
 from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
 from napari.layers import Layer, Shapes
@@ -11,10 +14,13 @@ import caiman as cm
 from caiman.source_extraction.cnmf import cnmf as cnmf
 from caiman.utils.utils import load_dict_from_hdf5
 from caiman.source_extraction.cnmf.params import CNMFParams
+from caiman.source_extraction.cnmf.cnmf import load_CNMF
 import psutil
 import json
 from tqdm import tqdm
 from caiman.utils.visualization import get_contours as caiman_get_contours
+from functools import partial
+from . import _cnmf
 
 
 class CNMF(QtWidgets.QWidget):
@@ -28,15 +34,22 @@ class CNMF(QtWidgets.QWidget):
         btn_open.clicked.connect(self._open_image_dialog)
         vlayout.addWidget(btn_open)
 
+        btn_params = QtWidgets
+
         # just a button to start CNMF with some hard coded params for this prototype
         btn_start_cnmf = QtWidgets.QPushButton('Perform CNMF', self)
         btn_start_cnmf.clicked.connect(self.start_cnmf)
+        vlayout.addWidget(btn_start_cnmf)
+
+        self.text_browser = QtWidgets.QTextBrowser(self)
+        vlayout.addWidget(self.text_browser)
 
         # activate layout
         self.setLayout(vlayout)
 
         self.path: str = None
         self.cnmf_obj: cnmf.CNMF = None
+        self.process: QtCore.QProcess = None
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf'])
     def _open_image_dialog(self, path: str, *args, **kwargs):
@@ -50,6 +63,9 @@ class CNMF(QtWidgets.QWidget):
         self.viewer.open(path)
 
     def clear_viewer(self) -> bool:
+        if len(self.viewer.layers) == 0:
+            return True
+
         if QtWidgets.QMessageBox.warning(
                 self,
                 'Clear viewer?',
@@ -64,55 +80,44 @@ class CNMF(QtWidgets.QWidget):
         return True
 
     def start_cnmf(self):
-        c, dview, n_processes = cm.cluster.setup_cluster(
-            backend='local',
-            n_processes=(psutil.cpu_count() - 1),
-            single_thread=False, ignore_preexisting
-            =True
+        self.process = QtCore.QProcess()
+        self.process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
+        self.process.readyReadStandardOutput.connect(partial(self._print_qprocess_std_out, self.process))
+        self.process.finished.connect(self.show_results)
+
+        runfile = make_runfile(
+            module_path=os.path.abspath(_cnmf.__file__),
+            filename=self.path + '.runfile',
+            args_str=self.path
         )
 
-        memmap_fname = cm.save_memmap(
-            filenames=[self.path],
-            base_name=f'memmap-{os.path.basename(self.path)}',
-            order='C',
-            dview=dview
-        )
+        self.process.setWorkingDirectory(os.path.dirname(self.path))
 
-        Yr, dims, T = cm.load_memmap(memmap_fname)
-        Y = np.reshape(Yr.T, [T] + list(dims), order='F')
+        if IS_WINDOWS:
+            self.process.start('powershell.exe', [runfile])
+        else:
+            print(runfile)
+            self.process.start(runfile)
 
-        # just some hard coded params for the prototype
-        params = CNMFParams(
-            params_dict=json.load(open('./params.json', 'r'))
-        )
-
-        self.cnmf_obj = cnmf.CNMF(
-            dview=dview,
-            n_processes=n_processes,
-            params=params,
-        )
-
-        self.cnmf_obj.fit(Y)
-
-        self.cnmf_obj.estimates.evaluate_components(
-            Y,
-            self.cnmf_obj.params,
-            dview=dview
-        )
-
-        self.cnmf_obj.estimates.select_components(use_object=True)
-
-        out_filename = f'{self.path}_results.hdf5'
-        self.cnmf_obj.save(out_filename)
+    def _print_qprocess_std_out(self, proc):
+        txt = proc.readAllStandardOutput().data().decode('utf8')
+        self.text_browser.append(txt)
 
     def show_results(self):
+        print("showing results")
+        self.cnmf_obj = load_CNMF(self.path + '.results.hdf5')
+
         dims = self.cnmf_obj.dims
         if dims is None:  # I think that one of these is `None` if loaded from an hdf5 file
             dims = self.cnmf_obj.estimates.dims
 
+        # need to transpose these
+        dims = dims[1], dims[0]
+
         contours_good = caiman_get_contours(
             self.cnmf_obj.estimates.A[:, self.cnmf_obj.estimates.idx_components],
-            dims
+            dims,
+            swap_dim=True
         )
 
         colors_contours_good = auto_colormap(
@@ -121,16 +126,45 @@ class CNMF(QtWidgets.QWidget):
             output='mpl',
         )
 
-        contours_bad = caiman_get_contours(
-            self.cnmf_obj.estimates.A[:, self.cnmf_obj.estimates.idx_components_bad],
-            dims
+        contours_good_coordinates = [self._organize_coordinates(c) for c in contours_good]
+        self.viewer.add_shapes(
+            data=contours_good_coordinates,
+            shape_type='polygon',
+            edge_width=0.5,
+            edge_color=colors_contours_good,
+            face_color=colors_contours_good,
+            opacity=0.1,
         )
 
-        for i in tqdm(range(len(contours_good)), desc="Adding good components..."):
-            pass
+        if self.cnmf_obj.estimates.idx_components_bad is not None and len(self.cnmf_obj.estimates.idx_components_bad) > 0:
+            contours_bad = caiman_get_contours(
+                self.cnmf_obj.estimates.A[:, self.cnmf_obj.estimates.idx_components_bad],
+                dims,
+                swap_dim=True
+            )
 
-        for i in tqdm(range(len(contours_bad)), desc="Adding bad components..."):
-            pass
+            contours_bad_coordinates = [self._organize_coordinates(c) for c in contours_bad]
+
+            colors_contours_bad = auto_colormap(
+                n_colors=len(contours_bad),
+                cmap='hsv',
+                output='mpl',
+            )
+
+            self.viewer.add_shapes(
+                data=contours_bad_coordinates,
+                shape_type='polygon',
+                edge_width=0.5,
+                edge_color=colors_contours_bad,
+                face_color=colors_contours_bad,
+                opacity=0.1,
+            )
+
+    def _organize_coordinates(self, contour: dict):
+        coors = contour['coordinates']
+        coors = coors[~np.isnan(coors).any(axis=1)]
+
+        return coors
 
 
 @napari_hook_implementation
