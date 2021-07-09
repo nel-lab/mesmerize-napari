@@ -21,6 +21,7 @@ from tqdm import tqdm
 from caiman.utils.visualization import get_contours as caiman_get_contours
 from functools import partial
 from . import _cnmf
+from pyqtgraph import PlotDataItem, PlotWidget
 
 
 class CNMF(QtWidgets.QWidget):
@@ -50,6 +51,7 @@ class CNMF(QtWidgets.QWidget):
         self.path: str = None
         self.cnmf_obj: cnmf.CNMF = None
         self.process: QtCore.QProcess = None
+        self.plot_widget: PlotWidget = None
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf'])
     def _open_image_dialog(self, path: str, *args, **kwargs):
@@ -159,6 +161,13 @@ class CNMF(QtWidgets.QWidget):
                 face_color=colors_contours_bad,
                 opacity=0.1,
             )
+
+        self.plot_widget = PlotWidget()
+
+        for c in self.cnmf_obj.estimates.C:
+            self.plot_widget.addItem(PlotDataItem(c))
+
+        self.plot_widget.show()
 
     def _organize_coordinates(self, contour: dict):
         coors = contour['coordinates']
