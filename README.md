@@ -5,7 +5,7 @@ Napari can interface with CaImAn CNMF using `QProcess` and display the spatial c
 ![cnmf](./screenshots/cnmf_prototype.gif)
 
 Napari can stream calcium imaging movies in realtime while pyqtgraph is used to show calcium traces. Please note that due to limitations of GIFs images/animations this GIF doesn't fully represent the high level of responsiveness and interactivity during live streaming.
-~[streaming](./screenshots/napari_streaming.gif)
+![streaming](./screenshots/napari_streaming.gif)
 
 # Creating a working environment
 Currently a bit wonky to get napari and caiman in the same env. This order of steps worked for me on Arch Linux (Should be similar on Ubuntu too).
