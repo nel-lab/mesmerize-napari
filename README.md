@@ -8,7 +8,7 @@ Napari can stream calcium imaging movies in realtime while pyqtgraph is used to 
 ![streaming](./screenshots/napari_streaming.gif)
 
 # Creating a working environment
-Currently a bit wonky to get napari and caiman in the same env. This order of steps worked for me on Arch Linux (Should be similar on Ubuntu too).
+The installation of `napari` and `caiman` in the same env is a work in progress. This order of steps worked for me on Ubuntu.
 
 Install `napari` first and then `caiman`
 
@@ -19,7 +19,6 @@ git clone https://github.com/napari/napari.git
 cd napari
 pip install -r requirements.txt
 pip install -e ".[all]"
-
 ```
 
 Install `caiman` from my fork (dependency issues related to the latest versions of `h5py` and `tensorflow`, should probably make a PR after figuring it out):
