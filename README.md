@@ -1,5 +1,5 @@
 # caiman-napari-prototype
-prototype caiman plugin for napari
+Prototype `caiman` plugin for the `napari` viewer.
 
 Napari can interface with CaImAn CNMF using `QProcess` and display the spatial components using `napari.layers.shapes`. `stdout` from the ongoing `QProcess` is shown in the text area on the right.
 ![cnmf](./screenshots/cnmf_prototype.gif)
