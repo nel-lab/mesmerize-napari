@@ -5,11 +5,11 @@ Prototype `caiman` plugin for the `napari` viewer.
 This plugin interfaces with CaImAn CNMF using `QProcess` and displays the spatial components using `napari.layers.shapes`. `stdout` from the ongoing `QProcess` is shown in the text area on the right.
 ![cnmf](./screenshots/cnmf_prototype.gif)
 
-# Streaming demo
+## Streaming demo
 Napari can stream calcium imaging movies in realtime while pyqtgraph is used to show calcium traces. Please note that due to limitations of GIF images, this GIF doesn't fully represent the high level of responsiveness and interactivity during live streaming.
 ![streaming](./screenshots/napari_streaming.gif)
 
-## Creating a working environment
+# Creating a working environment
 The installation of `napari` and `caiman` in the same env is a work in progress. This order of steps worked for me on Ubuntu.
 
 Install `napari` first and then `caiman`
