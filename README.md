@@ -6,7 +6,7 @@ This plugin interfaces with CaImAn CNMF using `QProcess` and displays the spatia
 ![cnmf](./screenshots/cnmf_prototype.gif)
 
 # Streaming demo
-Napari can stream calcium imaging movies in realtime while pyqtgraph is used to show calcium traces. Please note that due to limitations of GIFs images/animations this GIF doesn't fully represent the high level of responsiveness and interactivity during live streaming.
+Napari can stream calcium imaging movies in realtime while pyqtgraph is used to show calcium traces. Please note that due to limitations of GIF images, this GIF doesn't fully represent the high level of responsiveness and interactivity during live streaming.
 ![streaming](./screenshots/napari_streaming.gif)
 
 ## Creating a working environment
