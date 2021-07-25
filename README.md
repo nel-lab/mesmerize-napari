@@ -1,7 +1,7 @@
 # caiman-napari-prototype
 Prototype `caiman` plugin for the `napari` viewer.
 
-Napari can interface with CaImAn CNMF using `QProcess` and display the spatial components using `napari.layers.shapes`. `stdout` from the ongoing `QProcess` is shown in the text area on the right.
+This plugin interfaces with CaImAn CNMF using `QProcess` and displays the spatial components using `napari.layers.shapes`. `stdout` from the ongoing `QProcess` is shown in the text area on the right.
 ![cnmf](./screenshots/cnmf_prototype.gif)
 
 Napari can stream calcium imaging movies in realtime while pyqtgraph is used to show calcium traces. Please note that due to limitations of GIFs images/animations this GIF doesn't fully represent the high level of responsiveness and interactivity during live streaming.
