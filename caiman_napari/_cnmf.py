@@ -11,35 +11,16 @@ import psutil
 import json
 from tqdm import tqdm
 import sys
+import pandas as pd
 
 
-params = \
-{
-    "fr": 30,
-    "decay_time": 0.4,
-    "p": 1,
-    "nb": 2,
-    "rf": 15,
-    "K": 4,
-    "stride": 6,
-    "method_init": "greedy_roi",
-    "rolling_sum": True,
-    "only_init": True,
-    "ssub": 1,
-    "tsub": 1,
-    "merge_thr": 0.85,
-    "min_SNR": 2.0,
-    "rval_thr": 0.85,
-    "use_cnn": True,
-    "min_cnn_thr": 0.99,
-    "cnn_lowest": 0.1
-}
+def main(batch_path, uuid):
+    df = pd.read_pickle(batch_path)
+    item = df[df['uuid'] == uuid].squeeze()
 
-# Parameters for CNMF
-cnmf_params = CNMFParams(params_dict=params)
+    input_movie_path = item['input_movie_path']
+    params = item['params']
 
-
-def main(path):
     # adapted from current demo notebook
     n_processes = psutil.cpu_count() - 1
     print("starting mc")
@@ -50,9 +31,10 @@ def main(path):
         single_thread=False
     )
 
+    cnmf_params = CNMFParams(params_dict=params)
 
     fname_new = cm.save_memmap(
-        [path],
+        [input_movie_path],
         base_name='memmap_',
         order='C',
         dview=dview
@@ -86,8 +68,8 @@ def main(path):
     print("Eval")
     cnmf_obj.estimates.evaluate_components(images, cnmf_obj.params, dview=dview)
 
-    cnmf_obj.save(path + '.  .hdf5')
+    cnmf_obj.save(uuid + '.hdf5')
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
