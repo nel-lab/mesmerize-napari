@@ -7,6 +7,8 @@ from napari import Viewer
 from napari.layers import Layer, Shapes
 from .common import *
 from pathlib import Path
+from napari.utils import io
+# TODO: ask where frame rate metadata stored in napari
 
 import numpy as np
 from time import time
@@ -21,19 +23,21 @@ from tqdm import tqdm
 from caiman.utils.visualization import get_contours as caiman_get_contours
 from functools import partial
 from . import _cnmf
+from . import _mcorr
 from pyqtgraph import PlotDataItem, PlotWidget
+from .main_dockwidget import Ui_DockWidget
 
 
 class CNMF(QtWidgets.QWidget):
     def __init__(self, napari_viewer: Viewer):
         self.viewer: Viewer = napari_viewer
         QtWidgets.QWidget.__init__(self)
+        self.ui = Ui_DockWidget()
+        self.ui.setupUi(self)
 
         vlayout = QtWidgets.QVBoxLayout()
 
-        btn_open = QtWidgets.QPushButton('Open movie', self)
-        btn_open.clicked.connect(self._open_image_dialog)
-        vlayout.addWidget(btn_open)
+        self.ui.pushButtonOpenMovie.clicked.connect(self._open_image_dialog)
 
         # Button to run MC
         btn_params = QtWidgets
@@ -91,7 +95,7 @@ class CNMF(QtWidgets.QWidget):
         self.process.finished.connect(self.show_mc_results)
 
         runfile = make_runfile(
-            module_path=os.path.abspath(_cnmf.__file__),
+            module_path=os.path.abspath(_mcorr.__file__),
             filename=self.path + '.runfile',
             args_str=self.path
         )
@@ -106,8 +110,8 @@ class CNMF(QtWidgets.QWidget):
     def show_mc_results(self):
         # extract mmap from _cnmf and display new movie
         mmap = np.load(self.path + 'mc.npy')
-        vid = cm.load(mmap[0])
-        vid.play(fr = 60, q_max = 99.5, magnification = 5)
+        vid = mmap[0]
+        self.viewer.add_image(vid, name='Motion Corrected')
 
     def start_cnmf(self):
         self.process = QtCore.QProcess()
