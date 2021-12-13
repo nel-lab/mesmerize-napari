@@ -35,7 +35,11 @@ class CNMF(QtWidgets.QWidget):
         btn_open.clicked.connect(self._open_image_dialog)
         vlayout.addWidget(btn_open)
 
+        # Button to run MC
         btn_params = QtWidgets
+        btn_mc = QtWidgets.QPushButton('Run Motion Correction', self)
+        btn_mc.clicked.connect(self.start_mc)
+        vlayout.addWidget(btn_mc)
 
         # just a button to start CNMF with some hard coded params for this prototype
         btn_start_cnmf = QtWidgets.QPushButton('Perform CNMF', self)
@@ -80,6 +84,30 @@ class CNMF(QtWidgets.QWidget):
             self.viewer.layers.remove(layer)
 
         return True
+    def start_mc(self):
+        self.process = QtCore.QProcess()
+        self.process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
+        self.process.readyReadStandardOutput.connect(partial(self._print_qprocess_std_out, self.process))
+        self.process.finished.connect(self.show_mc_results)
+
+        runfile = make_runfile(
+            module_path=os.path.abspath(_cnmf.__file__),
+            filename=self.path + '.runfile',
+            args_str=self.path
+        )
+
+        self.process.setWorkingDirectory(os.path.dirname(self.path))
+
+        if IS_WINDOWS:
+            self.process.start('powershell.exe', [runfile])
+        else:
+            print(runfile)
+            self.process.start(runfile)
+    def show_mc_results(self):
+        # extract mmap from _cnmf and display new movie
+        mmap = np.load(self.path + 'mc.npy')
+        vid = cm.load(mmap[0])
+        vid.play(fr = 60, q_max = 99.5, magnification = 5)
 
     def start_cnmf(self):
         self.process = QtCore.QProcess()

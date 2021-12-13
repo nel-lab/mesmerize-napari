@@ -176,13 +176,24 @@ def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Opt
 
     if not IS_WINDOWS:
         with open(sh_file, 'w') as f:
-            f.write(
-                f'#!/bin/bash\n'
-                f'export PATH={os.environ["PATH"]}\n'
-                f'export PYTHONPATH={os.environ["PYTHONPATH"]}\n'
-                f'export VIRTUAL_ENV={os.environ["VIRTUAL_ENV"]}\n'
-                f'export LD_LIBRARY_PATH={os.environ["LD_LIBRARY_PATH"]}\n'
-            )
+            if 'CONDA_PREFIX' in os.environ.keys():
+                f.write(
+                    f'#!/bin/bash\n'
+                    f'CONDA_PREFIX={os.environ["CONDA_PREFIX"]}\n'
+                    f'CONDA_PYTHON_EXE={os.environ["CONDA_PYTHON_EXE"]}\n'
+                    f'CONDA_PREFIX_1 = {os.environ["CONDA_PREFIX_1"]}\n'
+                )
+
+            elif 'VIRTUAL_ENV' in os.environ.keys():
+                f.write(
+                    f'#!/bin/bash\n'
+                    f'export PATH={os.environ["PATH"]}\n'
+                    f'export VIRTUAL_ENV={os.environ["VIRTUAL_ENV"]}\n'
+                    f'export LD_LIBRARY_PATH={os.environ["LD_LIBRARY_PATH"]}\n'
+                )
+
+            if 'PYTHONPATH' in os.environ.keys():
+                f.write(f'export PYTHONPATH={os.environ["PYTHONPATH"]}\n')
 
             # for k, v in os.environ.items():  # copy the current environment
             #     if '\n' in v:
