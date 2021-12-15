@@ -2,7 +2,6 @@ import os.path
 
 import napari.viewer
 from qtpy import QtWidgets, QtCore
-from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
 from napari.layers import Layer, Shapes
 from .common import *
@@ -207,7 +206,3 @@ class CNMF(QtWidgets.QWidget):
 
         return coors
 
-
-@napari_hook_implementation
-def napari_experimental_provide_dock_widget():
-    return CNMF
