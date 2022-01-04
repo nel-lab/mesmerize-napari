@@ -1,1 +1,1 @@
-from .cnmf import napari_experimental_provide_dock_widget
+from .main_offline_gui import napari_experimental_provide_dock_widget

@@ -1,12 +1,13 @@
 from PyQt5 import QtWidgets
-from .pytemplates.cnmf_pytemplate import Ui_CNMFWidget
+from .cnmf_pytemplate import Ui_CNMFWidget
 from .common import *
+from napari import Viewer
+from .main_offline_gui import MainOfflineGUI
 
 
-class CNMFWidget(QtWidgets.QWidget):
+class CNMFWidget(MainOfflineGUI):
     def __init__(self, parent):
-        QtWidgets.QWidget.__init__(self, parent=parent)
-
+        super(CNMFWidget, self).__init__(parent)
         self.ui = Ui_CNMFWidget()
         self.ui.setupUi(self)
 
@@ -114,3 +115,4 @@ class CNMFWidget(QtWidgets.QWidget):
         item_name = self.ui.lineEdName.text()
 
         self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
+

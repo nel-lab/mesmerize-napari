@@ -1,13 +1,13 @@
-from .pytemplates.main_offline_gui_template import Ui_MainOfflineGUIWidget
+from .main_offline_gui_template import Ui_MainOfflineGUIWidget
+from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
 from PyQt5 import QtWidgets, QtCore
 from qtpy import QtWidgets, QtCore
 from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
-from common import *
+from .common import *
 import pandas as pd
 from functools import partial
-from .core import *
 
 
 COLORS_HEX = \
@@ -22,19 +22,23 @@ COLORS_HEX = \
 class MainOfflineGUI(QtWidgets.QWidget):
     def __init__(self, napari_viewer: Viewer):
         self.viewer = napari_viewer
-
         QtWidgets.QWidget.__init__(self)
 
         self.ui = Ui_MainOfflineGUIWidget()
         self.ui.setupUi(self)
+        self.show()
+
+        # define actions for each button
+        ## Open Movie
+        self.ui.pushButtonOpenMovie.clicked.connect(self.open_movie)
+        ## Open Panel to set parameters for CNMF
+        self.ui.pushButtonParamsCNMF.clicked.connect(self.start_cnmf)
+
 
         self.input_movie_path = None
 
         self.dataframe: pd.DataFrame = None
         self.dataframe_file_path: str = None
-
-        self.cnmf_params_gui = CNMFWidget(parent=self)
-        self.ui.pushButtonParamsCNMF.clicked.connect(self.cnmf_params_gui.show)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -102,6 +106,15 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def set_list_widget_item_color(self, ix: int, color: str):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
+
+    def start_cnmf(self):
+        self.cnmf_gui = CNMFWidget(parent=self)
+        #self.cnmf_gui.show()
+
+    def start_mcorr(self):
+        self.mcorr_gui = MCORRWidget(parent=self)
+        self.mcorr_gui.show()
+
 
 
 @napari_hook_implementation
