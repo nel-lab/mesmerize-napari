@@ -7,7 +7,7 @@ from napari import Viewer
 
 class MCORRWidget(QtWidgets.QWidget):
     def __init__(self, parent):
-        QtWidgets.QWidget.__init__(self,parent=self)
+        QtWidgets.QWidget.__init__(self, parent=parent)
         self.ui = Ui_DockWidget()
         self.ui.setupUi(self)
 

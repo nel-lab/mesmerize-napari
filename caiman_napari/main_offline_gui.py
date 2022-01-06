@@ -10,6 +10,7 @@ from .core import *
 import pandas as pd
 from functools import partial
 import caiman as cm
+from .core import CaimanDataFrameExtensions, CaimanSeriesExtensions
 
 
 COLORS_HEX = \
@@ -38,7 +39,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         ## Open Movie
         self.ui.pushButtonOpenMovie.clicked.connect(self.open_movie)
         ## Open Panel to set parameters for CNMF
-        self.ui.pushButtonParamsCNMF.clicked.connect(self.start_cnmf)
+        self.ui.pushButtonParamsCNMF.clicked.connect(self.show_cnmf_params_gui)
+        ## Open panel for MCORR
+        self.ui.pushButtonParamsMCorr.clicked.connect(self.show_mcorr_params_gui)
         ## Start Batch
         self.ui.pushButtonNewBatch.clicked.connect(self.create_new_batch)
         ## Open Batch
@@ -83,9 +86,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         if input_movie_path is None:
             input_movie_path = self.dataframe_file_path
 
-        #self.dataframe.CaimanDataFrameExtensions.add_item(algo, input_movie_path, parameters)
-        ## 'DataFrame' object has no attribute 'CaimanDataFrameExtensions'
-        self.dataframe.CaimanDataFrameExtensions.add_item(algo=algo,
+        self.dataframe.caiman.add_item(algo=algo,
                                            input_move_path=input_movie_path, params=parameters)
 
         uuid = self.dataframe.iloc[-1]['uuid']
@@ -110,7 +111,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def _run_index(self, index: int):
         callbacks = [partial(self.item_finished, index)]
 
-        self.dataframe.iloc[index].CaimanSeriesExtensions.run(callbacks_finished=callbacks)
+        self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks)
 
     def item_finished(self, ix):
         self.set_list_widget_item_color(ix, 'green')
@@ -118,12 +119,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def set_list_widget_item_color(self, ix: int, color: str):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
 
-    def start_cnmf(self):
-        self.cnmf_gui = CNMFWidget(parent=self)
-        self.viewer.window.add_dock_widget(self.cnmf_gui)
-        #self.cnmf_gui.show()
+    def show_cnmf_params_gui(self):
+        self.cnmf_gui = CNMFWidget(parent=None)
+        # self.viewer.window.add_dock_widget(self.cnmf_gui)
+        self.cnmf_gui.show()
 
-    def start_mcorr(self):
+    def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
 

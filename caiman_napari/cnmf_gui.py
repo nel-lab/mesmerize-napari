@@ -8,10 +8,10 @@ from .core import *
 
 class CNMFWidget(QtWidgets.QWidget):
     def __init__(self, parent):
-        QtWidgets.QWidget.__init__(self, parent = parent)
+        QtWidgets.QWidget.__init__(self, parent=parent)
         self.ui = Ui_CNMFWidget()
         self.ui.setupUi(self)
-        self.ui.btnAddToBatchCNMF.clicked.connect(self.cnmf_add_item)
+        self.ui.btnAddToBatchCNMF.clicked.connect(self.add_item)
 
     @present_exceptions()
     def get_params(self, *args, group_params: bool = False) -> dict:
@@ -112,10 +112,8 @@ class CNMFWidget(QtWidgets.QWidget):
 
         return d
 
-    def cnmf_add_item(self):
+    def add_item(self):
         params = self.get_params()
         item_name = self.ui.lineEdName.text()
-
-
-        self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
+        # self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
 
