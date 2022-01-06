@@ -1,15 +1,16 @@
 from PyQt5 import QtWidgets
 from .cnmf_pytemplate import Ui_CNMFWidget
 from .common import *
-from napari import Viewer
-from .main_offline_gui import MainOfflineGUI
 
 
-class CNMFWidget(MainOfflineGUI):
+
+
+class CNMFWidget(QtWidgets.QWidget):
     def __init__(self, parent):
-        super(CNMFWidget, self).__init__(parent)
+        QtWidgets.QWidget.__init__(self, parent = parent)
         self.ui = Ui_CNMFWidget()
         self.ui.setupUi(self)
+        self.ui.btnAddToBatchCNMF.clicked.connect(self.cnmf_add_item)
 
     @present_exceptions()
     def get_params(self, *args, group_params: bool = False) -> dict:
@@ -110,9 +111,10 @@ class CNMFWidget(MainOfflineGUI):
 
         return d
 
-    def add_item(self):
+    def cnmf_add_item(self):
         params = self.get_params()
         item_name = self.ui.lineEdName.text()
+
 
         self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
 

@@ -8,6 +8,7 @@ from napari import Viewer
 from .common import *
 import pandas as pd
 from functools import partial
+import caiman as cm
 
 
 COLORS_HEX = \
@@ -28,17 +29,21 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.show()
 
+        self.input_movie_path = None
+
+        self.dataframe: pd.DataFrame = None
+        self.dataframe_file_path: str = None
         # define actions for each button
         ## Open Movie
         self.ui.pushButtonOpenMovie.clicked.connect(self.open_movie)
         ## Open Panel to set parameters for CNMF
         self.ui.pushButtonParamsCNMF.clicked.connect(self.start_cnmf)
+        ## Start Batch
+        self.ui.pushButtonNewBatch.clicked.connect(self.create_new_batch)
+        ## Open Batch
+        self.ui.pushButtonOpenBatch.clicked.connect(self.open_batch)
 
 
-        self.input_movie_path = None
-
-        self.dataframe: pd.DataFrame = None
-        self.dataframe_file_path: str = None
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -46,6 +51,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
             return
 
         self.input_movie_path = path
+        self.viewer.open(self.input_movie_path)
 
     def clear_viewer(self) -> bool:
         if len(self.viewer.layers) == 0:
@@ -74,9 +80,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if input_movie_path is None:
-            input_movie_path = self.input_movie_path
+            input_movie_path = self.dataframe_file_path
 
-        self.dataframe.caiman.add_item(algo, input_movie_path, parameters)
+        #self.dataframe.CaimanDataFrameExtensions.add_item(algo, input_movie_path, parameters)
+        ## 'DataFrame' object has no attribute 'CaimanDataFrameExtensions'
+        self.dataframe.CaimanDataFrameExtensions.add_item(algo=algo,
+                                           input_move_path=input_movie_path, params=parameters)
+
         uuid = self.dataframe.iloc[-1]['uuid']
 
         self.ui.listWidgetItems.addItem(f'{algo}: {name}')
@@ -99,7 +109,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def _run_index(self, index: int):
         callbacks = [partial(self.item_finished, index)]
 
-        self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks)
+        self.dataframe.iloc[index].CaimanSeriesExtensions.run(callbacks_finished=callbacks)
 
     def item_finished(self, ix):
         self.set_list_widget_item_color(ix, 'green')
@@ -109,6 +119,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def start_cnmf(self):
         self.cnmf_gui = CNMFWidget(parent=self)
+        self.viewer.window.add_dock_widget(self.cnmf_gui)
         #self.cnmf_gui.show()
 
     def start_mcorr(self):
