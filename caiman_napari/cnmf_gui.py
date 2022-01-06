@@ -1,15 +1,13 @@
 from PyQt5 import QtWidgets
-from .cnmf_pytemplate import Ui_CNMFWidget
+from .cnmf_pytemplate import Ui_CNMFDockWidget
 from .utils import *
 from .core import *
 
 
-
-
-class CNMFWidget(QtWidgets.QWidget):
+class CNMFWidget(QtWidgets.QDockWidget):
     def __init__(self, parent):
-        QtWidgets.QWidget.__init__(self, parent=parent)
-        self.ui = Ui_CNMFWidget()
+        QtWidgets.QDockWidget.__init__(self, parent=parent)
+        self.ui = Ui_CNMFDockWidget()
         self.ui.setupUi(self)
         self.ui.btnAddToBatchCNMF.clicked.connect(self.add_item)
 
@@ -115,5 +113,7 @@ class CNMFWidget(QtWidgets.QWidget):
     def add_item(self):
         params = self.get_params()
         item_name = self.ui.lineEdName.text()
-        # self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
+        print('parent is')
+        print(self.parent())
+        self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
 

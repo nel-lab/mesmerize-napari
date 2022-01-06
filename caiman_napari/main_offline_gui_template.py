@@ -9,7 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from .cnmf_pytemplate import  Ui_CNMFWidget
 
 class Ui_MainOfflineGUIWidget(object):
     def setupUi(self, MainOfflineGUIWidget):
