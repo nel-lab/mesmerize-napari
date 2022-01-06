@@ -5,7 +5,8 @@ from PyQt5 import QtWidgets, QtCore
 from qtpy import QtWidgets, QtCore
 from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
-from .common import *
+from .utils import *
+from .core import *
 import pandas as pd
 from functools import partial
 import caiman as cm

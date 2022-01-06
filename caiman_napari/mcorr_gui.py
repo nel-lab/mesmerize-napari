@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 from .mcorr_pytemplate import Ui_DockWidget
-from .common import *
+from .utils import *
+from .core import *
 from napari import Viewer
 
 

@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 from .cnmf_pytemplate import Ui_CNMFWidget
-from .common import *
+from .utils import *
+from .core import *
 
 
 
