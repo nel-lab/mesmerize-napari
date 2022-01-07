@@ -1,15 +1,16 @@
 from PyQt5 import QtWidgets
-from .mcorr_pytemplate import Ui_DockWidget
+from .mcorr_pytemplate import Ui_MCORRWidget
 from .utils import *
 from .core import *
 from napari import Viewer
 
 
-class MCORRWidget(QtWidgets.QWidget):
+class MCORRWidget(QtWidgets.QDockWidget):
     def __init__(self, parent):
-        QtWidgets.QWidget.__init__(self, parent=parent)
-        self.ui = Ui_DockWidget()
+        QtWidgets.QDockWidget.__init__(self, parent=parent)
+        self.ui = Ui_MCORRWidget()
         self.ui.setupUi(self)
+        self.ui.btnAddToBatchElastic.clicked.connect(self.add_item)
 
     @present_exceptions()
     def get_params(self, *args, group_params: bool = False) -> dict:
@@ -30,8 +31,8 @@ class MCORRWidget(QtWidgets.QWidget):
                 'overlaps': (self.ui.spinboxOverlaps.value(), self.ui.spinboxOverlaps.value()),
                 'max_deviation_rigid': self.ui.spinboxMaxDev.value(),
                 'border_nan': 'copy',
-                'decay_time': 0.4,
-                'pw_rigid': True
+                'pw_rigid': self.ui.comboBoxPwRigidBool.currentText(),
+                'gSig_filt': self.ui.spinBoxGSig_filt.value()
             }
         # Any additional mcorr kwargs set in the text entry
         if self.ui.groupBox_motion_correction_kwargs.isChecked():
@@ -74,7 +75,7 @@ class MCORRWidget(QtWidgets.QWidget):
 
     def add_item(self):
         params = self.get_params()
-        item_name = self.ui.lineEdName.text()
+        item_name = self.ui.lineEditNameElastic.text()
 
         self.parent().add_item(algo='mcorr', parameters=params, name=item_name)
 

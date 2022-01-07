@@ -113,7 +113,6 @@ class CNMFWidget(QtWidgets.QDockWidget):
     def add_item(self):
         params = self.get_params()
         item_name = self.ui.lineEdName.text()
-        print('parent is')
-        print(self.parent())
+
         self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
 

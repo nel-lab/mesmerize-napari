@@ -46,6 +46,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonNewBatch.clicked.connect(self.create_new_batch)
         ## Open Batch
         self.ui.pushButtonOpenBatch.clicked.connect(self.open_batch)
+        ## Start running from zereoth index
+        self.ui.pushButtonStart.clicked.connect(self.run)
+        ## Start running from selected index
+        self.ui.pushButtonStartItem.clicked.connect(self.run_item)
+
 
 
 
@@ -103,11 +108,21 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
 
-        self._run_index(ix)
+        # Run every item starting from the selected item
+        for i in (ix, self.ui.listWidgetItems.count()):
+            self.set_list_widget_item_color(i, 'orange')
+            try:
+                self._run_index(i)
+            except:
+                self.set_list_widget_item_color(i, 'red')
 
     def run(self):
-        self._run_index(0)
-
+        for i in range(self.ui.listWidgetItems.count()):
+            self.set_list_widget_item_color(i, 'orange')
+            try:
+                self._run_index(i)
+            except:
+                self.set_list_widget_item_color(i, 'red')
     def _run_index(self, index: int):
         callbacks = [partial(self.item_finished, index)]
 
@@ -121,7 +136,6 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def show_cnmf_params_gui(self):
         self.cnmf_gui = CNMFWidget(parent=self)
-        # self.viewer.window.add_dock_widget(self.cnmf_gui)
         self.cnmf_gui.show()
 
     def show_mcorr_params_gui(self):

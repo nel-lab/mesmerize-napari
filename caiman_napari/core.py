@@ -97,6 +97,8 @@ class CaimanDataFrameExtensions:
         # Save DataFrame to disk
         self._df.to_pickle(self.path)
 
+    def remove_item(self, index):
+        self._df.drop(index=index)
 
 @pd.api.extensions.register_series_accessor("caiman")
 class CaimanSeriesExtensions:
