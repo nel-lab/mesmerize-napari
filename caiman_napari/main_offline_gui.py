@@ -87,7 +87,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
             input_movie_path = self.dataframe_file_path
 
         self.dataframe.caiman.add_item(algo=algo,
-                                           input_move_path=input_movie_path, params=parameters)
+                                           input_movie_path=input_movie_path, params=parameters)
 
         uuid = self.dataframe.iloc[-1]['uuid']
 
@@ -120,7 +120,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
 
     def show_cnmf_params_gui(self):
-        self.cnmf_gui = CNMFWidget(parent=None)
+        self.cnmf_gui = CNMFWidget(parent=self)
         # self.viewer.window.add_dock_widget(self.cnmf_gui)
         self.cnmf_gui.show()
 
