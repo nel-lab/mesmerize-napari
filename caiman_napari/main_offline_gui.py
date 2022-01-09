@@ -1,3 +1,5 @@
+import time
+
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
@@ -53,9 +55,6 @@ class MainOfflineGUI(QtWidgets.QWidget):
         ## Remove selected item
         self.ui.pushButtonDelItem.clicked.connect(self.remove_item)
 
-
-
-
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf'])
     def open_movie(self, path: str, *args, **kwargs):
         if not self.clear_viewer():
@@ -88,6 +87,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def open_batch(self, path: str, *args, **kwargs):
         self.dataframe = load_batch(path)
         self.dataframe_file_path = path
+
+        self.ui.listWidgetItems.clear()
+
         # Iterate through dataframe, add each item to list widget
         ## For now, instead of name I'm adding the uuid
         for i, r in self.dataframe.iterrows():
@@ -142,6 +144,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def item_finished(self, ix):
         self.set_list_widget_item_color(ix, 'green')
+
+        if (ix + 1) < self.ui.listWidgetItems.count():
+            time.sleep(10)
+            self._run_index(ix + 1)
+
+        else:
+            QtWidgets.QMessageBox.information(self, 'Batch is done!', 'Yay, your batch has finished processing!')
 
     def set_list_widget_item_color(self, ix: int, color: str):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
