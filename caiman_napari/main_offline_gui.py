@@ -90,21 +90,22 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.dataframe_file_path = path
         # Iterate through dataframe, add each item to list widget
         ## For now, instead of name I'm adding the uuid
-        for i in range(len(self.dataframe.index)):
-            algo = self.dataframe.algo[i]
-            uuid = self.dataframe.uuid[i]
-            self.ui.listWidgetItems.addItem(f'{algo}: {uuid}')
+        for i, r in self.dataframe.iterrows():
+            algo = r['algo']
+            name = r['name']
+            uuid = r['uuid']
+            self.ui.listWidgetItems.addItem(f'{algo}: {name}')
             
             item = self.ui.listWidgetItems.item(i)
             item.setData(3, uuid)
-
 
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if input_movie_path is None:
             input_movie_path = self.dataframe_file_path
 
-        self.dataframe.caiman.add_item(algo=algo,
-                                           input_movie_path=input_movie_path, params=parameters)
+        self.dataframe.caiman.add_item(
+            algo=algo, name=name, input_movie_path=input_movie_path, params=parameters
+        )
 
         uuid = self.dataframe.iloc[-1]['uuid']
 
@@ -113,6 +114,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         n = self.ui.listWidgetItems.count()
         item = self.ui.listWidgetItems.item(n - 1)
         item.setData(3, uuid)
+
     def remove_item(self):
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)

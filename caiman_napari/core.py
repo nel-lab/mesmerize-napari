@@ -24,6 +24,9 @@ ALGO_MODULES = \
     }
 
 
+DATAFRAME_COLUMNS = ['algo', 'name', 'input_movie_path', 'params', 'outputs', 'uuid']
+
+
 def load_batch(path: Union[str, pathlib.Path]) -> pd.DataFrame:
     global CURRENT_BATCH_PATH
 
@@ -43,7 +46,7 @@ def _get_item_uuid(item: Union[int, str, UUID]) -> UUID:
 
 
 def create_batch(path: str = None):
-    df = pandas.DataFrame(columns=['algo', 'input_movie_path', 'params', 'outputs', 'uuid'])
+    df = pandas.DataFrame(columns=DATAFRAME_COLUMNS)
     df.caiman.path = path
 
     df.to_pickle(path)
@@ -63,7 +66,7 @@ class CaimanDataFrameExtensions:
         self._df = df
         self.path = None
 
-    def add_item(self, algo: str, input_movie_path: str, params: dict):
+    def add_item(self, algo: str, name: str, input_movie_path: str, params: dict):
         """
         Add an item to the DataFrame to organize parameters
         that can be used to run a CaImAn algorithm
@@ -72,6 +75,9 @@ class CaimanDataFrameExtensions:
         ----------
         algo: str
             Name of the algorithm to run, see `ALGO_MODULES` dict
+
+        name: str
+            User set name for the batch item
 
         input_movie_path: str
             Full path to the input movie
@@ -84,6 +90,7 @@ class CaimanDataFrameExtensions:
         s = pd.Series(
             {
                 'algo': algo,
+                'name': name,
                 'input_movie_path': input_movie_path,
                 'params': params,
                 'outputs': [],  # not used yet, intended to store list of output file paths
