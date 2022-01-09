@@ -50,6 +50,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonStart.clicked.connect(self.run)
         ## Start running from selected index
         self.ui.pushButtonStartItem.clicked.connect(self.run_item)
+        ## Remove selected item
+        self.ui.pushButtonDelItem.clicked.connect(self.remove_item)
 
 
 
@@ -86,6 +88,16 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def open_batch(self, path: str, *args, **kwargs):
         self.dataframe = load_batch(path)
         self.dataframe_file_path = path
+        # Iterate through dataframe, add each item to list widget
+        ## For now, instead of name I'm adding the uuid
+        for i in range(len(self.dataframe.index)):
+            algo = self.dataframe.algo[i]
+            uuid = self.dataframe.uuid[i]
+            self.ui.listWidgetItems.addItem(f'{algo}: {uuid}')
+            
+            item = self.ui.listWidgetItems.item(i)
+            item.setData(3, uuid)
+
 
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if input_movie_path is None:
@@ -101,6 +113,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
         n = self.ui.listWidgetItems.count()
         item = self.ui.listWidgetItems.item(n - 1)
         item.setData(3, uuid)
+    def remove_item(self):
+        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
+        uuid = item_gui.data(3)
+
+        ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
+        self.dataframe.caiman.remove_item(index=ix)
+        self.ui.listWidgetItems.takeItem(ix)
 
     def run_item(self):
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
@@ -108,21 +127,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
 
-        # Run every item starting from the selected item
-        for i in (ix, self.ui.listWidgetItems.count()):
-            self.set_list_widget_item_color(i, 'orange')
-            try:
-                self._run_index(i)
-            except:
-                self.set_list_widget_item_color(i, 'red')
+        # For now, just run given index.
+        self._run_index(ix)
 
     def run(self):
-        for i in range(self.ui.listWidgetItems.count()):
-            self.set_list_widget_item_color(i, 'orange')
-            try:
-                self._run_index(i)
-            except:
-                self.set_list_widget_item_color(i, 'red')
+        self._run_index(0)
+
     def _run_index(self, index: int):
         callbacks = [partial(self.item_finished, index)]
 
@@ -141,6 +151,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
+
 
 
 

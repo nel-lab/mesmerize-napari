@@ -98,7 +98,13 @@ class CaimanDataFrameExtensions:
         self._df.to_pickle(self.path)
 
     def remove_item(self, index):
-        self._df.drop(index=index)
+        # Drop selected index
+        self._df.drop([index], inplace=True)
+        # Reset indeces so there are no 'jumps'
+        self._df.reset_index(drop=True, inplace=True)
+        # Save new df to disc
+        self._df.to_pickle(self.path)
+
 
 @pd.api.extensions.register_series_accessor("caiman")
 class CaimanSeriesExtensions:
