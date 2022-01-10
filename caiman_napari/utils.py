@@ -267,9 +267,9 @@ def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Opt
             if 'CONDA_PREFIX' in os.environ.keys():
                 f.write(
                     f'#!/bin/bash\n'
-                    f'CONDA_PREFIX={os.environ["CONDA_PREFIX"]}\n'
-                    f'CONDA_PYTHON_EXE={os.environ["CONDA_PYTHON_EXE"]}\n'
-                    f'CONDA_PREFIX_1 = {os.environ["CONDA_PREFIX_1"]}\n'
+                    f'export CONDA_PREFIX={os.environ["CONDA_PREFIX"]}\n'
+                    f'export CONDA_PYTHON_EXE={os.environ["CONDA_PYTHON_EXE"]}\n'
+                    f'export CONDA_PREFIX_1={os.environ["CONDA_PREFIX_1"]}\n'
                 )
 
             elif 'VIRTUAL_ENV' in os.environ.keys():

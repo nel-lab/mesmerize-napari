@@ -11,8 +11,13 @@ from .utils import *
 from .core import *
 import pandas as pd
 from functools import partial
+import pprint
+from pprint import pformat
 import caiman as cm
+from caiman.source_extraction.cnmf.cnmf import load_CNMF
 from .core import CaimanDataFrameExtensions, CaimanSeriesExtensions
+import os
+from .cnmf_results import show_results
 
 
 COLORS_HEX = \
@@ -54,6 +59,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonStartItem.clicked.connect(self.run_item)
         ## Remove selected item
         self.ui.pushButtonDelItem.clicked.connect(self.remove_item)
+        ## Change parameters displayed in param text box upon change in selection
+        self.ui.listWidgetItems.currentRowChanged.connect(self.set_params_text)
+        ## On double click of item in listwidget, load results and display
+        self.ui.listWidgetItems.doubleClicked.connect(self.show_cnmf_results)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -80,6 +89,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     @use_save_file_dialog('Choose location to save batch file', '', '.pickle')
     def create_new_batch(self, path, *args, **kwargs):
+        self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
 
@@ -103,11 +113,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if input_movie_path is None:
-            input_movie_path = self.dataframe_file_path
+            input_movie_path = self.input_movie_path
 
         self.dataframe.caiman.add_item(
             algo=algo, name=name, input_movie_path=input_movie_path, params=parameters
         )
+        print("after add_item", self.dataframe.params)
 
         uuid = self.dataframe.iloc[-1]['uuid']
 
@@ -139,8 +150,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def _run_index(self, index: int):
         callbacks = [partial(self.item_finished, index)]
+        std_out = self._print_qprocess_std_out
 
-        self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks)
+        self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks, callback_std_out=std_out)
+
+    def _print_qprocess_std_out(self, proc):
+        txt = proc.readAllStandardOutput().data().decode('utf8')
+        self.ui.textBrowserStdOut.append(txt)
 
     def item_finished(self, ix):
         self.set_list_widget_item_color(ix, 'green')
@@ -152,6 +168,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
         else:
             QtWidgets.QMessageBox.information(self, 'Batch is done!', 'Yay, your batch has finished processing!')
 
+    def set_params_text(self, ix):
+        p = self.dataframe.iloc[ix]['params']
+        print(p)
+        u = self.dataframe.iloc[ix]['uuid']
+        s = pprint.pformat(p)
+        s = f"{u}\n\n{s}"
+        self.ui.textBrowserParams.setText(s)
+
     def set_list_widget_item_color(self, ix: int, color: str):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
 
@@ -162,7 +186,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
+    def show_cnmf_results(self):
+        print("show cnmf results")
+        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
+        uuid = item_gui.data(3)
+        dir = os.path.dirname(self.dataframe_file_path)
+        self.cnmf_obj = load_CNMF(dir + '/' + uuid + '.hdf5')
 
+        show_results(self.cnmf_obj, self.viewer)
 
 
 

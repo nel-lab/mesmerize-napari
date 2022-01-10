@@ -130,6 +130,9 @@
     </layout>
    </item>
    <item>
+    <widget class="QTextBrowser" name="textBrowserParams"/>
+   </item>
+   <item>
     <widget class="QTextBrowser" name="textBrowserStdOut"/>
    </item>
   </layout>

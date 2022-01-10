@@ -33,7 +33,7 @@ def main(batch_path, uuid):
     opts = CNMFParams(params_dict=params)
 
     # Run MC
-    fnames = [download_demo(str(input_movie_path))]
+    fnames = [str(input_movie_path)]
     mc = MotionCorrect(fnames, dview = dview, **opts.get_group('motion'))
     mc.motion_correct(save_movie = True)
     np.save(input_movie_path + 'mc.npy', mc.mmap_file)

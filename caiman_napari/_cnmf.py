@@ -20,10 +20,10 @@ def main(batch_path, uuid):
 
     input_movie_path = item['input_movie_path']
     params = item['params']
+    print("_cnmf params", params)
 
     # adapted from current demo notebook
     n_processes = psutil.cpu_count() - 1
-    print("starting mc")
     # Start cluster for parallel processing
     c, dview, n_processes = cm.cluster.setup_cluster(
         backend='local',
@@ -31,7 +31,12 @@ def main(batch_path, uuid):
         single_thread=False
     )
 
-    cnmf_params = CNMFParams(params_dict=params)
+    # merge cnmf and eval kwargs into one dict
+    c = dict(params['cnmf_kwargs'])
+    e = dict(params['eval_kwargs'])
+    tot = {**c, **e}
+    cnmf_params = CNMFParams(params_dict=tot)
+
 
     fname_new = cm.save_memmap(
         [input_movie_path],
@@ -61,9 +66,9 @@ def main(batch_path, uuid):
 
     print("fitting images")
     cnm = cnm.fit(images)
-
-    print('refitting')
-    cnmf_obj = cnm.refit(images, dview=dview)
+    if params['refit'] == True:
+        print('refitting')
+        cnmf_obj = cnm.refit(images, dview=dview)
 
     print("Eval")
     cnmf_obj.estimates.evaluate_components(images, cnmf_obj.params, dview=dview)

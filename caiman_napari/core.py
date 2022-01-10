@@ -146,7 +146,7 @@ class CaimanSeriesExtensions:
 
         # Set the callback function to read the stdout
         if callback_std_out is not None:
-            self.process.readyReadStandardOutput.connect(partial(self.callback_std_out, self.process))
+            self.process.readyReadStandardOutput.connect(partial(callback_std_out, self.process))
 
         # connect the callback functions for when the process finishes
         for f in callbacks_finished:

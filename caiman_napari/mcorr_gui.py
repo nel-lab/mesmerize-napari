@@ -12,8 +12,8 @@ class MCORRWidget(QtWidgets.QDockWidget):
         self.ui.setupUi(self)
         self.ui.btnAddToBatchElastic.clicked.connect(self.add_item)
 
-    @present_exceptions()
-    def get_params(self, *args, group_params: bool = False) -> dict:
+    #@present_exceptions()
+    def get_params(self, *args, group_params: bool = False) -> Tuple[str, dict]:
         """
         Get a dict of the set parameters.
         If the work environment was loaded from a motion correction batch item it put the bord_px in the dict.
@@ -23,6 +23,11 @@ class MCORRWidget(QtWidgets.QDockWidget):
         :rtype: dict
         """
         # TODO: Change mcorr gui to include different parameters
+        gSig = self.ui.spinBoxGSig_filt.value()
+        if gSig == 0:
+            gSig = None
+        else:
+            gSig = (gSig, gSig)
 
         mcorr_kwargs = \
             {
@@ -32,7 +37,7 @@ class MCORRWidget(QtWidgets.QDockWidget):
                 'max_deviation_rigid': self.ui.spinboxMaxDev.value(),
                 'border_nan': 'copy',
                 'pw_rigid': self.ui.comboBoxPwRigidBool.currentText(),
-                'gSig_filt': self.ui.spinBoxGSig_filt.value()
+                'gSig_filt': gSig
             }
         # Any additional mcorr kwargs set in the text entry
         if self.ui.groupBox_motion_correction_kwargs.isChecked():
@@ -41,20 +46,10 @@ class MCORRWidget(QtWidgets.QDockWidget):
                 mcorr_kwargs_add = eval(f"dict({_kwargs})")
                 mcorr_kwargs.update(mcorr_kwargs_add)
             except:
-                raise ValueError("CNMF kwargs not formatted properly.")
-
-        if self.vi.viewer.workEnv.imgdata.ndim == 4:
-            is_3d = True
-        else:
-            is_3d = False
+                raise ValueError("MCorr kwargs not formatted properly.")
 
         # Make the output dict
-        d = \
-            {
-                'item_name': self.ui.lineEdName.text(),
-                'is_3d': is_3d,
-                'keep_memmap': self.ui.checkBoxKeepMemmap.isChecked()
-            }
+        d = dict()
         # Group the kwargs of the two parts seperately
         if group_params:
             d.update(
@@ -67,15 +62,17 @@ class MCORRWidget(QtWidgets.QDockWidget):
         else:
             d.update(
                 {
-                    **mcorr_kwargs,
+                    **mcorr_kwargs
                 }
             )
 
-        return d
+        name = self.ui.lineEditNameElastic.text()
+
+        return name, d
 
     def add_item(self):
-        params = self.get_params()
-        item_name = self.ui.lineEditNameElastic.text()
+        item_name, params = self.get_params()
+        print("mcorr params", params)
 
         self.parent().add_item(algo='mcorr', parameters=params, name=item_name)
 
