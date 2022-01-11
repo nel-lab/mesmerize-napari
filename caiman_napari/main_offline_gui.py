@@ -18,6 +18,8 @@ from caiman.source_extraction.cnmf.cnmf import load_CNMF
 from .core import CaimanDataFrameExtensions, CaimanSeriesExtensions
 import os
 from .cnmf_results import show_results
+from ._cnmf import load_output_cnmf
+from._mcorr import load_output_mcorr
 
 
 COLORS_HEX = \
@@ -62,15 +64,21 @@ class MainOfflineGUI(QtWidgets.QWidget):
         ## Change parameters displayed in param text box upon change in selection
         self.ui.listWidgetItems.currentRowChanged.connect(self.set_params_text)
         ## On double click of item in listwidget, load results and display
-        self.ui.listWidgetItems.doubleClicked.connect(self.show_cnmf_results)
+        self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
 
-    @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf'])
+    @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
         if not self.clear_viewer():
             return
 
         self.input_movie_path = path
         self.viewer.open(self.input_movie_path)
+
+
+        #Yr, dims, T = cm.load_memmap(path)
+        #images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        #images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        #self.viewer.add_image(images)
 
     def clear_viewer(self) -> bool:
         if len(self.viewer.layers) == 0:
@@ -186,14 +194,18 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
-    def show_cnmf_results(self):
+    def load_output(self):
         print("show cnmf results")
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)
-        dir = os.path.dirname(self.dataframe_file_path)
-        self.cnmf_obj = load_CNMF(dir + '/' + uuid + '.hdf5')
-
-        show_results(self.cnmf_obj, self.viewer)
+        ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
+        algo = self.dataframe['algo'][ix]
+        self.viewer.open(self.dataframe['input_movie_path'][ix])
+        print("algo name", algo)
+        if algo == 'cnmf':
+            load_output_cnmf(self.viewer, self.dataframe_file_path, uuid)
+        elif algo == 'mcorr':
+            load_output_mcorr(self.viewer, self.dataframe_file_path, uuid)
 
 
 

@@ -38,6 +38,8 @@ def main(batch_path, uuid):
     mc.motion_correct(save_movie = True)
     np.save(input_movie_path + 'mc.npy', mc.mmap_file)
 
+def load_output_mcorr(viewer, batch_path, uuid):
+    print("output mcorr movie")
 
 
 if __name__ == "__main__":
