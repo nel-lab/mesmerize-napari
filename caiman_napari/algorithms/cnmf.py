@@ -15,9 +15,8 @@ import pandas as pd
 
 from caiman.utils.visualization import get_contours as caiman_get_contours
 from caiman.source_extraction.cnmf.cnmf import load_CNMF
-from .utils import *
+from caiman_napari.utils import *
 import os
-
 
 
 def main(batch_path, uuid):
@@ -83,7 +82,10 @@ def main(batch_path, uuid):
     cnmf_obj.save(uuid + '.hdf5')
 
 
-def load_output_cnmf(viewer, batch_path, uuid):
+def load_output(viewer, batch_item: pd.Series):
+    print('CNMF output')
+    print(batch_item)
+    return
 
     dir = os.path.dirname(batch_path)
     cnmf_obj = load_CNMF(dir + '/' + uuid + '.hdf5')

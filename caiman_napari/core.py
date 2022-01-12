@@ -1,5 +1,5 @@
 import os
-from . import _cnmf
+from .algorithms import cnmf
 from . import _mcorr
 from .utils import make_runfile, IS_WINDOWS
 # Core utilities
@@ -19,7 +19,7 @@ CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
 
 ALGO_MODULES = \
     {
-        'cnmf': _cnmf,
+        'cnmf': cnmf,
         'mcorr': _mcorr
     }
 

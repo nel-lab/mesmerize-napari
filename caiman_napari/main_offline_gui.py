@@ -3,8 +3,8 @@ import time
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
-from PyQt5 import QtWidgets, QtCore
-from qtpy import QtWidgets, QtCore
+from PyQt5 import QtWidgets
+from qtpy import QtWidgets
 from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
 from .utils import *
@@ -12,13 +12,8 @@ from .core import *
 import pandas as pd
 from functools import partial
 import pprint
-from pprint import pformat
-import caiman as cm
-from caiman.source_extraction.cnmf.cnmf import load_CNMF
-from .core import CaimanDataFrameExtensions, CaimanSeriesExtensions
-import os
-from .cnmf_results import show_results
-from ._cnmf import load_output_cnmf
+# from .algorithms import *
+from . import algorithms
 from._mcorr import load_output_mcorr
 
 
@@ -194,6 +189,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
+
     def load_output(self):
         print("show cnmf results")
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
@@ -202,11 +198,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         algo = self.dataframe['algo'][ix]
         self.viewer.open(self.dataframe['input_movie_path'][ix])
         print("algo name", algo)
-        if algo == 'cnmf':
-            load_output_cnmf(self.viewer, self.dataframe_file_path, uuid)
-        elif algo == 'mcorr':
-            load_output_mcorr(self.viewer, self.dataframe_file_path, uuid)
-
+        
+        getattr(algorithms, algo).load_output(self.viewer, self.dataframe.iloc[ix])
 
 
 @napari_hook_implementation
