@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mcorr_template_dockwidget.ui'
+# Form implementation generated from reading ui file 'ui_files/mcorr_template_dockwidget.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
 #
@@ -33,17 +33,12 @@ class Ui_MCORRWidget(object):
         self.verticalLayout.addWidget(self.groupBox_motion_correction_kwargs)
         self.horizontalLayout_21 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_21.setObjectName("horizontalLayout_21")
-        self.label_11 = QtWidgets.QLabel(self.dockWidgetContents)
-        self.label_11.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_11.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_11.setObjectName("label_11")
-        self.horizontalLayout_21.addWidget(self.label_11)
-        self.comboBoxPwRigidBool = QtWidgets.QComboBox(self.dockWidgetContents)
-        self.comboBoxPwRigidBool.setObjectName("comboBoxPwRigidBool")
-        self.comboBoxPwRigidBool.addItem("")
-        self.comboBoxPwRigidBool.addItem("")
-        self.horizontalLayout_21.addWidget(self.comboBoxPwRigidBool)
         self.verticalLayout.addLayout(self.horizontalLayout_21)
+        self.checkBoxRigidMC = QtWidgets.QCheckBox(self.dockWidgetContents)
+        self.checkBoxRigidMC.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.checkBoxRigidMC.setChecked(False)
+        self.checkBoxRigidMC.setObjectName("checkBoxRigidMC")
+        self.verticalLayout.addWidget(self.checkBoxRigidMC)
         self.label_16 = QtWidgets.QLabel(self.dockWidgetContents)
         font = QtGui.QFont()
         font.setPointSize(12)
@@ -266,8 +261,7 @@ class Ui_MCORRWidget(object):
         self.lineEditNameElastic.returnPressed.connect(self.btnAddToBatchElastic.click)
         QtCore.QMetaObject.connectSlotsByName(MCORRWidget)
         MCORRWidget.setTabOrder(self.groupBox_motion_correction_kwargs, self.plainTextEdit_mc_kwargs)
-        MCORRWidget.setTabOrder(self.plainTextEdit_mc_kwargs, self.comboBoxPwRigidBool)
-        MCORRWidget.setTabOrder(self.comboBoxPwRigidBool, self.spinBoxGSig_filt)
+        MCORRWidget.setTabOrder(self.plainTextEdit_mc_kwargs, self.spinBoxGSig_filt)
         MCORRWidget.setTabOrder(self.spinBoxGSig_filt, self.spinboxX)
         MCORRWidget.setTabOrder(self.spinboxX, self.spinboxY)
         MCORRWidget.setTabOrder(self.spinboxY, self.spinboxIterRigid)
@@ -292,9 +286,7 @@ class Ui_MCORRWidget(object):
         self.groupBox_motion_correction_kwargs.setTitle(_translate("MCORRWidget", "Use &motion correction kwargs"))
         self.plainTextEdit_mc_kwargs.setToolTip(_translate("MCORRWidget", "You can enter additional kwargs to pass for CNMF instantiation.\n"
 "Use single quotes for strings, do not use double quotes."))
-        self.label_11.setText(_translate("MCORRWidget", "Piecewise Rigid MC:"))
-        self.comboBoxPwRigidBool.setItemText(0, _translate("MCORRWidget", "True"))
-        self.comboBoxPwRigidBool.setItemText(1, _translate("MCORRWidget", "False"))
+        self.checkBoxRigidMC.setText(_translate("MCORRWidget", "Piecewise Rigid MC"))
         self.label_16.setToolTip(_translate("MCORRWidget", "Compute some summary images (correlation and peak to noise ratio)"))
         self.label_16.setText(_translate("MCORRWidget", "Rigid correction"))
         self.label.setText(_translate("MCORRWidget", "gSig_filt:"))

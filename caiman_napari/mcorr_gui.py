@@ -36,7 +36,7 @@ class MCORRWidget(QtWidgets.QDockWidget):
                 'overlaps': (self.ui.spinboxOverlaps.value(), self.ui.spinboxOverlaps.value()),
                 'max_deviation_rigid': self.ui.spinboxMaxDev.value(),
                 'border_nan': 'copy',
-                'pw_rigid': self.ui.comboBoxPwRigidBool.currentText(),
+                'pw_rigid': self.ui.checkBoxRigidMC.isChecked(),
                 'gSig_filt': gSig
             }
         # Any additional mcorr kwargs set in the text entry

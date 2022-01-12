@@ -52,35 +52,20 @@ Use single quotes for strings, do not use double quotes.</string>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_21">
-      <item>
-       <widget class="QLabel" name="label_11">
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text">
-         <string>Piecewise Rigid MC:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBoxPwRigidBool">
-        <item>
-         <property name="text">
-          <string>True</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>False</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QHBoxLayout" name="horizontalLayout_21"/>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="checkBoxRigidMC">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Piecewise Rigid MC</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_16">
@@ -589,7 +574,6 @@ Use single quotes for strings, do not use double quotes.</string>
  <tabstops>
   <tabstop>groupBox_motion_correction_kwargs</tabstop>
   <tabstop>plainTextEdit_mc_kwargs</tabstop>
-  <tabstop>comboBoxPwRigidBool</tabstop>
   <tabstop>spinBoxGSig_filt</tabstop>
   <tabstop>spinboxX</tabstop>
   <tabstop>spinboxY</tabstop>
