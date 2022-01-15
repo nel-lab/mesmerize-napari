@@ -12,9 +12,9 @@ from .core import *
 import pandas as pd
 from functools import partial
 import pprint
-# from .algorithms import *
+from .algorithms import *
 from . import algorithms
-from._mcorr import load_output_mcorr
+from._mcorr import load_outputs
 import caiman as cm
 
 
@@ -60,7 +60,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         ## Change parameters displayed in param text box upon change in selection
         self.ui.listWidgetItems.currentRowChanged.connect(self.set_params_text)
         ## On double click of item in listwidget, load results and display
-        self.ui.listWidgetItems.doubleClicked.connect(self.temp_func)
+        self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -197,20 +197,20 @@ class MainOfflineGUI(QtWidgets.QWidget):
         print("show results")
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)
-        ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
-        algo = self.dataframe['algo'][ix]
-        self.viewer.open(self.dataframe['input_movie_path'][ix])
-        load_output_mcorr(self.viewer, self.dataframe.iloc[ix])
+        #algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo']
+        self.viewer.open(self.dataframe.loc[self.dataframe['uuid'] == uuid,'input_movie_path'])
+        #print(self.dataframe.loc[self.dataframe['uuid'] == uuid])
+        load_outputs(self.viewer, self.dataframe.loc[self.dataframe['uuid'] == uuid])
     def load_output(self):
         print("show results")
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)
-        ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
-        algo = self.dataframe['algo'][ix]
-        self.viewer.open(self.dataframe['input_movie_path'][ix])
-        print("algo name", algo)
+
+        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo']
+        self.viewer.open(self.dataframe.loc[self.dataframe['uuid'] == uuid,'input_movie_path'])
+        print("algo name", algo[1])
         
-        getattr(algorithms, algo).load_output(self.viewer, self.dataframe.iloc[ix])
+        getattr(algorithms, algo[1]).load_output(self.viewer, self.dataframe.loc[self.dataframe['uuid'] == uuid])
 
 
 @napari_hook_implementation
