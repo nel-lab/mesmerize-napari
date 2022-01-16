@@ -2,10 +2,9 @@
 
 # Form implementation generated from reading ui file 'ui_files/main_offline_gui_template.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.3
+# Created by: PyQt5 UI code generator 5.12
 #
 # WARNING! All changes made in this file will be lost!
-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -20,7 +19,6 @@ class Ui_MainOfflineGUIWidget(object):
         font = QtGui.QFont()
         font.setPointSize(13)
         font.setBold(True)
-        font.setWeight(75)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
@@ -93,12 +91,13 @@ class Ui_MainOfflineGUIWidget(object):
         MainOfflineGUIWidget.setTabOrder(self.pushButtonStart, self.pushButtonStartItem)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonStartItem, self.pushButtonDelItem)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonDelItem, self.pushButtonAbort)
-        MainOfflineGUIWidget.setTabOrder(self.pushButtonAbort, self.textBrowserStdOut)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonAbort, self.textBrowserParams)
+        MainOfflineGUIWidget.setTabOrder(self.textBrowserParams, self.textBrowserStdOut)
 
     def retranslateUi(self, MainOfflineGUIWidget):
         _translate = QtCore.QCoreApplication.translate
         MainOfflineGUIWidget.setWindowTitle(_translate("MainOfflineGUIWidget", "Form"))
-        self.label_2.setText(_translate("MainOfflineGUIWidget", "CaImAn oflfine"))
+        self.label_2.setText(_translate("MainOfflineGUIWidget", "CaImAn Offline"))
         self.pushButtonOpenMovie.setText(_translate("MainOfflineGUIWidget", "Open Movie"))
         self.groupBox.setTitle(_translate("MainOfflineGUIWidget", "Parameter Setting"))
         self.pushButtonParamsMCorr.setText(_translate("MainOfflineGUIWidget", "MCorr"))
@@ -113,11 +112,3 @@ class Ui_MainOfflineGUIWidget(object):
         self.pushButtonAbort.setText(_translate("MainOfflineGUIWidget", "Abort"))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainOfflineGUIWidget = QtWidgets.QWidget()
-    ui = Ui_MainOfflineGUIWidget()
-    ui.setupUi(MainOfflineGUIWidget)
-    MainOfflineGUIWidget.show()
-    sys.exit(app.exec_())
