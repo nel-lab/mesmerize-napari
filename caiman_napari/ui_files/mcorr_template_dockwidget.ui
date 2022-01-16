@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DockWidget</class>
- <widget class="QDockWidget" name="DockWidget">
+ <class>MCORRWidget</class>
+ <widget class="QDockWidget" name="MCORRWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
-    <height>869</height>
+    <width>267</width>
+    <height>858</height>
    </rect>
   </property>
   <property name="floating">
    <bool>true</bool>
   </property>
+  <property name="allowedAreas">
+   <set>Qt::NoDockWidgetArea</set>
+  </property>
   <property name="windowTitle">
-   <string>&amp;CaImAn Motion Correction</string>
+   <string>Motion Correction</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -49,11 +52,26 @@ Use single quotes for strings, do not use double quotes.</string>
      </widget>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_21"/>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="checkBoxRigidMC">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Piecewise Rigid MC</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="label_16">
       <property name="font">
        <font>
         <pointsize>12</pointsize>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -64,55 +82,6 @@ Use single quotes for strings, do not use double quotes.</string>
        <string>Rigid correction</string>
       </property>
      </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_21">
-      <item>
-       <widget class="QLabel" name="label_11">
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text">
-         <string>Output bit depth: </string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBoxOutputBitDepth">
-        <item>
-         <property name="text">
-          <string>Do not convert</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>8</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>16</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -282,7 +251,6 @@ Use single quotes for strings, do not use double quotes.</string>
       <property name="font">
        <font>
         <pointsize>12</pointsize>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -604,7 +572,7 @@ Use single quotes for strings, do not use double quotes.</string>
  <tabstops>
   <tabstop>groupBox_motion_correction_kwargs</tabstop>
   <tabstop>plainTextEdit_mc_kwargs</tabstop>
-  <tabstop>comboBoxOutputBitDepth</tabstop>
+  <tabstop>checkBoxRigidMC</tabstop>
   <tabstop>spinBoxGSig_filt</tabstop>
   <tabstop>spinboxX</tabstop>
   <tabstop>spinboxY</tabstop>

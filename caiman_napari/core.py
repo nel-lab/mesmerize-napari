@@ -1,9 +1,6 @@
 import os
-from . import _cnmf
-from . import _mcorr
+from .algorithms import *
 from .utils import make_runfile, IS_WINDOWS
-# Core utilities
-import pandas
 import pandas as pd
 import pathlib
 from pathlib import Path
@@ -19,9 +16,12 @@ CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
 
 ALGO_MODULES = \
     {
-        'cnmf': _cnmf,
-        'mcorr': _mcorr
+        'cnmf': cnmf,
+        'mcorr': mcorr
     }
+
+
+DATAFRAME_COLUMNS = ['algo', 'name', 'input_movie_path', 'params', 'outputs', 'uuid']
 
 
 def load_batch(path: Union[str, pathlib.Path]) -> pd.DataFrame:
@@ -43,7 +43,7 @@ def _get_item_uuid(item: Union[int, str, UUID]) -> UUID:
 
 
 def create_batch(path: str = None):
-    df = pandas.DataFrame(columns=['algo', 'input_movie_path', 'params', 'outputs', 'uuid'])
+    df = pd.DataFrame(columns=DATAFRAME_COLUMNS)
     df.caiman.path = path
 
     df.to_pickle(path)
@@ -63,7 +63,7 @@ class CaimanDataFrameExtensions:
         self._df = df
         self.path = None
 
-    def add_item(self, algo: str, input_movie_path: str, params: dict):
+    def add_item(self, algo: str, name: str, input_movie_path: str, params: dict):
         """
         Add an item to the DataFrame to organize parameters
         that can be used to run a CaImAn algorithm
@@ -72,6 +72,9 @@ class CaimanDataFrameExtensions:
         ----------
         algo: str
             Name of the algorithm to run, see `ALGO_MODULES` dict
+
+        name: str
+            User set name for the batch item
 
         input_movie_path: str
             Full path to the input movie
@@ -84,10 +87,11 @@ class CaimanDataFrameExtensions:
         s = pd.Series(
             {
                 'algo': algo,
+                'name': name,
                 'input_movie_path': input_movie_path,
                 'params': params,
-                'outputs': [],  # not used yet, intended to store list of output file paths
-                'uuid': str(uuid4())  # unique identifier for this combination of movive + params
+                'outputs': None,  # to store dict of output information, such as output file paths
+                'uuid': str(uuid4())  # unique identifier for this combination of movie + params
             }
         )
 
@@ -95,6 +99,14 @@ class CaimanDataFrameExtensions:
         self._df.loc[self._df.index.size] = s
 
         # Save DataFrame to disk
+        self._df.to_pickle(self.path)
+
+    def remove_item(self, index):
+        # Drop selected index
+        self._df.drop([index], inplace=True)
+        # Reset indeces so there are no 'jumps'
+        self._df.reset_index(drop=True, inplace=True)
+        # Save new df to disc
         self._df.to_pickle(self.path)
 
 
@@ -131,7 +143,7 @@ class CaimanSeriesExtensions:
 
         # Set the callback function to read the stdout
         if callback_std_out is not None:
-            self.process.readyReadStandardOutput.connect(partial(self.callback_std_out, self.process))
+            self.process.readyReadStandardOutput.connect(partial(callback_std_out, self.process))
 
         # connect the callback functions for when the process finishes
         for f in callbacks_finished:

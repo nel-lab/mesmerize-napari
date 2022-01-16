@@ -12,7 +12,7 @@ class CNMFWidget(QtWidgets.QDockWidget):
         self.ui.btnAddToBatchCNMF.clicked.connect(self.add_item)
 
     @present_exceptions()
-    def get_params(self, *args, group_params: bool = False) -> dict:
+    def get_params(self, *args, group_params: bool = True) -> Tuple[str, bool, dict]:
         """
         Get a dict of the set parameters.
         If the work environment was loaded from a motion correction batch item it put the bord_px in the dict.
@@ -30,7 +30,8 @@ class CNMFWidget(QtWidgets.QDockWidget):
             {
                 'p': self.ui.spinBoxP.value(),
                 'nb': self.ui.spinBoxnb.value(),
-                'merge_thresh': self.ui.doubleSpinBoxMergeThresh.value(),
+                # raises error: no parameter 'merge_thresh' found
+                #'merge_thresh': self.ui.doubleSpinBoxMergeThresh.value(),
                 'rf': rf if not self.ui.checkBoxRfNone.isChecked() else None,
                 'stride': self.ui.spinBoxStrideCNMF.value(),
                 'K': self.ui.spinBoxK.value(),
@@ -75,20 +76,14 @@ class CNMFWidget(QtWidgets.QDockWidget):
             except:
                 raise ValueError("Evaluation kwargs not formatted properly.")
 
-        if self.vi.viewer.workEnv.imgdata.ndim == 4:
-            is_3d = True
-        else:
-            is_3d = False
-
         # Make the output dict
-        d = \
+        d = dict()
+        d.update(
             {
-                'item_name': self.ui.lineEdName.text(),
-                'refit': self.ui.checkBoxRefit.isChecked(),
-                # 'border_pix': bord_px,
-                'is_3d': is_3d,
-                'keep_memmap': self.ui.checkBoxKeepMemmap.isChecked()
+                'refit': self.ui.checkBoxRefit.isChecked()
             }
+        )
+
 
         # Group the kwargs of the two parts seperately
         if group_params:
@@ -108,12 +103,15 @@ class CNMFWidget(QtWidgets.QDockWidget):
                 }
             )
 
-        return d
+        name = self.ui.lineEdName.text()
+        refit = self.ui.checkBoxRefit.isChecked()
+        print("cnmf_gui get params:", d)
+
+        return name, d
 
     def add_item(self):
-        params = self.get_params()
-        item_name = self.ui.lineEdName.text()
-        print('parent is')
-        print(self.parent())
+        item_name, params = self.get_params()
+        print("cnmf_gui add params:", params)
+
         self.parent().add_item(algo='cnmf', parameters=params, name=item_name)
 

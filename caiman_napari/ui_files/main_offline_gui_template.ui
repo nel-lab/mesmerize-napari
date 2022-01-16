@@ -19,12 +19,11 @@
      <property name="font">
       <font>
        <pointsize>13</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
-      <string>CaImAn oflfine</string>
+      <string>CaImAn Offline</string>
      </property>
     </widget>
    </item>
@@ -130,6 +129,9 @@
     </layout>
    </item>
    <item>
+    <widget class="QTextBrowser" name="textBrowserParams"/>
+   </item>
+   <item>
     <widget class="QTextBrowser" name="textBrowserStdOut"/>
    </item>
   </layout>
@@ -146,6 +148,7 @@
   <tabstop>pushButtonStartItem</tabstop>
   <tabstop>pushButtonDelItem</tabstop>
   <tabstop>pushButtonAbort</tabstop>
+  <tabstop>textBrowserParams</tabstop>
   <tabstop>textBrowserStdOut</tabstop>
  </tabstops>
  <resources/>

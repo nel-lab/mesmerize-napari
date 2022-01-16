@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='caiman-napari-prototype',
     version='0.0',
-    packages=['caiman_napari'],
+    packages=find_packages(),
     url='',
     license='',
     author='kushal',
