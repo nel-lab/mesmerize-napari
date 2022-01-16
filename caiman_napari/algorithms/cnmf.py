@@ -1,4 +1,5 @@
 """Performs CNMF in a separate process"""
+import pathlib
 
 import numpy as np
 import caiman as cm
@@ -17,6 +18,7 @@ from caiman.utils.visualization import get_contours as caiman_get_contours
 from caiman.source_extraction.cnmf.cnmf import load_CNMF
 from caiman_napari.utils import *
 import os
+import traceback
 
 
 def main(batch_path, uuid):
@@ -41,54 +43,66 @@ def main(batch_path, uuid):
     e = dict(params['eval_kwargs'])
     tot = {**c, **e}
     cnmf_params = CNMFParams(params_dict=tot)
+    # Run CNMF, denote boolean 'success' if CNMF completes w/out error
+    try:
+        fname_new = cm.save_memmap(
+            [input_movie_path],
+            base_name='memmap_',
+            order='C',
+            dview=dview
+        )
 
+        print('making memmap')
 
-    fname_new = cm.save_memmap(
-        [input_movie_path],
-        base_name='memmap_',
-        order='C',
-        dview=dview
-    )
+        Yr, dims, T = cm.load_memmap(fname_new)
+        images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        # in fname new load in memmap order C
 
-    print('making memmap')
+        cm.stop_server(dview=dview)
+        c, dview, n_processes = cm.cluster.setup_cluster(
+            backend='local',
+            n_processes=None,
+            single_thread=False
+        )
 
-    Yr, dims, T = cm.load_memmap(fname_new)
-    images = np.reshape(Yr.T, [T] + list(dims), order='F')
-    # in fname new load in memmap order C
+        print("performing CNMF")
+        cnm = cnmf.CNMF(
+            n_processes,
+            params=cnmf_params,
+            dview=dview
+        )
 
-    cm.stop_server(dview=dview)
-    c, dview, n_processes = cm.cluster.setup_cluster(
-        backend='local',
-        n_processes=None,
-        single_thread=False
-    )
+        print("fitting images")
+        cnm = cnm.fit(images)
+        if params['refit'] == True:
+            print('refitting')
+            cnmf_obj = cnm.refit(images, dview=dview)
 
-    print("performing CNMF")
-    cnm = cnmf.CNMF(
-        n_processes,
-        params=cnmf_params,
-        dview=dview
-    )
+        print("Eval")
+        cnmf_obj.estimates.evaluate_components(images, cnmf_obj.params, dview=dview)
 
-    print("fitting images")
-    cnm = cnm.fit(images)
-    if params['refit'] == True:
-        print('refitting')
-        cnmf_obj = cnm.refit(images, dview=dview)
+        output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
 
-    print("Eval")
-    cnmf_obj.estimates.evaluate_components(images, cnmf_obj.params, dview=dview)
-
-    cnmf_obj.save(uuid + '.hdf5')
-
+        cnmf_obj.save(output_path)
+        d = dict()
+        d.update(
+            {
+                "cnmf_outputs": output_path,
+                "success": True,
+                "traceback": None
+            }
+        )
+    except:
+        d = {"success": False, "traceback": traceback.format_exc()}
+    # Add dictionary to output column of series
+    df.loc[df['uuid'] == uuid, 'outputs'] = [d]
+    # save dataframe to disc
+    df.to_pickle(batch_path)
 
 def load_output(viewer, batch_item: pd.Series):
-    print('CNMF output')
-    print(batch_item)
-    return
-
-    dir = os.path.dirname(batch_path)
-    cnmf_obj = load_CNMF(dir + '/' + uuid + '.hdf5')
+    print('Loading outputs of CNMF')
+    path = batch_item["outputs"].item()["cnmf_outputs"]
+    cnmf_obj = load_CNMF(path)
 
     dims = cnmf_obj.dims
     if dims is None:  # I think that one of these is `None` if loaded from an hdf5 file
