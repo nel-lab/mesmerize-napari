@@ -1,3 +1,5 @@
+import traceback
+
 import numpy as np
 import caiman as cm
 from caiman.source_extraction.cnmf import cnmf as cnmf
@@ -31,24 +33,34 @@ def main(batch_path, uuid):
     )
 
     opts = CNMFParams(params_dict=params)
+    # Run MC, denote boolean 'success' if MC completes w/out error
+    try:
+        # Run MC
+        fnames = [str(input_movie_path)]
+        mc = MotionCorrect(fnames, dview = dview, **opts.get_group('motion'))
+        mc.motion_correct(save_movie = True)
+        # Find path to mmap file
+        output_path = mc.mmap_file
+        d = dict()
+        d.update(
+            {
+                "mcorr_output": output_path,
+                "success": True,
+                "traceback": None
+            }
+        )
+    except:
+        d = {"success": False, "traceback": traceback.format_exc()}
 
-    # Run MC
-    fnames = [str(input_movie_path)]
-    mc = MotionCorrect(fnames, dview = dview, **opts.get_group('motion'))
-    mc.motion_correct(save_movie = True)
-    ix = df[df['uuid'] == uuid].index[0]
-    df['outputs'][ix] = mc.mmap_file
-    # Add the Series to the DataFrame
-    print('map file', df['outputs'][ix])
-    print('new df', df)
+    # Add dictionary to output column of series
+    df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # Save DataFrame to disk
     df.to_pickle(batch_path)
-    #np.save(input_movie_path + 'mc.npy', mc.mmap_file)
 
-def load_output_mcorr(viewer, batch_item: pd.Series):
-    print("output mcorr movie")
-    path = batch_item['outputs'][0]
-    print(path)
+def load_output(viewer, batch_item: pd.Series):
+    print('Loading outputs of MC')
+    path = batch_item['outputs'].item()["mcorr_output"][0]
+
     Yr, dims, T = cm.load_memmap(path)
     MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
     viewer.add_image(MotionCorrectedMovie)
