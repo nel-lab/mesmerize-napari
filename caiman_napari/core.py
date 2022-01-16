@@ -1,6 +1,6 @@
 import os
-from . import algorithms
-from . import _mcorr
+from .algorithms import *
+from .algorithms import mcorr
 from .utils import make_runfile, IS_WINDOWS
 # Core utilities
 import pandas
@@ -19,8 +19,8 @@ CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
 
 ALGO_MODULES = \
     {
-        # 'cnmf': cnmf,
-        'mcorr': _mcorr
+        'cnmf': cnmf,
+        'mcorr': mcorr
     }
 
 
@@ -93,8 +93,8 @@ class CaimanDataFrameExtensions:
                 'name': name,
                 'input_movie_path': input_movie_path,
                 'params': params,
-                'outputs': [],  # not used yet, intended to store list of output file paths
-                'uuid': str(uuid4())  # unique identifier for this combination of movive + params
+                'outputs': None,  # not used yet, intended to store list of output file paths
+                'uuid': str(uuid4())  # unique identifier for this combination of movie + params
             }
         )
 
