@@ -1,5 +1,4 @@
 import time
-import pathlib
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
@@ -12,9 +11,7 @@ from .core import *
 import pandas as pd
 from functools import partial
 import pprint
-from .algorithms import *
 from . import algorithms
-from._mcorr import load_outputs
 import caiman as cm
 
 
@@ -113,7 +110,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
             name = r['name']
             uuid = r['uuid']
             self.ui.listWidgetItems.addItem(f'{algo}: {name}')
-            
+
             item = self.ui.listWidgetItems.item(i)
             item.setData(3, uuid)
 
@@ -165,7 +162,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.textBrowserStdOut.append(txt)
 
     def item_finished(self, ix):
-        self.set_list_widget_item_color(ix, 'green')
+        self.dataframe = load_batch(self.dataframe_file_path)
+        if self.dataframe.iloc[ix]['outputs']['success']:
+            self.set_list_widget_item_color(ix, 'green')
+        else:
+            self.set_list_widget_item_color(ix, 'red')
 
         if (ix + 1) < self.ui.listWidgetItems.count():
             time.sleep(10)
@@ -180,6 +181,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
         u = self.dataframe.iloc[ix]['uuid']
         s = pprint.pformat(p)
         s = f"{u}\n\n{s}"
+
+        if self.dataframe.iloc[ix]['outputs'] is not None:
+            if self.dataframe.iloc[ix]['outputs']['traceback'] is not None:
+                tb = self.dataframe.iloc[ix]['outputs']['traceback']
+                s += f"\n\n{tb}"
+
         self.ui.textBrowserParams.setText(s)
 
     def set_list_widget_item_color(self, ix: int, color: str):
@@ -193,24 +200,19 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
 
-    def temp_func(self):
-        print("show results")
-        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
-        uuid = item_gui.data(3)
-        #algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo']
-        self.viewer.open(self.dataframe.loc[self.dataframe['uuid'] == uuid,'input_movie_path'])
-        #print(self.dataframe.loc[self.dataframe['uuid'] == uuid])
-        load_outputs(self.viewer, self.dataframe.loc[self.dataframe['uuid'] == uuid])
     def load_output(self):
-        print("show results")
+        # clear napari viewer before loading new movies
+        self.clear_viewer()
+        # Find uuid for selected item
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)
+        # Algorithm name for selected item
+        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
+        # Open input movie for selected item
+        self.viewer.open(self.dataframe.loc[self.dataframe['uuid'] == uuid, 'input_movie_path'].item())
+        print("show outputs for: ", algo)
 
-        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo']
-        self.viewer.open(self.dataframe.loc[self.dataframe['uuid'] == uuid,'input_movie_path'])
-        print("algo name", algo[1])
-        
-        getattr(algorithms, algo[1]).load_output(self.viewer, self.dataframe.loc[self.dataframe['uuid'] == uuid])
+        getattr(algorithms, algo).load_output(self.viewer, self.dataframe.loc[self.dataframe['uuid'] == uuid])
 
 
 @napari_hook_implementation
