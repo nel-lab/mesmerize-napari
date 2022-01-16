@@ -72,7 +72,6 @@ Use single quotes for strings, do not use double quotes.</string>
       <property name="font">
        <font>
         <pointsize>12</pointsize>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -252,7 +251,6 @@ Use single quotes for strings, do not use double quotes.</string>
       <property name="font">
        <font>
         <pointsize>12</pointsize>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -574,6 +572,7 @@ Use single quotes for strings, do not use double quotes.</string>
  <tabstops>
   <tabstop>groupBox_motion_correction_kwargs</tabstop>
   <tabstop>plainTextEdit_mc_kwargs</tabstop>
+  <tabstop>checkBoxRigidMC</tabstop>
   <tabstop>spinBoxGSig_filt</tabstop>
   <tabstop>spinboxX</tabstop>
   <tabstop>spinboxY</tabstop>
