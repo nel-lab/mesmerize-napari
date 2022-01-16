@@ -1,9 +1,6 @@
 import os
 from .algorithms import *
-from .algorithms import mcorr
 from .utils import make_runfile, IS_WINDOWS
-# Core utilities
-import pandas
 import pandas as pd
 import pathlib
 from pathlib import Path
@@ -46,7 +43,7 @@ def _get_item_uuid(item: Union[int, str, UUID]) -> UUID:
 
 
 def create_batch(path: str = None):
-    df = pandas.DataFrame(columns=DATAFRAME_COLUMNS)
+    df = pd.DataFrame(columns=DATAFRAME_COLUMNS)
     df.caiman.path = path
 
     df.to_pickle(path)
@@ -93,7 +90,7 @@ class CaimanDataFrameExtensions:
                 'name': name,
                 'input_movie_path': input_movie_path,
                 'params': params,
-                'outputs': None,  # not used yet, intended to store list of output file paths
+                'outputs': None,  # to store dict of output information, such as output file paths
                 'uuid': str(uuid4())  # unique identifier for this combination of movie + params
             }
         )

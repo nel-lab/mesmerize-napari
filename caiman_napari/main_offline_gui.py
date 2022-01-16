@@ -38,25 +38,25 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.dataframe: pd.DataFrame = None
         self.dataframe_file_path: str = None
         # define actions for each button
-        ## Open Movie
+        # Open Movie
         self.ui.pushButtonOpenMovie.clicked.connect(self.open_movie)
-        ## Open Panel to set parameters for CNMF
+        # Open Panel to set parameters for CNMF
         self.ui.pushButtonParamsCNMF.clicked.connect(self.show_cnmf_params_gui)
-        ## Open panel for MCORR
+        # Open panel for MCORR
         self.ui.pushButtonParamsMCorr.clicked.connect(self.show_mcorr_params_gui)
-        ## Start Batch
+        # Start Batch
         self.ui.pushButtonNewBatch.clicked.connect(self.create_new_batch)
-        ## Open Batch
+        # Open Batch
         self.ui.pushButtonOpenBatch.clicked.connect(self.open_batch)
-        ## Start running from zereoth index
+        # Start running from zereoth index
         self.ui.pushButtonStart.clicked.connect(self.run)
-        ## Start running from selected index
+        # Start running from selected index
         self.ui.pushButtonStartItem.clicked.connect(self.run_item)
-        ## Remove selected item
+        # Remove selected item
         self.ui.pushButtonDelItem.clicked.connect(self.remove_item)
-        ## Change parameters displayed in param text box upon change in selection
+        # Change parameters displayed in param text box upon change in selection
         self.ui.listWidgetItems.currentRowChanged.connect(self.set_params_text)
-        ## On double click of item in listwidget, load results and display
+        # On double click of item in listwidget, load results and display
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
@@ -64,6 +64,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         if not self.clear_viewer():
             return
 
+        self._open_movie(path)
+
+    def _open_movie(self, path):
         self.input_movie_path = path
         file_ext = pathlib.Path(self.input_movie_path).suffix
         if file_ext == '.mmap':
@@ -72,8 +75,6 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.viewer.add_image(images)
         else:
             self.viewer.open(self.input_movie_path)
-
-
 
     def clear_viewer(self) -> bool:
         if len(self.viewer.layers) == 0:
@@ -209,10 +210,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
         # Algorithm name for selected item
         algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
         # Open input movie for selected item
-        self.viewer.open(self.dataframe.loc[self.dataframe['uuid'] == uuid, 'input_movie_path'].item())
+        movie_path = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'input_movie_path'].item()
+        self._open_movie(movie_path)
         print("show outputs for: ", algo)
-
-        getattr(algorithms, algo).load_output(self.viewer, self.dataframe.loc[self.dataframe['uuid'] == uuid])
+        r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
+        getattr(algorithms, algo).load_output(self.viewer, r)
 
 
 @napari_hook_implementation
