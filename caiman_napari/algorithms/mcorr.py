@@ -32,7 +32,8 @@ def main(batch_path, uuid):
         single_thread=False
     )
 
-    opts = CNMFParams(params_dict=params)
+    rel_params = dict(params['mcorr_kwargs'])
+    opts = CNMFParams(params_dict=rel_params)
     # Run MC, denote boolean 'success' if MC completes w/out error
     try:
         # Run MC
@@ -52,6 +53,7 @@ def main(batch_path, uuid):
     except:
         d = {"success": False, "traceback": traceback.format_exc()}
 
+    print(d)
     # Add dictionary to output column of series
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # Save DataFrame to disk
@@ -64,6 +66,14 @@ def load_output(viewer, batch_item: pd.Series):
     Yr, dims, T = cm.load_memmap(path)
     MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
     viewer.add_image(MotionCorrectedMovie)
+
+    # Dict for Projections
+    choices = {'mean': np.mean(MotionCorrectedMovie, axis=0),
+               'std': np.std(MotionCorrectedMovie, axis=0),
+               'max': np.max(MotionCorrectedMovie, axis=0)}
+    MC_Projection = choices.get(batch_item['params'].item()['view_projections'])
+
+    viewer.add_image(MC_Projection)
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])

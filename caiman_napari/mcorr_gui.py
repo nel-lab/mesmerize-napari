@@ -13,7 +13,7 @@ class MCORRWidget(QtWidgets.QDockWidget):
         self.ui.btnAddToBatchElastic.clicked.connect(self.add_item)
 
     #@present_exceptions()
-    def get_params(self, *args, group_params: bool = False) -> Tuple[str, dict]:
+    def get_params(self, *args, group_params: bool = True) -> Tuple[str, dict]:
         """
         Get a dict of the set parameters.
         If the work environment was loaded from a motion correction batch item it put the bord_px in the dict.
@@ -50,6 +50,11 @@ class MCORRWidget(QtWidgets.QDockWidget):
 
         # Make the output dict
         d = dict()
+        d.update(
+            {
+                'view_projections': self.ui.comboBoxProjectionsOption.currentText()
+            }
+        )
         # Group the kwargs of the two parts seperately
         if group_params:
             d.update(
