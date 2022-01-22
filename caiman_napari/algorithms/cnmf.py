@@ -117,10 +117,16 @@ def load_output(viewer, batch_item: pd.Series):
         swap_dim=True
     )
 
-    colors_contours_good = auto_colormap(
+    colors_contours_good_edge = auto_colormap(
         n_colors=len(contours_good),
         cmap='hsv',
         output='mpl',
+    )
+    colors_contours_good_face = auto_colormap(
+        n_colors=len(contours_good),
+        cmap='hsv',
+        output='mpl',
+        alpha=0.0,
     )
 
     contours_good_coordinates = [_organize_coordinates(c) for c in contours_good]
@@ -128,8 +134,8 @@ def load_output(viewer, batch_item: pd.Series):
         data=contours_good_coordinates,
         shape_type='polygon',
         edge_width=0.5,
-        edge_color=colors_contours_good,
-        face_color=colors_contours_good,
+        edge_color=colors_contours_good_edge,
+        face_color=colors_contours_good_face,
         opacity=0.1,
     )
 
@@ -142,18 +148,24 @@ def load_output(viewer, batch_item: pd.Series):
 
         contours_bad_coordinates = [_organize_coordinates(c) for c in contours_bad]
 
-        colors_contours_bad = auto_colormap(
+        colors_contours_bad_edge = auto_colormap(
             n_colors=len(contours_bad),
             cmap='hsv',
             output='mpl',
+        )
+        colors_contours_bad_face = auto_colormap(
+            n_colors=len(contours_bad),
+            cmap='hsv',
+            output='mpl',
+            alpha=0.0
         )
 
         viewer.add_shapes(
             data=contours_bad_coordinates,
             shape_type='polygon',
             edge_width=0.5,
-            edge_color=colors_contours_bad,
-            face_color=colors_contours_bad,
+            edge_color=colors_contours_bad_edge,
+            face_color=colors_contours_bad_face,
             opacity=0.1,
         )
 
