@@ -50,11 +50,7 @@ class MCORRWidget(QtWidgets.QDockWidget):
 
         # Make the output dict
         d = dict()
-        d.update(
-            {
-                'view_projections': self.ui.comboBoxProjectionsOption.currentText()
-            }
-        )
+
         # Group the kwargs of the two parts seperately
         if group_params:
             d.update(

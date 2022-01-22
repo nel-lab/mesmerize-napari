@@ -67,11 +67,18 @@ def load_output(viewer, batch_item: pd.Series):
     MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
     viewer.add_image(MotionCorrectedMovie)
 
+
+def load_projection(viewer, batch_item: pd.Series, proj_type):
+    path = batch_item['outputs'].item()["mcorr_output"][0]
+
+    Yr, dims, T = cm.load_memmap(path)
+    MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
+
     # Dict for Projections
     choices = {'mean': np.mean(MotionCorrectedMovie, axis=0),
-               'std': np.std(MotionCorrectedMovie, axis=0),
+               'standard deviation': np.std(MotionCorrectedMovie, axis=0),
                'max': np.max(MotionCorrectedMovie, axis=0)}
-    MC_Projection = choices.get(batch_item['params'].item()['view_projections'])
+    MC_Projection = choices[proj_type]
 
     viewer.add_image(MC_Projection)
 
