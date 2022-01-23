@@ -29,6 +29,24 @@
     </widget>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <item>
+      <widget class="QPushButton" name="pushButtonNewBatch">
+       <property name="text">
+        <string>New Batch</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonOpenBatch">
+       <property name="text">
+        <string>Open Batch</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QPushButton" name="pushButtonOpenMovie">
      <property name="text">
       <string>Open Movie</string>
@@ -66,72 +84,12 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>MCorr Projections</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QComboBox" name="comboBoxProjectionOpts">
-        <item>
-         <property name="text">
-          <string>mean</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>std</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>max</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonViewProjection">
-        <property name="text">
-         <string>View Projection</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Items</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_9">
-     <item>
-      <widget class="QPushButton" name="pushButtonNewBatch">
-       <property name="text">
-        <string>New Batch</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButtonOpenBatch">
-       <property name="text">
-        <string>Open Batch</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QListWidget" name="listWidgetItems"/>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_11">
      <item>
       <widget class="QPushButton" name="pushButtonStart">
+       <property name="toolTip">
+        <string>Run the batch from the first item</string>
+       </property>
        <property name="text">
         <string>Start</string>
        </property>
@@ -139,6 +97,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonStartItem">
+       <property name="toolTip">
+        <string>Run the batch from the currently selected item</string>
+       </property>
        <property name="text">
         <string>Start at item</string>
        </property>
@@ -165,27 +126,111 @@
     </layout>
    </item>
    <item>
-    <widget class="QTextBrowser" name="textBrowserParams"/>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Items</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <widget class="QTextBrowser" name="textBrowserStdOut"/>
+    <widget class="QListWidget" name="listWidgetItems">
+     <property name="toolTip">
+      <string>List of items in current batch</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="toolTip">
+      <string>Click an item and use post-processing tools</string>
+     </property>
+     <property name="title">
+      <string>Post-processing</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QComboBox" name="comboBoxProjectionOpts">
+        <property name="toolTip">
+         <string>Type of projections to show</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>mean</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>std</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>max</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonViewProjection">
+        <property name="toolTip">
+         <string>View the mean/std/max Projection (for motion correction) 
+and/or Correlation Image (for CNMF).</string>
+        </property>
+        <property name="text">
+         <string>View Proj/Corr</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonEvalComponents">
+        <property name="toolTip">
+         <string>Open GUI for component evaluation</string>
+        </property>
+        <property name="text">
+         <string>Eval Comps</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="textBrowserParams">
+     <property name="toolTip">
+      <string>Parameters for the currently selected batch item</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="textBrowserStdOut">
+     <property name="toolTip">
+      <string>stdout and stderr from externally running QProcess</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
+  <tabstop>pushButtonNewBatch</tabstop>
+  <tabstop>pushButtonOpenBatch</tabstop>
   <tabstop>pushButtonOpenMovie</tabstop>
   <tabstop>pushButtonParamsMCorr</tabstop>
   <tabstop>pushButtonParamsCNMF</tabstop>
   <tabstop>pushButtonParamsCNMFE</tabstop>
-  <tabstop>comboBoxProjectionOpts</tabstop>
-  <tabstop>pushButtonViewProjection</tabstop>
-  <tabstop>pushButtonNewBatch</tabstop>
-  <tabstop>pushButtonOpenBatch</tabstop>
-  <tabstop>listWidgetItems</tabstop>
   <tabstop>pushButtonStart</tabstop>
   <tabstop>pushButtonStartItem</tabstop>
   <tabstop>pushButtonDelItem</tabstop>
   <tabstop>pushButtonAbort</tabstop>
+  <tabstop>listWidgetItems</tabstop>
+  <tabstop>comboBoxProjectionOpts</tabstop>
+  <tabstop>pushButtonViewProjection</tabstop>
+  <tabstop>pushButtonEvalComponents</tabstop>
   <tabstop>textBrowserParams</tabstop>
   <tabstop>textBrowserStdOut</tabstop>
  </tabstops>
