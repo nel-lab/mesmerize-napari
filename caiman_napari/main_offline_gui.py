@@ -58,6 +58,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.currentRowChanged.connect(self.set_params_text)
         # On double click of item in listwidget, load results and display
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
+        # Show MCorr Projections
+        self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -216,6 +218,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_output(self.viewer, r)
 
+    def view_projections(self):
+        proj_type = self.ui.comboBoxProjectionOpts.currentText()
+        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
+        uuid = item_gui.data(3)
+        # Algorithm name for selected item
+        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
+        r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
+        getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
