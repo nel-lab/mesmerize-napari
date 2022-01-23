@@ -217,6 +217,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         print("show outputs for: ", algo)
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_output(self.viewer, r)
+
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
@@ -224,12 +225,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         # Algorithm name for selected item
         algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
-        if algo == 'mcorr':
-            algorithms.mcorr.load_projection(self.viewer, r, proj_type)
-            # If we decide to create a separate button, this is the function we can call
-            algorithms.mcorr.load_correlation_image(self.viewer, r)
-        else:
-            print("Projections only available for completed MCorr items")
+        getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():

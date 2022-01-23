@@ -70,6 +70,18 @@ def load_output(viewer, batch_item: pd.Series):
 
 
 def load_projection(viewer, batch_item: pd.Series, proj_type):
+    """
+
+    Parameters
+    ----------
+    viewer: Viewer
+        Viewer instance to load the projection into
+    batch_item: pd.Series
+
+    proj_type: str
+        define type of projection to display {mean, sd, max}
+
+    """
     print("loading projection")
     path = batch_item['outputs'].item()["mcorr_output"][0]
 
@@ -79,6 +91,8 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
     MC_Projection = getattr(np, f"nan{proj_type}")(MotionCorrectedMovie, axis=0)
 
     viewer.add_image(MC_Projection)
+
+    load_correlation_image(viewer, batch_item)
 
 
     # Load Correlation Image

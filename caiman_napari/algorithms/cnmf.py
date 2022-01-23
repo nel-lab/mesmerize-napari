@@ -20,6 +20,7 @@ from caiman_napari.utils import *
 from caiman.summary_images import local_correlations_movie_offline
 import os
 import traceback
+from napari.viewer import Viewer
 
 
 def main(batch_path, uuid):
@@ -75,7 +76,6 @@ def main(batch_path, uuid):
 
         print("fitting images")
         cnm = cnm.fit(images)
-
         #
         if params['refit'] == True:
             print('refitting')
@@ -91,6 +91,7 @@ def main(batch_path, uuid):
         d.update(
             {
                 "cnmf_outputs": output_path,
+                "cnmf_memmap": fname_new,
                 "success": True,
                 "traceback": None
             }
@@ -139,7 +140,7 @@ def load_output(viewer, batch_item: pd.Series):
         edge_width=0.5,
         edge_color=colors_contours_good_edge,
         face_color=colors_contours_good_face,
-        opacity=0.1,
+        opacity=0.7,
     )
 
     if cnmf_obj.estimates.idx_components_bad is not None and len(cnmf_obj.estimates.idx_components_bad) > 0:
@@ -169,7 +170,7 @@ def load_output(viewer, batch_item: pd.Series):
             edge_width=0.5,
             edge_color=colors_contours_bad_edge,
             face_color=colors_contours_bad_face,
-            opacity=0.1,
+            opacity=0.7,
         )
 
 def _organize_coordinates(contour: dict):
@@ -177,7 +178,31 @@ def _organize_coordinates(contour: dict):
     coors = coors[~np.isnan(coors).any(axis=1)]
 
     return coors
+def load_projection(viewer, batch_item: pd.Series, proj_type):
+    """
+    Load correlation map from cnmf memmap file
 
+    Parameters
+    ----------
+    viewer: Viewer
+        Viewer instance to load the projection in
+
+    batch_item: pd.Series
+
+    proj_type: None
+        Not used
+
+    """
+    # Get cnmf memmap
+    fname_new = batch_item["outputs"].item()["cnmf_memmap"]
+    # Get order f images
+    Yr, dims, T = cm.load_memmap(fname_new)
+    images = np.reshape(Yr.T, [T] + list(dims), order='F')
+    # Get correlation map
+    Cn = cm.local_correlations(images.transpose(1, 2, 0))
+    Cn[np.isnan(Cn)] = 0
+    # Add correlation map to napari viewer
+    viewer.add_image(Cn)
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
