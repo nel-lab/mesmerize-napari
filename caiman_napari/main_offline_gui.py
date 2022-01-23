@@ -2,6 +2,7 @@ import time
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
+from .cnmfe_gui import CNMFEWidget
 from PyQt5 import QtWidgets
 from qtpy import QtWidgets
 from napari_plugin_engine import napari_hook_implementation
@@ -42,8 +43,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonOpenMovie.clicked.connect(self.open_movie)
         # Open Panel to set parameters for CNMF
         self.ui.pushButtonParamsCNMF.clicked.connect(self.show_cnmf_params_gui)
-        # Open panel for MCORR
+        # Open panel to set parameters MCORR
         self.ui.pushButtonParamsMCorr.clicked.connect(self.show_mcorr_params_gui)
+        # Open panel to set parameters for CNMFE
+        self.ui.pushButtonParamsCNMFE.clicked.connect(self.show_cnmfe_params_gui)
         # Start Batch
         self.ui.pushButtonNewBatch.clicked.connect(self.create_new_batch)
         # Open Batch
@@ -202,6 +205,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
+    def show_cnmfe_params_gui(self):
+        self.cnmfe_gui = CNMFEWidget(parent=self)
+        self.cnmfe_gui.show()
 
     def load_output(self):
         # clear napari viewer before loading new movies
