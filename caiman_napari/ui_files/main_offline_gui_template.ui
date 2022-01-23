@@ -80,7 +80,7 @@
         </item>
         <item>
          <property name="text">
-          <string>standard deviation</string>
+          <string>std</string>
          </property>
         </item>
         <item>
@@ -177,6 +177,8 @@
   <tabstop>pushButtonParamsMCorr</tabstop>
   <tabstop>pushButtonParamsCNMF</tabstop>
   <tabstop>pushButtonParamsCNMFE</tabstop>
+  <tabstop>comboBoxProjectionOpts</tabstop>
+  <tabstop>pushButtonViewProjection</tabstop>
   <tabstop>pushButtonNewBatch</tabstop>
   <tabstop>pushButtonOpenBatch</tabstop>
   <tabstop>listWidgetItems</tabstop>
