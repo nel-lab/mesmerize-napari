@@ -3,6 +3,7 @@ from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
 from .cnmfe_gui import CNMFEWidget
+from .evaluate_components import EvalComponentsWidgets
 from PyQt5 import QtWidgets
 from qtpy import QtWidgets
 from napari_plugin_engine import napari_hook_implementation
@@ -63,6 +64,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
         # Show MCorr Projections
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
+
+        self.ui.pushButtonEvalComponents.clicked.connect(self.show_eval_components_gui)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -205,6 +208,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
+
     def show_cnmfe_params_gui(self):
         self.cnmfe_gui = CNMFEWidget(parent=self)
         self.cnmfe_gui.show()
@@ -232,6 +236,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
         algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
+
+    def show_eval_components_gui(self):
+        self.eval_components_gui = EvalComponentsWidgets(parent=self)
+        self.eval_components_gui.show()
+
+
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():

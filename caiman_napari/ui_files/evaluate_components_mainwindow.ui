@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DockWidgetComponentEvaluation</class>
- <widget class="QDockWidget" name="DockWidgetComponentEvaluation">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>221</width>
-    <height>313</height>
+    <width>196</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DockWidget</string>
+   <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
+  <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="label_10">
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -31,9 +32,9 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout_11">
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_11">
         <property name="text">
          <string>rval_lowest</string>
         </property>
@@ -58,9 +59,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_12">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_12">
         <property name="text">
          <string>SNR_lowest</string>
         </property>
@@ -79,9 +80,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout_13">
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label_13">
         <property name="text">
          <string>cnn_lowest</string>
         </property>
@@ -103,9 +104,10 @@
      </layout>
     </item>
     <item>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="label_14">
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -118,9 +120,9 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <layout class="QHBoxLayout" name="horizontalLayout_14">
       <item>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="label_15">
         <property name="text">
          <string>rval_thr</string>
         </property>
@@ -142,9 +144,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <layout class="QHBoxLayout" name="horizontalLayout_15">
       <item>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="label_16">
         <property name="text">
          <string>min_SNR</string>
         </property>
@@ -166,9 +168,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <layout class="QHBoxLayout" name="horizontalLayout_16">
       <item>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="label_17">
         <property name="text">
          <string>min_cnn_thr</string>
         </property>
@@ -197,7 +199,7 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <layout class="QHBoxLayout" name="horizontalLayout_17">
       <item>
        <widget class="QPushButton" name="pushButton_update">
         <property name="text">
@@ -216,7 +218,29 @@
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>196</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>doubleSpinBox_rval_lowest</tabstop>
+  <tabstop>doubleSpinBox_SNR_lowest</tabstop>
+  <tabstop>doubleSpinBox_cnn_lowest</tabstop>
+  <tabstop>doubleSpinBox_rval_thr</tabstop>
+  <tabstop>doubleSpinBox_min_SNR</tabstop>
+  <tabstop>doubleSpinBox_min_cnn_thr</tabstop>
+  <tabstop>checkBox_update_live</tabstop>
+  <tabstop>pushButton_update</tabstop>
+  <tabstop>pushButton_save_to_item</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
