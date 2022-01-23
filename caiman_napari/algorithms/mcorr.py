@@ -6,6 +6,7 @@ from caiman.source_extraction.cnmf import cnmf as cnmf
 from caiman.utils.utils import load_dict_from_hdf5
 from caiman.source_extraction.cnmf.params import CNMFParams
 from caiman.motion_correction import MotionCorrect
+from caiman.summary_images import local_correlations_movie_offline
 from caiman.utils.utils import download_demo
 import psutil
 import json
@@ -69,6 +70,7 @@ def load_output(viewer, batch_item: pd.Series):
 
 
 def load_projection(viewer, batch_item: pd.Series, proj_type):
+    print("loading projection")
     path = batch_item['outputs'].item()["mcorr_output"][0]
 
     Yr, dims, T = cm.load_memmap(path)
@@ -81,6 +83,30 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
     MC_Projection = choices[proj_type]
 
     viewer.add_image(MC_Projection)
+
+
+    # Load Correlation Image
+def load_correlation_image(viewer, batch_item: pd.Series):
+    print("loading correlation image)")
+    path = batch_item['outputs'].item()['mcorr_output'][0]
+    # Set up parallel processing
+    # adapted from current demo notebook
+    n_processes = psutil.cpu_count() - 1
+    # Start cluster for parallel processing
+    c, dview, n_processes = cm.cluster.setup_cluster(
+        backend='local',
+        n_processes=n_processes,
+        single_thread=False
+    )
+
+    Cns = local_correlations_movie_offline([path],
+                                           remove_baseline=True, window=1000, stride=1000,
+                                           winSize_baseline=100, quantil_min_baseline=10,
+                                           dview=dview)
+    Cn = Cns.max(axis=0)
+    Cn[np.isnan(Cn)] = 0
+    correlation_image = Cn
+    viewer.add_image(correlation_image)
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])

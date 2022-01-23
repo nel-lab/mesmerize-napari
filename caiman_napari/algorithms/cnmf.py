@@ -17,6 +17,7 @@ import pandas as pd
 from caiman.utils.visualization import get_contours as caiman_get_contours
 from caiman.source_extraction.cnmf.cnmf import load_CNMF
 from caiman_napari.utils import *
+from caiman.summary_images import local_correlations_movie_offline
 import os
 import traceback
 
@@ -74,16 +75,18 @@ def main(batch_path, uuid):
 
         print("fitting images")
         cnm = cnm.fit(images)
+
+        #
         if params['refit'] == True:
             print('refitting')
-            cnmf_obj = cnm.refit(images, dview=dview)
+            cnm = cnm.refit(images, dview=dview)
 
         print("Eval")
-        cnmf_obj.estimates.evaluate_components(images, cnmf_obj.params, dview=dview)
+        cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
 
         output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
 
-        cnmf_obj.save(output_path)
+        cnm.save(output_path)
         d = dict()
         d.update(
             {
@@ -174,6 +177,7 @@ def _organize_coordinates(contour: dict):
     coors = coors[~np.isnan(coors).any(axis=1)]
 
     return coors
+
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])

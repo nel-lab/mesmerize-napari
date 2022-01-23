@@ -226,6 +226,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         if algo == 'mcorr':
             algorithms.mcorr.load_projection(self.viewer, r, proj_type)
+            algorithms.mcorr.load_correlation_image(self.viewer, r)
         else:
             print("Projections only available for completed MCorr items")
 
