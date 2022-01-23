@@ -77,10 +77,11 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
     MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
 
     # Dict for Projections
-    choices = {'mean': np.mean(MotionCorrectedMovie, axis=0),
-               'standard deviation': np.std(MotionCorrectedMovie, axis=0),
-               'max': np.max(MotionCorrectedMovie, axis=0)}
-    MC_Projection = choices[proj_type]
+    choices = {'mean': 'mean',
+               'standard deviation': 'std',
+               'max': 'max'}
+
+    MC_Projection = getattr(np, f"nan{choices[proj_type]}")(MotionCorrectedMovie, axis=0)
 
     viewer.add_image(MC_Projection)
 

@@ -226,6 +226,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         if algo == 'mcorr':
             algorithms.mcorr.load_projection(self.viewer, r, proj_type)
+            # If we decide to create a separate button, this is the function we can call
             algorithms.mcorr.load_correlation_image(self.viewer, r)
         else:
             print("Projections only available for completed MCorr items")
