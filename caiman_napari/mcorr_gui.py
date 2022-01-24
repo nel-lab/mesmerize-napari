@@ -51,7 +51,7 @@ class MCORRWidget(QtWidgets.QDockWidget):
         # Make the output dict
         d = dict()
 
-        # Group the kwargs of the two parts seperately
+        # Group the kwargs of the two parts separately
         if group_params:
             d.update(
                 {
