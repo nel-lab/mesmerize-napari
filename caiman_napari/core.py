@@ -17,7 +17,8 @@ CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
 ALGO_MODULES = \
     {
         'cnmf': cnmf,
-        'mcorr': mcorr
+        'mcorr': mcorr,
+        'cnmfe': cnmfe,
     }
 
 
