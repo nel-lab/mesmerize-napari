@@ -60,13 +60,16 @@ def main(batch_path, uuid):
         )
 
         if not params['do_cnmfe']:
-             pickle.dump(cn_filter, open(uuid + '_cn_filter.pikl', 'wb'), protocol=4)
-             pickle.dump(pnr, open(uuid + '_pnr.pikl', 'wb'), protocol=4)
+             pnr_output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}_pnr.pikl").resolve())
+             cn_output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}_cn_filter.pikl").resolve())
+
+             pickle.dump(cn_filter, open(pnr_output_path, 'wb'), protocol=4)
+             pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
 
              output_file_list = \
              [
-                 uuid + '_pnr.pikl',
-                 uuid + '_cn_filter.pikl'
+                 pnr_output_path,
+                 cn_output_path
              ]
              print(output_file_list)
 
@@ -79,6 +82,7 @@ def main(batch_path, uuid):
                      "traceback": None
                  }
              )
+             print('dict for non-cnmfe:', d)
 
         else:
             cnmfe_params_dict = \
@@ -115,6 +119,7 @@ def main(batch_path, uuid):
                     "traceback": None
                 }
             )
+            print(d)
 
     except:
         d = {"success": False, "traceback": traceback.format_exc()}
@@ -122,8 +127,89 @@ def main(batch_path, uuid):
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # save dataframe to disc
     df.to_pickle(batch_path)
-def load_output(viewer, batch_item: pd.Series):
-    pass
 
+def load_output(viewer, batch_item: pd.Series):
+    print('loading outputs of CNMFE')
+    path = batch_item["outputs"].item()["cnmfe_outputs"]
+    params = batch_item["params"].item()
+    uuid = batch_item['uuid']
+
+    if not params['do_cnmfe']:
+        cn_filter = pd.read_pickle(path[0])
+        viewer.add_image(cn_filter)
+        pnr_filter = pd.read_pickle(path[1])
+        viewer.add_image(pnr_filter)
+    else:
+        cnmfe_obj = load_CNMF(path)
+        print(cnmfe_obj)
+        dims = cnmfe_obj.dims
+        if dims is None:
+            dims = cnmfe_obj.estimates.dims
+
+        dims = dims[1], dims[0]
+
+        contours_good = caiman_get_contours(
+            cnmfe_obj.estimates.A[:, cnmfe_obj.estimates.idx_components],
+            dims,
+            swap_dim=True
+        )
+
+        colors_contours_good_edge = auto_colormap(
+            n_colors=len(contours_good),
+            cmap='hsv',
+            output='mpl',
+        )
+        colors_contours_good_face = auto_colormap(
+            n_colors=len(contours_good),
+            cmap='hsv',
+            output='mpl',
+            alpha=0.0,
+        )
+
+        contours_good_coordinates = [_organize_coordinates(c) for c in contours_good]
+        viewer.add_shapes(
+            data=contours_good_coordinates,
+            shape_type='polygon',
+            edge_width=0.5,
+            edge_color=colors_contours_good_edge,
+            face_color=colors_contours_good_face,
+            opacity=0.7,
+        )
+        if cnmfe_obj.estimates.idx_components_bad is not None and len(cnmfe_obj.estimates.idx_components_bad) > 0:
+            contours_bad = caiman_get_contours(
+                cnmfe_obj.estimates.A[:, cnmfe_obj.estimates.idx_components_bad],
+                dims,
+                swap_dim=True
+            )
+
+            contours_bad_coordinates = [_organize_coordinates(c) for c in contours_bad]
+
+            colors_contours_bad_edge = auto_colormap(
+                n_colors=len(contours_bad),
+                cmap='hsv',
+                output='mpl',
+            )
+            colors_contours_bad_face = auto_colormap(
+                n_colors=len(contours_bad),
+                cmap='hsv',
+                output='mpl',
+                alpha=0.0
+            )
+
+            viewer.add_shapes(
+                data=contours_bad_coordinates,
+                shape_type='polygon',
+                edge_width=0.5,
+                edge_color=colors_contours_bad_edge,
+                face_color=colors_contours_bad_face,
+                opacity=0.7,
+            )
+
+def _organize_coordinates(contour: dict):
+    coors = contour['coordinates']
+    coors = coors[~np.isnan(coors).any(axis=1)]
+
+    return coors
+    
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
