@@ -53,11 +53,11 @@ def main(batch_path, uuid):
 
         Yr, dims, T = cm.load_memmap(fname_new)
         images = np.reshape(Yr.T, [T] + list(dims), order='F')
-
+        downsample_ratio = params['downsample_ratio']
         # in fname new load in memmap order C
 
         cn_filter, pnr = cm.summary_images.correlation_pnr(
-            images, swap_dim=False, gSig=gSig
+            images[::downsample_ratio], swap_dim=False, gSig=gSig
         )
 
         if not params['do_cnmfe']:

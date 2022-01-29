@@ -14,6 +14,7 @@ class CNMFEWidget(QtWidgets.QDockWidget):
     @present_exceptions()
     def _add_item_corr_pnr(self, *args) -> Tuple[str, dict]:
         gSig = self.ui.spinBoxGSig.value()
+        downsample_ratio = self.ui.spinBoxDownsample.value()
         cnmfe_kwargs = \
             {
                 'gSig':  (gSig, gSig)
@@ -23,6 +24,7 @@ class CNMFEWidget(QtWidgets.QDockWidget):
             {
                 'do_cnmfe': False,
                 'cnmfe_kwargs': cnmfe_kwargs,
+                'downsample_ratio': downsample_ratio,
             }
         )
 
@@ -44,6 +46,7 @@ class CNMFEWidget(QtWidgets.QDockWidget):
             method_deconvolution = None
         else:
             method_deconvolution = deconv
+        downsample_ratio = self.ui.spinBoxDownsample.value()
         cnmfe_kwargs = \
             {
                 'gSig': (gSig, gSig),
@@ -78,7 +81,8 @@ class CNMFEWidget(QtWidgets.QDockWidget):
         d = dict()
         d.update(
             {
-                'do_cnmfe': True
+                'do_cnmfe': True,
+                'downsample_ratio': downsample_ratio,
             }
         )
 
