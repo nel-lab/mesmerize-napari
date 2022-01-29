@@ -13,6 +13,7 @@ import sys
 import pandas as pd
 import pickle
 from caiman.utils.visualization import get_contours as caiman_get_contours
+from caiman.utils.visualization import inspect_correlation_pnr, nb_inspect_correlation_pnr
 from caiman.source_extraction.cnmf.cnmf import load_CNMF
 from caiman_napari.utils import *
 from caiman.summary_images import local_correlations_movie_offline
@@ -87,13 +88,12 @@ def main(batch_path, uuid):
         else:
             cnmfe_params_dict = \
                 {
-                    #"method_init": 'corr_pnr',
+                    "method_init": 'corr_pnr',
                     "n_processes": n_processes,
                     "only_init": True,    # for 1p
-                    #"center_psf": True,         # for 1p
+                    "center_psf": True,         # for 1p
                     "normalize_init": False     # for 1p
                 }
-            # TODO: figure out cause for _flapack module error when including above dict params - method_init and center_psf
             tot = {**cnmfe_params_dict, **params['cnmfe_kwargs']}
             cnmfe_params_dict = CNMFParams(params_dict=tot)
             cnm = cnmf.CNMF(
@@ -104,8 +104,7 @@ def main(batch_path, uuid):
             print("Performing CNMFE")
             cnm = cnm.fit(images)
             print("evaluating components")
-            #cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
-            # TODO: figure out cause for 'error while saving cnn_preds' when running above function
+            cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
 
             output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
             cnm.save(output_path)
