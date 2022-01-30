@@ -302,3 +302,11 @@ def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Opt
     os.chmod(sh_file, st.st_mode | S_IEXEC)
 
     return sh_file
+
+
+def _organize_coordinates(contour: dict):
+    coors = contour['coordinates']
+    coors = coors[~np.isnan(coors).any(axis=1)]
+
+    return coors
+
