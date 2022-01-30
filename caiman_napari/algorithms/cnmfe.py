@@ -22,6 +22,7 @@ import traceback
 from napari.viewer import Viewer
 import time
 from time import sleep
+from ..utils import _organize_coordinates
 
 def main(batch_path, uuid):
     df = pd.read_pickle(batch_path)
@@ -68,10 +69,11 @@ def main(batch_path, uuid):
              pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
 
              output_file_list = \
-             [
-                 pnr_output_path,
-                 cn_output_path
-             ]
+                 {
+                     'cn': cn_output_path,
+                     'pnr': pnr_output_path,
+                 }
+
              print(output_file_list)
 
              d = dict()
@@ -134,9 +136,9 @@ def load_output(viewer, batch_item: pd.Series):
     uuid = batch_item['uuid']
 
     if not params['do_cnmfe']:
-        cn_filter = pd.read_pickle(path[0])
+        cn_filter = pd.read_pickle(path['cn'])
         viewer.add_image(cn_filter)
-        pnr_filter = pd.read_pickle(path[1])
+        pnr_filter = pd.read_pickle(path['pnr'])
         viewer.add_image(pnr_filter)
     else:
         cnmfe_obj = load_CNMF(path)
@@ -204,11 +206,6 @@ def load_output(viewer, batch_item: pd.Series):
                 opacity=0.7,
             )
 
-def _organize_coordinates(contour: dict):
-    coors = contour['coordinates']
-    coors = coors[~np.isnan(coors).any(axis=1)]
 
-    return coors
-    
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
