@@ -1,9 +1,25 @@
+from PyQt5 import QtWidgets
+import matplotlib
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from PyQt5 import QtWidgets
+
 from matplotlib.figure import Figure
 
+
 class MatplotlibWidget(QtWidgets.QWidget):
+    """
+    Implements a Matplotlib figure inside a QWidget.
+    Use getFigure() and redraw() to interact with matplotlib.
+
+    Example::
+
+        mw = MatplotlibWidget()
+        subplot = mw.getFigure().add_subplot(111)
+        subplot.plot(x,y)
+        mw.draw()
+    """
+
     def __init__(self, size=(5.0, 4.0), dpi=100):
         QtWidgets.QWidget.__init__(self)
         self.fig = Figure(size, dpi=dpi)

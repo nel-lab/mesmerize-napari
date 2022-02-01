@@ -28,6 +28,8 @@ from ..utils import _organize_coordinates
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from ..widget_util import MatplotlibWidget
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication
 
 
 
@@ -151,37 +153,45 @@ def load_output(viewer, batch_item: pd.Series):
 
         correlation_image_pnr = cn_filter
         pnr_image = pnr_filter
+
+        #app = QApplication(sys.argv)
         mw = MatplotlibWidget()
-        # fig = mw.getFigure()
-        mw.setWindowTitle(str(uuid))
-        #Adapted from CaImAn library's visualization module
-        # mw.plot = plt.figure(figsize=(10,4))
-        # fig = pl.figure(figsize=(10, 4))
-        cn_ax = mw.fig.add_axes([0.05, 0.2, 0.4, 0.7])
-        cn_img = cn_ax.imshow(cn_filter, cmap='jet')
-        # im_cn = plt.imshow(correlation_image_pnr, cmap='jet')
-        # plt.title('correlation image')
-        # self.cn_ax.colorbar()
-        pn_ax = mw.fig.add_axes([0.5, 0.2, 0.4, 0.7])
-        pn_img = pn_ax.imshow(pnr_filter, cmap='jet')
-        # im_pnr = plt.imshow(pnr_image, cmap='jet')
-        # plt.title('PNR')
-        # plt.colorbar()
+        subplot = mw.getFigure().add_subplot(111)
+        subplot.plot([0,1,2,3,4],[2,4,8,16,32])
+        mw.draw()
+        #sys.exit(app.exec_())
+        # app.exec_()
+        # mw = MatplotlibWidget()
+        # mw.getFigure()
+        # mw.setWindowTitle(str(uuid))
+        # #Adapted from CaImAn library's visualization module
+        # #mw.plot = plt.figure(figsize=(10,4))
+        # # fig = pl.figure(figsize=(10, 4))
+        # cn_ax = mw.fig.add_axes([0.05, 0.2, 0.4, 0.7])
+        # #mw.draw(cn_filter, cmap='jet')
+        # # im_cn = plt.imshow(correlation_image_pnr, cmap='jet')
+        # # plt.title('correlation image')
+        # # self.cn_ax.colorbar()
+        # pn_ax = mw.fig.add_axes([0.5, 0.2, 0.4, 0.7])
+        # pn_img = pn_ax.imshow(pnr_filter, cmap='jet')
+        # # im_pnr = plt.imshow(pnr_image, cmap='jet')
+        # # plt.title('PNR')
+        # # plt.colorbar()
+        # #
+        # s_cn_max_ax = mw.fig.add_axes([0.05, 0.01, 0.35, 0.03])
+        # s_cn_max = Slider(s_cn_max_ax, 'vmax',
+        #                   correlation_image_pnr.min(), correlation_image_pnr.max(), valinit=correlation_image_pnr.max())
         #
-        s_cn_max_ax = mw.fig.add_axes([0.05, 0.01, 0.35, 0.03])
-        s_cn_max = Slider(s_cn_max_ax, 'vmax',
-                          correlation_image_pnr.min(), correlation_image_pnr.max(), valinit=correlation_image_pnr.max())
-
-        s_cn_min_ax = mw.fig.add_axes([0.05, 0.07, 0.35, 0.03])
-        s_cn_min = Slider(s_cn_min_ax, 'vmin',
-                          correlation_image_pnr.min(), correlation_image_pnr.max(), valinit=correlation_image_pnr.min())
-
-        s_pnr_max_ax = mw.fig.add_axes([0.5, 0.01, 0.35, 0.03])
-        s_pnr_max = Slider(s_pnr_max_ax, 'vmax',
-                           pnr_image.min(), pnr_image.max(), valinit=pnr_image.max())
-        s_pnr_min_ax = mw.fig.add_axes([0.5, 0.07, 0.35, 0.03])
-        s_pnr_min = Slider(s_pnr_min_ax, 'vmin',
-                           pnr_image.min(), pnr_image.max(), valinit=pnr_image.min())
+        # s_cn_min_ax = mw.fig.add_axes([0.05, 0.07, 0.35, 0.03])
+        # s_cn_min = Slider(s_cn_min_ax, 'vmin',
+        #                   correlation_image_pnr.min(), correlation_image_pnr.max(), valinit=correlation_image_pnr.min())
+        #
+        # s_pnr_max_ax = mw.fig.add_axes([0.5, 0.01, 0.35, 0.03])
+        # s_pnr_max = Slider(s_pnr_max_ax, 'vmax',
+        #                    pnr_image.min(), pnr_image.max(), valinit=pnr_image.max())
+        # s_pnr_min_ax = mw.fig.add_axes([0.5, 0.07, 0.35, 0.03])
+        # s_pnr_min = Slider(s_pnr_min_ax, 'vmin',
+        #                    pnr_image.min(), pnr_image.max(), valinit=pnr_image.min())
     else:
         cnmfe_obj = load_CNMF(path)
         print(cnmfe_obj)
