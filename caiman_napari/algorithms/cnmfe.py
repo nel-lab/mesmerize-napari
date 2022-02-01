@@ -1,6 +1,7 @@
 import pathlib
 
 import matplotlib.widgets
+import napari
 import numpy as np
 import caiman as cm
 from caiman.source_extraction.cnmf import cnmf as cnmf
@@ -27,9 +28,11 @@ from time import sleep
 from ..utils import _organize_coordinates
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
-from ..widget_util import MatplotlibWidget
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication
+
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 
 
@@ -154,13 +157,25 @@ def load_output(viewer, batch_item: pd.Series):
         correlation_image_pnr = cn_filter
         pnr_image = pnr_filter
 
-        #app = QApplication(sys.argv)
-        mw = MatplotlibWidget()
-        subplot = mw.getFigure().add_subplot(111)
-        subplot.plot([0,1,2,3,4],[2,4,8,16,32])
-        mw.draw()
+        with napari.gui_qt():
+            napari.run()
+            mpl_widget = FigureCanvas(Figure(figsize=(8,4), dpi=100))
+            static_ax = mpl_widget.figure.subplots(nrows=2, ncols=1)
+            static_ax[0].imshow(cn_filter)
+            static_ax[1].imshow(pnr_filter)
+            #static_ax[0,1].imshow(pnr_filter)
+            # t = np.linspace(0, 10, 501)
+            # static_ax.plot(t, np.tan(t), ".")
+            viewer.window.add_dock_widget(mpl_widget, area='left', name=str(uuid))
+
+        # mw = MatplotlibWidget()
+        # subplot = mw.getFigure().add_subplot(111)
+        # #subplot.plot(cn_filter)
+        # subplot.imshow(cn_filter, cmap='jet')
+        # mw.setWindowTitle('correlation image')
+        # mw.show()
+
         #sys.exit(app.exec_())
-        # app.exec_()
         # mw = MatplotlibWidget()
         # mw.getFigure()
         # mw.setWindowTitle(str(uuid))
