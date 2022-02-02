@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
+    <width>701</width>
     <height>720</height>
    </rect>
   </property>
@@ -71,6 +71,13 @@
           </property>
           <property name="value">
            <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBoxDownsample">
+          <property name="value">
+           <number>1</number>
           </property>
          </widget>
         </item>
@@ -759,6 +766,7 @@ Use single quotes for strings, do not use double quotes.</string>
  </widget>
  <tabstops>
   <tabstop>spinBoxGSig</tabstop>
+  <tabstop>spinBoxDownsample</tabstop>
   <tabstop>lineEdCorrPNRName</tabstop>
   <tabstop>btnAddToBatchCorrPNR</tabstop>
   <tabstop>lineEditAin</tabstop>

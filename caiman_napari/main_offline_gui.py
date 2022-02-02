@@ -205,6 +205,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
+
     def show_cnmfe_params_gui(self):
         self.cnmfe_gui = CNMFEWidget(parent=self)
         self.cnmfe_gui.show()
