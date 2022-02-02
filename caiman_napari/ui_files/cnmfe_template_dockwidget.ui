@@ -766,6 +766,7 @@ Use single quotes for strings, do not use double quotes.</string>
  </widget>
  <tabstops>
   <tabstop>spinBoxGSig</tabstop>
+  <tabstop>spinBoxDownsample</tabstop>
   <tabstop>lineEdCorrPNRName</tabstop>
   <tabstop>btnAddToBatchCorrPNR</tabstop>
   <tabstop>lineEditAin</tabstop>
