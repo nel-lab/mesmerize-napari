@@ -6,10 +6,32 @@ import napari
 from napari import Viewer
 import napari_plot
 from napari_plot._qt.qt_viewer import QtViewer
+from caiman.source_extraction.cnmf.cnmf import load_CNMF
+from caiman.utils.utils import load_dict_from_hdf5
+from caiman_napari.utils import *
+import caiman as cm
+import pandas as pd
+import pyqtgraph as pg
 
-def napari1d_run(image, shapes: dict):
+def napari1d_run(batch_item: pd.Series, shapes: dict):
     viewer = napari.Viewer()
-    viewer.add_image(image)
+    ## Load correlation image
+    # Get cnmf memmap
+    fname_new = batch_item["outputs"].item()["cnmf_memmap"]
+    # Get order f images
+    Yr, dims, T = cm.load_memmap(fname_new)
+    images = np.reshape(Yr.T, [T] + list(dims), order='F')
+    # Get correlation map
+    Cn = cm.local_correlations(images.transpose(1, 2, 0))
+    Cn[np.isnan(Cn)] = 0
+    # Display Correlation Image in viewer
+    viewer.add_image(Cn, name="Correlation Image")
+    # Display video in viewer
+    viewer.add_image(images, name="Movie")
+    # Load cnmf file
+    path = batch_item["outputs"].item()["cnmf_outputs"]
+    cnmf_obj = load_CNMF(path)
+
 
     viewer.add_shapes(
         data=shapes['contours_good_coordinates'],
@@ -31,14 +53,31 @@ def napari1d_run(image, shapes: dict):
         name='bad components',
     )
 
+    # Traces
+    good_traces = cnmf_obj.estimates.C[cnmf_obj.estimates.idx_components]
+    bad_traces = cnmf_obj.estimates.C[cnmf_obj.estimates.idx_components_bad]
+
+    print("good traces", np.shape(good_traces))
+    print("bad traces", np.shape(bad_traces))
+
     viewer1d = napari_plot.ViewerModel1D()
     viewer1d.axis.y_label = "Intensity"
     viewer1d.axis.x_label = ""
     viewer1d.text_overlay.visible = True
     viewer1d.text_overlay.position = "top_right"
 
-    qt_viewer = QtViewer(viewer1d)
+    #qt_viewer = QtViewer(viewer1d)
 
+    lines = []
+    for i in range(np.shape(good_traces)[0]):
+        y = good_traces[i,:]
+        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i)))
+    for i in range(np.shape(bad_traces)[0]):
+        y = bad_traces[i,:]
+        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i)))
 
     viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
+
+    viewer.dims.events.connect(update_slider(viewer=viewer1d))
     napari.run()
+

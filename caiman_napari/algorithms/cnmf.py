@@ -167,16 +167,8 @@ def load_output(viewer, batch_item: pd.Series):
             'colors_contours_good_edge': colors_contours_good_edge,
             'colors_contours_good_face': colors_contours_good_face,
         }
-    # Get cnmf memmap
-    fname_new = batch_item["outputs"].item()["cnmf_memmap"]
-    # Get order f images
-    Yr, dims, T = cm.load_memmap(fname_new)
-    images = np.reshape(Yr.T, [T] + list(dims), order='F')
-    # Get correlation map
-    Cn = cm.local_correlations(images.transpose(1, 2, 0))
-    Cn[np.isnan(Cn)] = 0
 
-    napari1d_run(image=Cn, shapes=shapes_dict)
+    napari1d_run(batch_item=batch_item, shapes=shapes_dict)
 
 def _organize_coordinates(contour: dict):
     coors = contour['coordinates']
