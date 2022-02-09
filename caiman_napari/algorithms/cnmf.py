@@ -22,7 +22,9 @@ import os
 import traceback
 from napari.viewer import Viewer
 import napari_plot
-from ..napari1d_manager import napari1d_run
+
+if __name__ != '__main__':
+    from ..napari1d_manager import napari1d_run
 
 
 def main(batch_path, uuid):
@@ -105,6 +107,7 @@ def main(batch_path, uuid):
     # save dataframe to disc
     df.to_pickle(batch_path)
 
+
 def load_output(viewer, batch_item: pd.Series):
     print('Loading outputs of CNMF')
     path = batch_item["outputs"].item()["cnmf_outputs"]
@@ -170,11 +173,14 @@ def load_output(viewer, batch_item: pd.Series):
 
     napari1d_run(batch_item=batch_item, shapes=shapes_dict)
 
+
 def _organize_coordinates(contour: dict):
     coors = contour['coordinates']
     coors = coors[~np.isnan(coors).any(axis=1)]
 
     return coors
+
+
 def load_projection(viewer, batch_item: pd.Series, proj_type):
     """
     Load correlation map from cnmf memmap file
@@ -200,6 +206,7 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
     Cn[np.isnan(Cn)] = 0
     # Add correlation map to napari viewer
     viewer.add_image(Cn)
+
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
