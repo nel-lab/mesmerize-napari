@@ -63,7 +63,7 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     viewer1d = napari_plot.ViewerModel1D()
     qt_viewer = QtViewer(viewer1d)
     viewer1d.axis.y_label = "Intensity"
-    viewer1d.axis.x_label = ""
+    viewer1d.axis.x_label = "Time"
     viewer1d.text_overlay.visible = True
     viewer1d.text_overlay.position = "top_right"
     viewer1d.text_overlay.font_size = 15
@@ -86,9 +86,7 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
         lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i)))
     for i in range(np.shape(bad_traces)[0]):
         y = bad_traces[i,:]
-        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i)))
-
-
+        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i), color='red'))
     viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
     napari.run()
