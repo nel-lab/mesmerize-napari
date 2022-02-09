@@ -61,12 +61,20 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     print("bad traces", np.shape(bad_traces))
 
     viewer1d = napari_plot.ViewerModel1D()
+    qt_viewer = QtViewer(viewer1d)
     viewer1d.axis.y_label = "Intensity"
     viewer1d.axis.x_label = ""
     viewer1d.text_overlay.visible = True
     viewer1d.text_overlay.position = "top_right"
+    viewer1d.text_overlay.font_size = 15
 
-    #qt_viewer = QtViewer(viewer1d)
+    # Confirmed the time variable updates real time
+    @viewer.dims.events.current_step.connect
+    def update_slider(event):
+        time = viewer.dims.current_step[0]
+        viewer.text_overlay.text = f"{time:1.1f} time"
+        print("time", time)
+        #viewer1d.add_inf_line
 
     lines = []
     for i in range(np.shape(good_traces)[0]):
@@ -76,8 +84,8 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
         y = bad_traces[i,:]
         lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i)))
 
+
     viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
-    viewer.dims.events.connect(update_slider(viewer=viewer1d))
     napari.run()
 
