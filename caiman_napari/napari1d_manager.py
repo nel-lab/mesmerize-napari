@@ -67,14 +67,18 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     viewer1d.text_overlay.visible = True
     viewer1d.text_overlay.position = "top_right"
     viewer1d.text_overlay.font_size = 15
+    # Create layer for infinite line
+    layer = viewer1d.add_inf_line(data=[1], orientation="vertical", color="red", width=3, name="slider")
+    viewer1d.add_layer(layer=layer)
 
     # Confirmed the time variable updates real time
     @viewer.dims.events.current_step.connect
     def update_slider(event):
         time = viewer.dims.current_step[0]
         viewer.text_overlay.text = f"{time:1.1f} time"
-        print("time", time)
-        #viewer1d.add_inf_line
+        # Remove most recent layer, recreate new line
+        viewer1d.layers.remove(viewer1d.layers[-1])
+        viewer1d.add_inf_line([time], orientation="vertical", color="red", width=3)
 
     lines = []
     for i in range(np.shape(good_traces)[0]):
