@@ -228,6 +228,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_output(self.viewer, r)
 
+        self.current_output = getattr(algorithms, algo).Output()
+        self.current_output.main_output()
+
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
@@ -236,6 +239,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
         algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
+
+        if self.current_output.uuid != uuid:
+            self.clear_viewer()
+            self.current_output = getattr(algorithms, algo).Output()
+
+        self.current_output.load_projection()
 
     def show_eval_components_gui(self):
         self.eval_components_gui = EvalComponentsWidgets(parent=self)

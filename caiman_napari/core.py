@@ -8,6 +8,7 @@ from typing import *
 from PyQt5 import QtCore
 from functools import partial
 from uuid import uuid4, UUID
+from abc import ABC
 
 
 # Start of Core Utilities
@@ -172,3 +173,8 @@ class CaimanSeriesExtensions:
             print(runfile)
             self.process.start(runfile)
 
+
+class Output(ABC):
+    def __init__(self):
+        self.algo
+        self.uuid

@@ -178,31 +178,42 @@ def _organize_coordinates(contour: dict):
     coors = coors[~np.isnan(coors).any(axis=1)]
 
     return coors
-def load_projection(viewer, batch_item: pd.Series, proj_type):
-    """
-    Load correlation map from cnmf memmap file
 
-    Parameters
-    ----------
-    viewer: Viewer
-        Viewer instance to load the projection in
+class Output:
+    def __init__(self, uuid):
+        self.uuid = uuid
+        
+    def main_output(self):
+        pass
 
-    batch_item: pd.Series
+    def eval_components(self):
+        pass
 
-    proj_type: None
-        Not used
+    def load_projection(self, viewer, batch_item: pd.Series, proj_type):
+        """
+        Load correlation map from cnmf memmap file
 
-    """
-    # Get cnmf memmap
-    fname_new = batch_item["outputs"].item()["cnmf_memmap"]
-    # Get order f images
-    Yr, dims, T = cm.load_memmap(fname_new)
-    images = np.reshape(Yr.T, [T] + list(dims), order='F')
-    # Get correlation map
-    Cn = cm.local_correlations(images.transpose(1, 2, 0))
-    Cn[np.isnan(Cn)] = 0
-    # Add correlation map to napari viewer
-    viewer.add_image(Cn)
+        Parameters
+        ----------
+        viewer: Viewer
+            Viewer instance to load the projection in
+
+        batch_item: pd.Series
+
+        proj_type: None
+            Not used
+
+        """
+        # Get cnmf memmap
+        fname_new = batch_item["outputs"].item()["cnmf_memmap"]
+        # Get order f images
+        Yr, dims, T = cm.load_memmap(fname_new)
+        images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        # Get correlation map
+        Cn = cm.local_correlations(images.transpose(1, 2, 0))
+        Cn[np.isnan(Cn)] = 0
+        # Add correlation map to napari viewer
+        viewer.add_image(Cn)
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])

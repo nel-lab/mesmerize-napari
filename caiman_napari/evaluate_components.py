@@ -36,6 +36,10 @@ class EvalComponentsWidgets(QtWidgets.QMainWindow):
 
         return d
 
+    def load_cnmf_results(self):
+        pass
+
     def update_components(self):
         params = self.get_params()
         print(params)
+
