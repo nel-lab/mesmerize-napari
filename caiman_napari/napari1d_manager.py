@@ -71,6 +71,11 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     layer = viewer1d.add_inf_line(data=[1], orientation="vertical", color="red", width=3, name="slider")
     viewer1d.add_layer(layer=layer)
 
+    @viewer1d.bind_key('n')
+    def print_names(viewer1d):
+        print([layer.name for layer in viewer1d.layers])
+        viewer1d.layers.enabled = True
+
     # Confirmed the time variable updates real time
     @viewer.dims.events.current_step.connect
     def update_slider(event):
