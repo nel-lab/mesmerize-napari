@@ -289,6 +289,11 @@ def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Opt
             #
                 # f.write(f'export {k}="{v}"\n')
 
+            f.write(
+                f'export OPENBLAS_NUM_THREADS=1\n'
+                f'export MKL_NUM_THREADS=1\n'
+            )
+
             f.write(f'python {module_path} {args_str}')  # call the script to run
 
     else:
