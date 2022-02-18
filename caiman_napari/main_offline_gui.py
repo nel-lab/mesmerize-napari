@@ -14,6 +14,7 @@ from functools import partial
 import pprint
 from . import algorithms
 import caiman as cm
+import numpy as np
 
 
 COLORS_HEX = \
@@ -21,7 +22,8 @@ COLORS_HEX = \
         'orange': '#ffb347',
         'green': '#77dd77',
         'red': '#fe0d00',
-        'blue': '#85e3ff'
+        'blue': '#85e3ff',
+        'yellow': '#ffff00',
     }
 
 
@@ -120,6 +122,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             item = self.ui.listWidgetItems.item(i)
             item.setData(3, uuid)
 
+            self.set_list_widget_item_color(i)
+
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if input_movie_path is None:
             input_movie_path = self.input_movie_path
@@ -162,6 +166,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         std_out = self._print_qprocess_std_out
 
         self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks, callback_std_out=std_out)
+        self.set_list_widget_item_color(index, 'yellow')
 
     def _print_qprocess_std_out(self, proc):
         txt = proc.readAllStandardOutput().data().decode('utf8')
@@ -169,10 +174,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def item_finished(self, ix):
         self.dataframe = load_batch(self.dataframe_file_path)
-        if self.dataframe.iloc[ix]['outputs']['success']:
-            self.set_list_widget_item_color(ix, 'green')
-        else:
-            self.set_list_widget_item_color(ix, 'red')
+        self.set_list_widget_item_color(ix)
 
         if (ix + 1) < self.ui.listWidgetItems.count():
             time.sleep(10)
@@ -195,7 +197,20 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.textBrowserParams.setText(s)
 
-    def set_list_widget_item_color(self, ix: int, color: str):
+    def set_list_widget_item_color(self, ix: int, color: str = None):
+        if color is not None:
+            self._set_list_widget_item_color(ix, color)
+
+        elif color is None:
+            if self.dataframe.iloc[ix]['outputs'] is None:
+                return
+            
+            if self.dataframe.iloc[ix]['outputs']['success']:
+                self._set_list_widget_item_color(ix, 'green')
+            else:
+                self._set_list_widget_item_color(ix, 'red')
+
+    def _set_list_widget_item_color(self, ix: int, color: str):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
 
     def show_cnmf_params_gui(self):
