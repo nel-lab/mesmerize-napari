@@ -8,6 +8,7 @@ from typing import *
 from PyQt5 import QtCore
 from functools import partial
 from uuid import uuid4, UUID
+from subprocess import Popen
 
 
 # Start of Core Utilities
@@ -119,6 +120,25 @@ class CaimanSeriesExtensions:
     def __init__(self, s: pd.Series):
         self._series = s
         self.process: QtCore.QProcess = None
+
+    def _run_qprocess(self):
+        pass
+
+    def _run_subprocess(self):
+        parent_path = Path(self._series.input_movie_path).parent
+
+        # Create the runfile in the same dir using this Series' UUID as the filename
+        runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
+
+        # make the runfile
+        runfile = make_runfile(
+            module_path=os.path.abspath(ALGO_MODULES[self._series['algo']].__file__), # caiman algorithm
+            filename=runfile_path,  # path to create runfile
+            args_str=f'{CURRENT_BATCH_PATH} {self._series.uuid}'  # batch file path (which contains the params) and UUID are passed as args
+        )
+
+        self.process = Popen(runfile, cwd=os.path.dirname(self._series.input_movie_path))
+        self.process.wait()
 
     def run(
             self, callbacks_finished: List[callable],
