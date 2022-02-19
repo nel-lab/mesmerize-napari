@@ -63,6 +63,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
         # Show MCorr Projections
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
+        # Disable the param buttons
+        self.ui.pushButtonParamsMCorr.setEnabled(False)
+        self.ui.pushButtonParamsCNMF.setEnabled(False)
+        self.ui.pushButtonParamsCNMFE.setEnabled(False)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -101,6 +105,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
+        # Turn on push buttons for params
+        self.ui.pushButtonParamsMCorr.setEnabled(True)
+        self.ui.pushButtonParamsCNMF.setEnabled(True)
+        self.ui.pushButtonParamsCNMFE.setEnabled(True)
 
     @use_open_file_dialog('Choose batch', '', ['*.pickle'])
     def open_batch(self, path: str, *args, **kwargs):
@@ -119,6 +127,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
             item = self.ui.listWidgetItems.item(i)
             item.setData(3, uuid)
+
+        # Turn on push buttons for params
+        self.ui.pushButtonParamsMCorr.setEnabled(True)
+        self.ui.pushButtonParamsCNMF.setEnabled(True)
+        self.ui.pushButtonParamsCNMFE.setEnabled(True)
 
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if input_movie_path is None:
