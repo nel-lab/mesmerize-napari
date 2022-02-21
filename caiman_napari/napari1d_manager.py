@@ -88,10 +88,10 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     lines = []
     for i in range(np.shape(good_traces)[0]):
         y = good_traces[i,:]
-        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i)))
+        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i), color=shapes['colors_contours_good_edge'][i]))
     for i in range(np.shape(bad_traces)[0]):
         y = bad_traces[i,:]
-        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i), color='red'))
+        lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i), color=shapes['colors_contours_bad_edge'][i]))
     viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
     napari.run()
