@@ -6,12 +6,14 @@ import napari
 from napari import Viewer
 import napari_plot
 from napari_plot._qt.qt_viewer import QtViewer
+from qtpy.QtWidgets import QVBoxLayout
 from caiman.source_extraction.cnmf.cnmf import load_CNMF
 from caiman.utils.utils import load_dict_from_hdf5
 from caiman_napari.utils import *
 import caiman as cm
 import pandas as pd
 import pyqtgraph as pg
+from napari._qt.widgets.qt_viewer_dock_widget import QtViewerDockWidget
 
 def napari1d_run(batch_item: pd.Series, shapes: dict):
     viewer = napari.Viewer()
@@ -71,6 +73,9 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     layer = viewer1d.add_inf_line(data=[1], orientation="vertical", color="red", width=3, name="slider")
     viewer1d.add_layer(layer=layer)
 
+    # toggle control panel on (shows list of layers)
+    qt_viewer.on_toggle_controls_dialog()
+
     @viewer1d.bind_key('n')
     def print_names(viewer1d):
         print([layer.name for layer in viewer1d.layers])
@@ -84,6 +89,9 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
         # Remove most recent layer, recreate new line
         viewer1d.layers.remove(viewer1d.layers[-1])
         viewer1d.add_inf_line([time], orientation="vertical", color="red", width=3)
+
+    #viewer1d.layers.toggle_selected_visibility()
+
 
     lines = []
     for i in range(np.shape(good_traces)[0]):
