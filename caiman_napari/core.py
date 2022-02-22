@@ -45,6 +45,11 @@ def _get_item_uuid(item: Union[int, str, UUID]) -> UUID:
 
 
 def create_batch(path: str = None):
+    if pathlib.Path(path).is_file():
+        raise FileExistsError(
+            f'Batch file already exists at specified location: {path}'
+        )
+
     df = pd.DataFrame(columns=DATAFRAME_COLUMNS)
     df.caiman.path = path
 
