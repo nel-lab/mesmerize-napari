@@ -63,7 +63,7 @@ Use single quotes for strings, do not use double quotes.</string>
        <string>Piecewise Rigid MC</string>
       </property>
       <property name="checked">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
      </widget>
     </item>
