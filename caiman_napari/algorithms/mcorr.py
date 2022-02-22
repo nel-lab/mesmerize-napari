@@ -67,6 +67,7 @@ def load_output(viewer, batch_item: pd.Series):
     Yr, dims, T = cm.load_memmap(path)
     MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
     viewer.add_image(MotionCorrectedMovie)
+    viewer.grid.enabled = True
 
 
 def load_projection(viewer, batch_item: pd.Series, proj_type):

@@ -21,6 +21,10 @@ from caiman.summary_images import local_correlations_movie_offline
 import os
 import traceback
 from napari.viewer import Viewer
+import napari_plot
+
+if __name__ != '__main__':
+    from ..napari1d_manager import napari1d_run
 
 
 def main(batch_path, uuid):
@@ -103,6 +107,7 @@ def main(batch_path, uuid):
     # save dataframe to disc
     df.to_pickle(batch_path)
 
+
 def load_output(viewer, batch_item: pd.Series):
     print('Loading outputs of CNMF')
     path = batch_item["outputs"].item()["cnmf_outputs"]
@@ -134,14 +139,6 @@ def load_output(viewer, batch_item: pd.Series):
     )
 
     contours_good_coordinates = [_organize_coordinates(c) for c in contours_good]
-    viewer.add_shapes(
-        data=contours_good_coordinates,
-        shape_type='polygon',
-        edge_width=0.5,
-        edge_color=colors_contours_good_edge,
-        face_color=colors_contours_good_face,
-        opacity=0.7,
-    )
 
     if cnmf_obj.estimates.idx_components_bad is not None and len(cnmf_obj.estimates.idx_components_bad) > 0:
         contours_bad = caiman_get_contours(
@@ -163,21 +160,27 @@ def load_output(viewer, batch_item: pd.Series):
             output='mpl',
             alpha=0.0
         )
+    # create dictionary for shapes of contours to pass to napari1d manager
+    shapes_dict = \
+        {
+            'contours_bad_coordinates': contours_bad_coordinates,
+            'colors_contours_bad_edge': colors_contours_bad_edge,
+            'colors_contours_bad_face': colors_contours_bad_face,
+            'contours_good_coordinates': contours_good_coordinates,
+            'colors_contours_good_edge': colors_contours_good_edge,
+            'colors_contours_good_face': colors_contours_good_face,
+        }
 
-        viewer.add_shapes(
-            data=contours_bad_coordinates,
-            shape_type='polygon',
-            edge_width=0.5,
-            edge_color=colors_contours_bad_edge,
-            face_color=colors_contours_bad_face,
-            opacity=0.7,
-        )
+    napari1d_run(batch_item=batch_item, shapes=shapes_dict)
+
 
 def _organize_coordinates(contour: dict):
     coors = contour['coordinates']
     coors = coors[~np.isnan(coors).any(axis=1)]
 
     return coors
+
+
 def load_projection(viewer, batch_item: pd.Series, proj_type):
     """
     Load correlation map from cnmf memmap file
@@ -203,6 +206,7 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
     Cn[np.isnan(Cn)] = 0
     # Add correlation map to napari viewer
     viewer.add_image(Cn)
+
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
