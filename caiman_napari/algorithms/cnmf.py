@@ -17,8 +17,14 @@ import pandas as pd
 from caiman.utils.visualization import get_contours as caiman_get_contours
 from caiman.source_extraction.cnmf.cnmf import load_CNMF
 from caiman_napari.utils import *
+from caiman.summary_images import local_correlations_movie_offline
 import os
 import traceback
+from napari.viewer import Viewer
+import napari_plot
+
+if __name__ != '__main__':
+    from ..napari1d_manager import napari1d_run
 
 
 def main(batch_path, uuid):
@@ -74,20 +80,22 @@ def main(batch_path, uuid):
 
         print("fitting images")
         cnm = cnm.fit(images)
+        #
         if params['refit'] == True:
             print('refitting')
-            cnmf_obj = cnm.refit(images, dview=dview)
+            cnm = cnm.refit(images, dview=dview)
 
         print("Eval")
-        cnmf_obj.estimates.evaluate_components(images, cnmf_obj.params, dview=dview)
+        cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
 
         output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
 
-        cnmf_obj.save(output_path)
+        cnm.save(output_path)
         d = dict()
         d.update(
             {
                 "cnmf_outputs": output_path,
+                "cnmf_memmap": fname_new,
                 "success": True,
                 "traceback": None
             }
@@ -98,6 +106,7 @@ def main(batch_path, uuid):
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # save dataframe to disc
     df.to_pickle(batch_path)
+
 
 def load_output(viewer, batch_item: pd.Series):
     print('Loading outputs of CNMF')
@@ -117,21 +126,19 @@ def load_output(viewer, batch_item: pd.Series):
         swap_dim=True
     )
 
-    colors_contours_good = auto_colormap(
+    colors_contours_good_edge = auto_colormap(
         n_colors=len(contours_good),
         cmap='hsv',
         output='mpl',
     )
+    colors_contours_good_face = auto_colormap(
+        n_colors=len(contours_good),
+        cmap='hsv',
+        output='mpl',
+        alpha=0.0,
+    )
 
     contours_good_coordinates = [_organize_coordinates(c) for c in contours_good]
-    viewer.add_shapes(
-        data=contours_good_coordinates,
-        shape_type='polygon',
-        edge_width=0.5,
-        edge_color=colors_contours_good,
-        face_color=colors_contours_good,
-        opacity=0.1,
-    )
 
     if cnmf_obj.estimates.idx_components_bad is not None and len(cnmf_obj.estimates.idx_components_bad) > 0:
         contours_bad = caiman_get_contours(
@@ -142,26 +149,64 @@ def load_output(viewer, batch_item: pd.Series):
 
         contours_bad_coordinates = [_organize_coordinates(c) for c in contours_bad]
 
-        colors_contours_bad = auto_colormap(
+        colors_contours_bad_edge = auto_colormap(
             n_colors=len(contours_bad),
             cmap='hsv',
             output='mpl',
         )
-
-        viewer.add_shapes(
-            data=contours_bad_coordinates,
-            shape_type='polygon',
-            edge_width=0.5,
-            edge_color=colors_contours_bad,
-            face_color=colors_contours_bad,
-            opacity=0.1,
+        colors_contours_bad_face = auto_colormap(
+            n_colors=len(contours_bad),
+            cmap='hsv',
+            output='mpl',
+            alpha=0.0
         )
+    # create dictionary for shapes of contours to pass to napari1d manager
+    shapes_dict = \
+        {
+            'contours_bad_coordinates': contours_bad_coordinates,
+            'colors_contours_bad_edge': colors_contours_bad_edge,
+            'colors_contours_bad_face': colors_contours_bad_face,
+            'contours_good_coordinates': contours_good_coordinates,
+            'colors_contours_good_edge': colors_contours_good_edge,
+            'colors_contours_good_face': colors_contours_good_face,
+        }
+
+    napari1d_run(batch_item=batch_item, shapes=shapes_dict)
+
 
 def _organize_coordinates(contour: dict):
     coors = contour['coordinates']
     coors = coors[~np.isnan(coors).any(axis=1)]
 
     return coors
+
+
+def load_projection(viewer, batch_item: pd.Series, proj_type):
+    """
+    Load correlation map from cnmf memmap file
+
+    Parameters
+    ----------
+    viewer: Viewer
+        Viewer instance to load the projection in
+
+    batch_item: pd.Series
+
+    proj_type: None
+        Not used
+
+    """
+    # Get cnmf memmap
+    fname_new = batch_item["outputs"].item()["cnmf_memmap"]
+    # Get order f images
+    Yr, dims, T = cm.load_memmap(fname_new)
+    images = np.reshape(Yr.T, [T] + list(dims), order='F')
+    # Get correlation map
+    Cn = cm.local_correlations(images.transpose(1, 2, 0))
+    Cn[np.isnan(Cn)] = 0
+    # Add correlation map to napari viewer
+    viewer.add_image(Cn)
+
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])

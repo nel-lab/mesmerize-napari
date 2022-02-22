@@ -2,6 +2,7 @@ import time
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
+from .cnmfe_gui import CNMFEWidget
 from PyQt5 import QtWidgets
 from qtpy import QtWidgets
 from napari_plugin_engine import napari_hook_implementation
@@ -13,6 +14,7 @@ from functools import partial
 import pprint
 from . import algorithms
 import caiman as cm
+import numpy as np
 
 
 COLORS_HEX = \
@@ -20,7 +22,8 @@ COLORS_HEX = \
         'orange': '#ffb347',
         'green': '#77dd77',
         'red': '#fe0d00',
-        'blue': '#85e3ff'
+        'blue': '#85e3ff',
+        'yellow': '#ffff00',
     }
 
 
@@ -42,8 +45,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonOpenMovie.clicked.connect(self.open_movie)
         # Open Panel to set parameters for CNMF
         self.ui.pushButtonParamsCNMF.clicked.connect(self.show_cnmf_params_gui)
-        # Open panel for MCORR
+        # Open panel to set parameters MCORR
         self.ui.pushButtonParamsMCorr.clicked.connect(self.show_mcorr_params_gui)
+        # Open panel to set parameters for CNMFE
+        self.ui.pushButtonParamsCNMFE.clicked.connect(self.show_cnmfe_params_gui)
         # Start Batch
         self.ui.pushButtonNewBatch.clicked.connect(self.create_new_batch)
         # Open Batch
@@ -58,6 +63,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.currentRowChanged.connect(self.set_params_text)
         # On double click of item in listwidget, load results and display
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
+        # Show MCorr Projections
+        self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -115,6 +122,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             item = self.ui.listWidgetItems.item(i)
             item.setData(3, uuid)
 
+            self.set_list_widget_item_color(i)
+
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if input_movie_path is None:
             input_movie_path = self.input_movie_path
@@ -157,6 +166,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         std_out = self._print_qprocess_std_out
 
         self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks, callback_std_out=std_out)
+        self.set_list_widget_item_color(index, 'yellow')
 
     def _print_qprocess_std_out(self, proc):
         txt = proc.readAllStandardOutput().data().decode('utf8')
@@ -164,10 +174,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def item_finished(self, ix):
         self.dataframe = load_batch(self.dataframe_file_path)
-        if self.dataframe.iloc[ix]['outputs']['success']:
-            self.set_list_widget_item_color(ix, 'green')
-        else:
-            self.set_list_widget_item_color(ix, 'red')
+        self.set_list_widget_item_color(ix)
 
         if (ix + 1) < self.ui.listWidgetItems.count():
             time.sleep(10)
@@ -190,7 +197,20 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.textBrowserParams.setText(s)
 
-    def set_list_widget_item_color(self, ix: int, color: str):
+    def set_list_widget_item_color(self, ix: int, color: str = None):
+        if color is not None:
+            self._set_list_widget_item_color(ix, color)
+
+        elif color is None:
+            if self.dataframe.iloc[ix]['outputs'] is None:
+                return
+            
+            if self.dataframe.iloc[ix]['outputs']['success']:
+                self._set_list_widget_item_color(ix, 'green')
+            else:
+                self._set_list_widget_item_color(ix, 'red')
+
+    def _set_list_widget_item_color(self, ix: int, color: str):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
 
     def show_cnmf_params_gui(self):
@@ -200,6 +220,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def show_mcorr_params_gui(self):
         self.mcorr_gui = MCORRWidget(parent=self)
         self.mcorr_gui.show()
+
+    def show_cnmfe_params_gui(self):
+        self.cnmfe_gui = CNMFEWidget(parent=self)
+        self.cnmfe_gui.show()
 
     def load_output(self):
         # clear napari viewer before loading new movies
@@ -216,6 +240,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_output(self.viewer, r)
 
+    def view_projections(self):
+        proj_type = self.ui.comboBoxProjectionOpts.currentText()
+        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
+        uuid = item_gui.data(3)
+        # Algorithm name for selected item
+        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
+        r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
+        getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():

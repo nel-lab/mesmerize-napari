@@ -13,7 +13,7 @@ class MCORRWidget(QtWidgets.QDockWidget):
         self.ui.btnAddToBatchElastic.clicked.connect(self.add_item)
 
     #@present_exceptions()
-    def get_params(self, *args, group_params: bool = False) -> Tuple[str, dict]:
+    def get_params(self, *args, group_params: bool = True) -> Tuple[str, dict]:
         """
         Get a dict of the set parameters.
         If the work environment was loaded from a motion correction batch item it put the bord_px in the dict.
@@ -50,7 +50,8 @@ class MCORRWidget(QtWidgets.QDockWidget):
 
         # Make the output dict
         d = dict()
-        # Group the kwargs of the two parts seperately
+
+        # Group the kwargs of the two parts separately
         if group_params:
             d.update(
                 {

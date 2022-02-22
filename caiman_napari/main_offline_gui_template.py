@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'ui_files/main_offline_gui_template.ui'
 #
-# Created by: PyQt5 UI code generator 5.12
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -19,6 +20,7 @@ class Ui_MainOfflineGUIWidget(object):
         font = QtGui.QFont()
         font.setPointSize(13)
         font.setBold(True)
+        font.setWeight(75)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
@@ -39,6 +41,20 @@ class Ui_MainOfflineGUIWidget(object):
         self.pushButtonParamsCNMFE.setObjectName("pushButtonParamsCNMFE")
         self.horizontalLayout_10.addWidget(self.pushButtonParamsCNMFE)
         self.verticalLayout.addWidget(self.groupBox)
+        self.groupBox_2 = QtWidgets.QGroupBox(MainOfflineGUIWidget)
+        self.groupBox_2.setObjectName("groupBox_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.groupBox_2)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.comboBoxProjectionOpts = QtWidgets.QComboBox(self.groupBox_2)
+        self.comboBoxProjectionOpts.setObjectName("comboBoxProjectionOpts")
+        self.comboBoxProjectionOpts.addItem("")
+        self.comboBoxProjectionOpts.addItem("")
+        self.comboBoxProjectionOpts.addItem("")
+        self.horizontalLayout.addWidget(self.comboBoxProjectionOpts)
+        self.pushButtonViewProjection = QtWidgets.QPushButton(self.groupBox_2)
+        self.pushButtonViewProjection.setObjectName("pushButtonViewProjection")
+        self.horizontalLayout.addWidget(self.pushButtonViewProjection)
+        self.verticalLayout.addWidget(self.groupBox_2)
         self.label = QtWidgets.QLabel(MainOfflineGUIWidget)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
@@ -84,7 +100,9 @@ class Ui_MainOfflineGUIWidget(object):
         MainOfflineGUIWidget.setTabOrder(self.pushButtonOpenMovie, self.pushButtonParamsMCorr)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonParamsMCorr, self.pushButtonParamsCNMF)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonParamsCNMF, self.pushButtonParamsCNMFE)
-        MainOfflineGUIWidget.setTabOrder(self.pushButtonParamsCNMFE, self.pushButtonNewBatch)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonParamsCNMFE, self.comboBoxProjectionOpts)
+        MainOfflineGUIWidget.setTabOrder(self.comboBoxProjectionOpts, self.pushButtonViewProjection)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonViewProjection, self.pushButtonNewBatch)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonNewBatch, self.pushButtonOpenBatch)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonOpenBatch, self.listWidgetItems)
         MainOfflineGUIWidget.setTabOrder(self.listWidgetItems, self.pushButtonStart)
@@ -103,6 +121,11 @@ class Ui_MainOfflineGUIWidget(object):
         self.pushButtonParamsMCorr.setText(_translate("MainOfflineGUIWidget", "MCorr"))
         self.pushButtonParamsCNMF.setText(_translate("MainOfflineGUIWidget", "CNMF"))
         self.pushButtonParamsCNMFE.setText(_translate("MainOfflineGUIWidget", "CNMFE"))
+        self.groupBox_2.setTitle(_translate("MainOfflineGUIWidget", "MCorr Projections"))
+        self.comboBoxProjectionOpts.setItemText(0, _translate("MainOfflineGUIWidget", "mean"))
+        self.comboBoxProjectionOpts.setItemText(1, _translate("MainOfflineGUIWidget", "std"))
+        self.comboBoxProjectionOpts.setItemText(2, _translate("MainOfflineGUIWidget", "max"))
+        self.pushButtonViewProjection.setText(_translate("MainOfflineGUIWidget", "View Projection"))
         self.label.setText(_translate("MainOfflineGUIWidget", "Items"))
         self.pushButtonNewBatch.setText(_translate("MainOfflineGUIWidget", "New Batch"))
         self.pushButtonOpenBatch.setText(_translate("MainOfflineGUIWidget", "Open Batch"))
@@ -112,3 +135,11 @@ class Ui_MainOfflineGUIWidget(object):
         self.pushButtonAbort.setText(_translate("MainOfflineGUIWidget", "Abort"))
 
 
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainOfflineGUIWidget = QtWidgets.QWidget()
+    ui = Ui_MainOfflineGUIWidget()
+    ui.setupUi(MainOfflineGUIWidget)
+    MainOfflineGUIWidget.show()
+    sys.exit(app.exec_())
