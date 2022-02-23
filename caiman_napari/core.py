@@ -198,3 +198,4 @@ class CaimanSeriesExtensions:
             print(runfile)
             self.process.start(runfile)
 
+        return self.process
