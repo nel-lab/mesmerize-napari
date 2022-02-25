@@ -282,7 +282,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         # self._open_movie(movie_path)
         print("show outputs for: ", algo)
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
-        getattr(algorithms, algo).load_output(self.viewer, r)
+        getattr(algorithms, algo).load_output(self, self.viewer, r)
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()

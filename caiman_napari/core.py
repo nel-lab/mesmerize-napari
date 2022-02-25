@@ -13,6 +13,7 @@ from subprocess import Popen
 
 # Start of Core Utilities
 CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
+CURRENT_DATA_PATH: pathlib.Path = None
 
 
 ALGO_MODULES = \
@@ -26,16 +27,17 @@ ALGO_MODULES = \
 DATAFRAME_COLUMNS = ['algo', 'name', 'input_movie_path', 'params', 'outputs', 'uuid']
 
 
-def load_batch(path: Union[str, pathlib.Path]) -> pd.DataFrame:
+def load_batch(batch_file: Union[str, pathlib.Path], input_data_path: Union[str, pathlib.Path]) -> pd.DataFrame:
     global CURRENT_BATCH_PATH
+    global CURRENT_DATA_PATH
 
     df = pd.read_pickle(
-        pathlib.Path(path)
+        pathlib.Path(batch_file)
     )
 
-    CURRENT_BATCH_PATH = pathlib.Path(path)
+    CURRENT_BATCH_PATH = pathlib.Path(batch_file)
 
-    df.caiman.path = path
+    df.caiman.path = batch_file
 
     return df
 
@@ -90,6 +92,11 @@ class CaimanDataFrameExtensions:
             Parameters for running the algorithm with the input movie
 
         """
+
+        global CURRENT_DATA_PATH
+        if CURRENT_DATA_PATH is not None:
+            input_movie_path = Path(input_movie_path).relative_to(CURRENT_DATA_PATH).as_posix()
+
         # Create a pandas Series (Row) with the provided arguments
         s = pd.Series(
             {
@@ -145,11 +152,33 @@ class CaimanSeriesExtensions:
         self.process = Popen(runfile, cwd=os.path.dirname(self._series.input_movie_path))
         self.process.wait()
 
+    def submit_slurm(self):
+        parent_path = Path(self._series.input_movie_path).parent
+
+        # Create the runfile in the same dir using this Series' UUID as the filename
+        runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
+
+        if CURRENT_DATA_PATH is not None:
+            args_str = f'{CURRENT_BATCH_PATH} {self._series.uuid} {CURRENT_DATA_PATH}'
+        else:
+            f'{CURRENT_BATCH_PATH} {self._series.uuid}'
+
+        # make the runfile
+        runfile = make_runfile(
+            module_path=os.path.abspath(ALGO_MODULES[self._series['algo']].__file__), # caiman algorithm
+            filename=runfile_path,  # path to create runfile
+            args_str=args_str  # batch file path (which contains the params) and UUID are passed as args
+        )
+
+        submission_command = f'sbatch --ntasks=1 --cpus-per-task=16 --mem=90000 --wrap="{runfile}"'
+
+        Popen(submission_command.split(' '))
+
     def run(
             self, callbacks_finished: List[callable],
             callback_std_out: Optional[callable] = None
     ):
-        """
+        """--cpus-per-task=16 --cpus-per-task=16
         Run a CaImAn algorithm in an external process.
 
         NoRMCorre, CNMF, or CNMFE will be run for this Series.

@@ -108,7 +108,7 @@ def main(batch_path, uuid):
     df.to_pickle(batch_path)
 
 
-def load_output(viewer, batch_item: pd.Series):
+def load_output(parent, viewer, batch_item: pd.Series):
     print('Loading outputs of CNMF')
     path = batch_item["outputs"].item()["cnmf_outputs"]
     cnmf_obj = load_CNMF(path)
