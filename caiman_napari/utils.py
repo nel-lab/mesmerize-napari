@@ -289,6 +289,10 @@ def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Opt
             #
                 # f.write(f'export {k}="{v}"\n')
 
+            # User-setable n-processes
+            if 'MESMERIZE_N_PROCESSES' in os.environ.keys():
+                f.write(f'export MESMERIZE_N_PROCESSES={os.environ["MESMERIZE_N_PROCESSES"]}\n')
+
             f.write(
                 f'export OPENBLAS_NUM_THREADS=1\n'
                 f'export MKL_NUM_THREADS=1\n'

@@ -15,6 +15,14 @@ import pprint
 from . import algorithms
 import caiman as cm
 import numpy as np
+import psutil
+
+if not IS_WINDOWS:
+    from signal import SIGKILL
+
+elif IS_WINDOWS:
+    from win32api import TerminateProcess, CloseHandle
+
 
 
 COLORS_HEX = \
@@ -29,9 +37,9 @@ COLORS_HEX = \
 
 class MainOfflineGUI(QtWidgets.QWidget):
     def __init__(self, napari_viewer: Viewer):
-        self.viewer = napari_viewer
         QtWidgets.QWidget.__init__(self)
 
+        self.viewer = napari_viewer
         self.ui = Ui_MainOfflineGUIWidget()
         self.ui.setupUi(self)
         self.show()
@@ -57,6 +65,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonStart.clicked.connect(self.run)
         # Start running from selected index
         self.ui.pushButtonStartItem.clicked.connect(self.run_item)
+        self.ui.pushButtonAbort.clicked.connect(self.abort_run)
         # Remove selected item
         self.ui.pushButtonDelItem.clicked.connect(self.remove_item)
         # Change parameters displayed in param text box upon change in selection
@@ -65,6 +74,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
         # Show MCorr Projections
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
+
+        self.qprocess: QtCore.QProcess = None
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -97,6 +108,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         for layer in self.viewer.layers:
             self.viewer.layers.remove(layer)
+
+        return True
 
     @use_save_file_dialog('Choose location to save batch file', '', '.pickle')
     def create_new_batch(self, path, *args, **kwargs):
@@ -165,7 +178,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         callbacks = [partial(self.item_finished, index)]
         std_out = self._print_qprocess_std_out
 
-        self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks, callback_std_out=std_out)
+        self.qprocess = self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks, callback_std_out=std_out)
         self.set_list_widget_item_color(index, 'yellow')
 
     def _print_qprocess_std_out(self, proc):
@@ -173,6 +186,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.textBrowserStdOut.append(txt)
 
     def item_finished(self, ix):
+        self.qprocess = None
+
         self.dataframe = load_batch(self.dataframe_file_path)
         self.set_list_widget_item_color(ix)
 
@@ -182,6 +197,34 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         else:
             QtWidgets.QMessageBox.information(self, 'Batch is done!', 'Yay, your batch has finished processing!')
+
+    def abort_run(self):
+        if self.qprocess is not None:
+            self.qprocess.disconnect()
+
+        # self.qprocess.terminate()
+
+        try:
+            py_proc = psutil.Process(self.qprocess.pid()).children()[0].pid
+        except psutil.NoSuchProcess:
+            return
+        children = psutil.Process(py_proc).children()
+
+        if not IS_WINDOWS:
+            os.kill(py_proc, SIGKILL)
+
+            for child in children:
+                os.kill(child.pid, SIGKILL)
+
+        if IS_WINDOWS:
+            TerminateProcess(py_proc, -1)
+            CloseHandle(py_proc)
+
+            for child in children:
+                TerminateProcess(child.pid, -1)
+                CloseHandle(child.pid)
+
+        self.qprocess = None
 
     def set_params_text(self, ix):
         p = self.dataframe.iloc[ix]['params']
@@ -227,7 +270,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def load_output(self):
         # clear napari viewer before loading new movies
-        self.clear_viewer()
+        if not self.clear_viewer():
+            return
         # Find uuid for selected item
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)
@@ -235,7 +279,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
         # Open input movie for selected item
         movie_path = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'input_movie_path'].item()
-        self._open_movie(movie_path)
+        # self._open_movie(movie_path)
         print("show outputs for: ", algo)
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_output(self.viewer, r)

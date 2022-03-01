@@ -32,8 +32,9 @@ class MCORRWidget(QtWidgets.QDockWidget):
         mcorr_kwargs = \
             {
                 'max_shifts': [self.ui.spinboxX.value(), self.ui.spinboxY.value()],
+                'niter_rig': self.ui.spinboxIterRigid.value(),
                 'strides': [self.ui.spinboxStrides.value(), self.ui.spinboxStrides.value()],
-                'overlaps': (self.ui.spinboxOverlaps.value(), self.ui.spinboxOverlaps.value()),
+                'overlaps': [self.ui.spinboxOverlaps.value(), self.ui.spinboxOverlaps.value()],
                 'max_deviation_rigid': self.ui.spinboxMaxDev.value(),
                 'border_nan': 'copy',
                 'pw_rigid': self.ui.checkBoxRigidMC.isChecked(),
