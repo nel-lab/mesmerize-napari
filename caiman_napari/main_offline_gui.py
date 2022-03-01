@@ -29,6 +29,7 @@ COLORS_HEX = \
     {
         'orange': '#ffb347',
         'green': '#77dd77',
+        'dark-green': '#009603',
         'red': '#fe0d00',
         'blue': '#85e3ff',
         'yellow': '#ffff00',
@@ -75,7 +76,23 @@ class MainOfflineGUI(QtWidgets.QWidget):
         # Show MCorr Projections
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
 
+        self.ui.lineEditParentDataPath.textChanged.connect(self.set_parent_data_path)
+
         self.qprocess: QtCore.QProcess = None
+
+    def set_parent_data_path(self):
+        global PARENT_DATA_PATH
+        path = Path(self.ui.lineEditParentDataPath.text())
+        if not path.is_dir():
+            self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['red']}}}")
+        else:
+            self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}")
+            PARENT_DATA_PATH = path
+
+    @use_open_dir_dialog("Select Parent Data Directory")
+    def set_parent_data_path_dialog(self, path):
+        self.ui.lineEditParentDataPath.setText(path)
+        self.set_parent_data_path()
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):

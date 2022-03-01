@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>905</height>
+    <width>329</width>
+    <height>797</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,165 +29,319 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButtonOpenMovie">
-     <property name="text">
-      <string>Open Movie</string>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Parameter Setting</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_10">
-      <item>
-       <widget class="QPushButton" name="pushButtonParamsMCorr">
-        <property name="text">
-         <string>MCorr</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonParamsCNMF">
-        <property name="text">
-         <string>CNMF</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonParamsCNMFE">
-        <property name="text">
-         <string>CNMFE</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>MCorr Projections</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QComboBox" name="comboBoxProjectionOpts">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Batch Items</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QListWidget" name="listWidgetItems"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_compute">
+       <attribute name="title">
+        <string>Compute</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <property name="text">
-          <string>mean</string>
-         </property>
+         <widget class="QToolBox" name="toolBox">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="page_3">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>297</width>
+             <height>365</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Batch Management</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QLineEdit" name="lineEditParentDataPath">
+                <property name="placeholderText">
+                 <string>Parent Data Path</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonParentDataPath">
+                <property name="maximumSize">
+                 <size>
+                  <width>35</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QPushButton" name="pushButtonOpenBatch">
+                <property name="text">
+                 <string>Open Batch</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonNewBatch">
+                <property name="text">
+                 <string>New Batch</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonOpenMovie">
+              <property name="text">
+               <string>Open Movie</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>Parameter Setting</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_10">
+               <item>
+                <widget class="QPushButton" name="pushButtonParamsMCorr">
+                 <property name="text">
+                  <string>MCorr</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonParamsCNMF">
+                 <property name="text">
+                  <string>CNMF</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonParamsCNMFE">
+                 <property name="text">
+                  <string>CNMFE</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <item>
+               <widget class="QPushButton" name="pushButtonDelItem">
+                <property name="text">
+                 <string>Del Item</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonAbort">
+                <property name="text">
+                 <string>Abort</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QPushButton" name="pushButtonStart">
+                <property name="text">
+                 <string>Start</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStartItem">
+                <property name="text">
+                 <string>Start at item</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>297</width>
+             <height>365</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Parameter Viewer</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QTextBrowser" name="textBrowserParams"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>297</width>
+             <height>365</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>QProcess stdout</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <widget class="QTextBrowser" name="textBrowserStdOut"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_visualize">
+       <attribute name="title">
+        <string>Visualize</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Projections</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QComboBox" name="comboBoxProjectionOpts">
+             <item>
+              <property name="text">
+               <string>mean</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>std</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>max</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonViewProjection">
+             <property name="text">
+              <string>View Projection</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
         <item>
-         <property name="text">
-          <string>std</string>
-         </property>
+         <widget class="QPushButton" name="pushButtonVizCorrelationImage">
+          <property name="text">
+           <string>Correlation Image</string>
+          </property>
+         </widget>
         </item>
         <item>
-         <property name="text">
-          <string>max</string>
-         </property>
+         <widget class="QPushButton" name="pushButtonVizDownsampledMCorrrMovie">
+          <property name="text">
+           <string>Downsampled MCorr movie</string>
+          </property>
+         </widget>
         </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonViewProjection">
-        <property name="text">
-         <string>View Projection</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+        <item>
+         <widget class="QPushButton" name="pushButtonVizReconstructedMovie">
+          <property name="text">
+           <string>Reconstructed post-CNMF movie</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="radioButtonROIMask">
+            <property name="text">
+             <string>Mask ROIS</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButtonROIOutline">
+            <property name="text">
+             <string>Outline ROIs</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Items</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_9">
-     <item>
-      <widget class="QPushButton" name="pushButtonNewBatch">
-       <property name="text">
-        <string>New Batch</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButtonOpenBatch">
-       <property name="text">
-        <string>Open Batch</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QListWidget" name="listWidgetItems"/>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_11">
-     <item>
-      <widget class="QPushButton" name="pushButtonStart">
-       <property name="text">
-        <string>Start</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButtonStartItem">
-       <property name="text">
-        <string>Start at item</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_12">
-     <item>
-      <widget class="QPushButton" name="pushButtonDelItem">
-       <property name="text">
-        <string>Del Item</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButtonAbort">
-       <property name="text">
-        <string>Abort</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QTextBrowser" name="textBrowserParams"/>
-   </item>
-   <item>
-    <widget class="QTextBrowser" name="textBrowserStdOut"/>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>pushButtonOpenMovie</tabstop>
+  <tabstop>pushButtonOpenBatch</tabstop>
+  <tabstop>pushButtonNewBatch</tabstop>
+  <tabstop>listWidgetItems</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>pushButtonParamsMCorr</tabstop>
   <tabstop>pushButtonParamsCNMF</tabstop>
   <tabstop>pushButtonParamsCNMFE</tabstop>
-  <tabstop>comboBoxProjectionOpts</tabstop>
-  <tabstop>pushButtonViewProjection</tabstop>
-  <tabstop>pushButtonNewBatch</tabstop>
-  <tabstop>pushButtonOpenBatch</tabstop>
-  <tabstop>listWidgetItems</tabstop>
-  <tabstop>pushButtonStart</tabstop>
-  <tabstop>pushButtonStartItem</tabstop>
   <tabstop>pushButtonDelItem</tabstop>
   <tabstop>pushButtonAbort</tabstop>
+  <tabstop>pushButtonStart</tabstop>
+  <tabstop>pushButtonStartItem</tabstop>
   <tabstop>textBrowserParams</tabstop>
   <tabstop>textBrowserStdOut</tabstop>
+  <tabstop>comboBoxProjectionOpts</tabstop>
+  <tabstop>pushButtonViewProjection</tabstop>
  </tabstops>
  <resources/>
  <connections/>

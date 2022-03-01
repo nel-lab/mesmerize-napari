@@ -1,6 +1,9 @@
 import os
+
+import numpy as np
+
 from .algorithms import *
-from .utils import make_runfile, IS_WINDOWS
+from .utils import make_runfile, IS_WINDOWS, MESMERIZE_LRU_CACHE
 import pandas as pd
 import pathlib
 from pathlib import Path
@@ -9,11 +12,15 @@ from PyQt5 import QtCore
 from functools import partial
 from uuid import uuid4, UUID
 from subprocess import Popen
+from functools import lru_cache
+from caiman import load_memmap
+from caiman.source_extraction.cnmf.cnmf import load_CNMF
+from caiman.utils.visualization import get_contours as caiman_get_contours
 
 
 # Start of Core Utilities
 CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
-CURRENT_DATA_PATH: pathlib.Path = None
+PARENT_DATA_PATH: pathlib.Path = None
 
 
 ALGO_MODULES = \
@@ -29,7 +36,7 @@ DATAFRAME_COLUMNS = ['algo', 'name', 'input_movie_path', 'params', 'outputs', 'u
 
 def load_batch(batch_file: Union[str, pathlib.Path], input_data_path: Union[str, pathlib.Path]) -> pd.DataFrame:
     global CURRENT_BATCH_PATH
-    global CURRENT_DATA_PATH
+    global PARENT_DATA_PATH
 
     df = pd.read_pickle(
         pathlib.Path(batch_file)
@@ -63,6 +70,13 @@ def create_batch(path: str = None):
     return df
 
 
+def _get_full_data_path(path: Path) -> Path:
+    if PARENT_DATA_PATH is not None:
+        return PARENT_DATA_PATH.joinpath(path)
+
+    return path
+
+
 @pd.api.extensions.register_dataframe_accessor("caiman")
 class CaimanDataFrameExtensions:
     """
@@ -71,6 +85,9 @@ class CaimanDataFrameExtensions:
     def __init__(self, df: pd.DataFrame):
         self._df = df
         self.path = None
+
+    def uloc(self, u: Union[str, UUID]):
+        return self._df.loc[self._df['uuid'] == str(u)]
 
     def add_item(self, algo: str, name: str, input_movie_path: str, params: dict):
         """
@@ -93,9 +110,11 @@ class CaimanDataFrameExtensions:
 
         """
 
-        global CURRENT_DATA_PATH
-        if CURRENT_DATA_PATH is not None:
-            input_movie_path = Path(input_movie_path).relative_to(CURRENT_DATA_PATH).as_posix()
+        global PARENT_DATA_PATH
+        input_movie_path = Path(input_movie_path)
+
+        if PARENT_DATA_PATH is not None:
+            input_movie_path = str(input_movie_path.relative_to(PARENT_DATA_PATH))
 
         # Create a pandas Series (Row) with the provided arguments
         s = pd.Series(
@@ -158,8 +177,8 @@ class CaimanSeriesExtensions:
         # Create the runfile in the same dir using this Series' UUID as the filename
         runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
 
-        if CURRENT_DATA_PATH is not None:
-            args_str = f'{CURRENT_BATCH_PATH} {self._series.uuid} {CURRENT_DATA_PATH}'
+        if PARENT_DATA_PATH is not None:
+            args_str = f'{CURRENT_BATCH_PATH} {self._series.uuid} {PARENT_DATA_PATH}'
         else:
             f'{CURRENT_BATCH_PATH} {self._series.uuid}'
 
@@ -210,11 +229,15 @@ class CaimanSeriesExtensions:
         # Create the runfile in the same dir using this Series' UUID as the filename
         runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
 
+        args_str = f'--batch-path {CURRENT_BATCH_PATH} --uuid {self._series.uuid}'
+        if PARENT_DATA_PATH is not None:
+             args_str += f' --data-path {PARENT_DATA_PATH}'
+
         # make the runfile
         runfile = make_runfile(
             module_path=os.path.abspath(ALGO_MODULES[self._series['algo']].__file__), # caiman algorithm
             filename=runfile_path,  # path to create runfile
-            args_str=f'{CURRENT_BATCH_PATH} {self._series.uuid}'  # batch file path (which contains the params) and UUID are passed as args
+            args_str=args_str
         )
 
         # Set working dir for the external process
@@ -228,3 +251,58 @@ class CaimanSeriesExtensions:
             self.process.start(runfile)
 
         return self.process
+
+    def get_input_movie_path(self) -> Path:
+        return _get_full_data_path(self._series['input_movie_path'])
+
+    def get_cnmf_output_path(self):
+        return _get_full_data_path(self._series['outputs'].item()['cnmf_hdf5'])
+
+    @lru_cache(1)
+    def get_cnmf_obj(self):
+        return load_CNMF(self.get_cnmf_output_path())
+
+    @lru_cache(1)
+    def get_cnmf_spatial_mask(self):
+        pass
+
+    @lru_cache(1)
+    def get_cnmf_spatial_contours(self, ixs: np.ndarray):
+        cnmf_obj = self.get_cnmf_obj()
+
+        dims = cnmf_obj.dims
+        if dims is None:  # I think that one of these is `None` if loaded from an hdf5 file
+            dims = cnmf_obj.estimates.dims
+
+        # need to transpose these
+        dims = dims[1], dims[0]
+
+        contours = caiman_get_contours(
+            cnmf_obj.estimates.A[:, ixs],
+            dims,
+            swap_dim=True
+        )
+
+        return contours
+
+    @lru_cache(1)
+    def get_mcorr_movie_path(self):
+        pass
+
+    def clear_cache(self):
+        self.get_cnmf_obj.clear_cache()
+
+    def get_projection(self) -> np.ndarray:
+        pass
+
+    def get_mcorr_output_path(self):
+        return _get_full_data_path(self._series['outputs'].item()['mcorr_output'])
+
+    def get_correlation_image(self) -> np.ndarray:
+        pass
+
+    def get_mcorr_movie(self) -> np.ndarray:
+        path = self.get_mcorr_output_path()
+        Yr, dims, T = load_memmap(str(path))
+        mc_movie = np.reshape(Yr.T, [T] + list(dims), order='F')
+        return mc_movie

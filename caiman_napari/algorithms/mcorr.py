@@ -16,6 +16,7 @@ import sys
 from napari.utils import io
 import pandas as pd
 import os
+from pathlib import Path
 
 
 @click.command()
@@ -28,7 +29,8 @@ def main(batch_path, uuid, data_path: str = None):
 
     input_movie_path = item['input_movie_path']
     if data_path is not None:
-        input_movie_path = os.path.join(data_path, input_movie_path)
+        data_path = Path(data_path)
+        input_movie_path = str(data_path.joinpath(input_movie_path))
 
     params = item['params']
 
@@ -54,11 +56,14 @@ def main(batch_path, uuid, data_path: str = None):
     # Run MC, denote boolean 'success' if MC completes w/out error
     try:
         # Run MC
-        fnames = [str(input_movie_path)]
-        mc = MotionCorrect(fnames, dview = dview, **opts.get_group('motion'))
-        mc.motion_correct(save_movie = True, base_name_prefix=uuid)
+        fnames = [input_movie_path]
+        mc = MotionCorrect(fnames, dview=dview, **opts.get_group('motion'))
+        mc.motion_correct(save_movie=True, base_name_prefix=uuid)
         # Find path to mmap file
-        output_path = mc.mmap_file
+        output_path = Path(mc.mmap_file)
+        if data_path is not None:
+            output_path = Path(output_path).relative_to(data_path)
+
         d = dict()
         d.update(
             {
@@ -138,5 +143,6 @@ def load_correlation_image(viewer, batch_item: pd.Series):
     correlation_image = Cn
     viewer.add_image(correlation_image)
 
+
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main()

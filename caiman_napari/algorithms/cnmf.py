@@ -1,6 +1,6 @@
 """Performs CNMF in a separate process"""
 import pathlib
-
+import click
 import numpy as np
 import caiman as cm
 from caiman.source_extraction.cnmf import cnmf as cnmf
@@ -27,7 +27,11 @@ if __name__ != '__main__':
     from ..napari1d_manager import napari1d_run
 
 
-def main(batch_path, uuid):
+@click.command()
+@click.option('--batch-path', type=str)
+@click.option('--uuid', type=str)
+@click.option('--data-path')
+def main(batch_path, uuid, data_path: str = None):
     df = pd.read_pickle(batch_path)
     item = df[df['uuid'] == uuid].squeeze()
 
@@ -94,7 +98,7 @@ def main(batch_path, uuid):
         d = dict()
         d.update(
             {
-                "cnmf_outputs": output_path,
+                "cnmf_hdf5": output_path,
                 "cnmf_memmap": fname_new,
                 "success": True,
                 "traceback": None
@@ -209,4 +213,4 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main()
