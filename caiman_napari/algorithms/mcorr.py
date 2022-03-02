@@ -30,7 +30,9 @@ def main(batch_path, uuid, data_path: str = None):
     input_movie_path = item['input_movie_path']
     if data_path is not None:
         data_path = Path(data_path)
-        input_movie_path = str(data_path.joinpath(input_movie_path))
+        input_movie_path = data_path.joinpath(input_movie_path)
+
+    input_movie_path = str(input_movie_path)
 
     params = item['params']
 

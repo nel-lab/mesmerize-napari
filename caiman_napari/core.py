@@ -45,9 +45,8 @@ def get_parent_data_path() -> Path:
     return PARENT_DATA_PATH
 
 
-def load_batch(batch_file: Union[str, pathlib.Path], input_data_path: Union[str, pathlib.Path]) -> pd.DataFrame:
+def load_batch(batch_file: Union[str, pathlib.Path]) -> pd.DataFrame:
     global CURRENT_BATCH_PATH
-    global PARENT_DATA_PATH
 
     df = pd.read_pickle(
         pathlib.Path(batch_file)
@@ -125,7 +124,9 @@ class CaimanDataFrameExtensions:
         input_movie_path = Path(input_movie_path)
 
         if PARENT_DATA_PATH is not None:
-            input_movie_path = str(input_movie_path.relative_to(PARENT_DATA_PATH))
+            input_movie_path = input_movie_path.relative_to(PARENT_DATA_PATH)
+
+        input_movie_path = str(input_movie_path)
 
         # Create a pandas Series (Row) with the provided arguments
         s = pd.Series(
