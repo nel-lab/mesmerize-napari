@@ -60,7 +60,7 @@ def main(batch_path, uuid, data_path: str = None):
         mc = MotionCorrect(fnames, dview=dview, **opts.get_group('motion'))
         mc.motion_correct(save_movie=True, base_name_prefix=uuid)
         # Find path to mmap file
-        output_path = Path(mc.mmap_file)
+        output_path = Path(mc.mmap_file[0])
         if data_path is not None:
             output_path = Path(output_path).relative_to(data_path)
 

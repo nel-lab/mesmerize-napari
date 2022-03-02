@@ -34,6 +34,17 @@ ALGO_MODULES = \
 DATAFRAME_COLUMNS = ['algo', 'name', 'input_movie_path', 'params', 'outputs', 'uuid']
 
 
+def set_parent_data_path(path: Union[Path, str]) -> Path:
+    global PARENT_DATA_PATH
+    PARENT_DATA_PATH = Path(path)
+    return PARENT_DATA_PATH
+
+
+def get_parent_data_path() -> Path:
+    global PARENT_DATA_PATH
+    return PARENT_DATA_PATH
+
+
 def load_batch(batch_file: Union[str, pathlib.Path], input_data_path: Union[str, pathlib.Path]) -> pd.DataFrame:
     global CURRENT_BATCH_PATH
     global PARENT_DATA_PATH
@@ -156,19 +167,27 @@ class CaimanSeriesExtensions:
         pass
 
     def _run_subprocess(self):
-        parent_path = Path(self._series.input_movie_path).parent
+        global PARENT_DATA_PATH
+
+        # Get the dir that contains the input movie
+        parent_path = _get_full_data_path(Path(self._series.input_movie_path).parent)
 
         # Create the runfile in the same dir using this Series' UUID as the filename
         runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
 
-        # make the runfile
+        args_str = f'--batch-path {CURRENT_BATCH_PATH} --uuid {self._series.uuid}'
+        if PARENT_DATA_PATH is not None:
+            args_str += f' --data-path {PARENT_DATA_PATH}'
+
+
+    # make the runfile
         runfile = make_runfile(
             module_path=os.path.abspath(ALGO_MODULES[self._series['algo']].__file__), # caiman algorithm
             filename=runfile_path,  # path to create runfile
-            args_str=f'{CURRENT_BATCH_PATH} {self._series.uuid}'  # batch file path (which contains the params) and UUID are passed as args
+            args_str=args_str
         )
 
-        self.process = Popen(runfile, cwd=os.path.dirname(self._series.input_movie_path))
+        self.process = Popen(runfile, cwd=parent_path)
         self.process.wait()
 
     def submit_slurm(self):
@@ -223,8 +242,10 @@ class CaimanSeriesExtensions:
         for f in callbacks_finished:
             self.process.finished.connect(f)
 
+        global PARENT_DATA_PATH
+
         # Get the dir that contains the input movie
-        parent_path = Path(self._series.input_movie_path).parent
+        parent_path = _get_full_data_path(Path(self._series.input_movie_path).parent)
 
         # Create the runfile in the same dir using this Series' UUID as the filename
         runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
