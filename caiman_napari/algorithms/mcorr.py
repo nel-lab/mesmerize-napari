@@ -61,7 +61,9 @@ def main(batch_path, uuid, data_path: str = None):
         # Run MC
         fnames = [input_movie_path]
         mc = MotionCorrect(fnames, dview=dview, **opts.get_group('motion'))
-        mc.motion_correct(save_movie=True, base_name_prefix=uuid)
+        # Initial code: mc.motion_correct(save_movie=True, base_name_prefix=uuid)
+        ## Not sure purpose of the base_name_prefix param
+        mc.motion_correct(save_movie=True)
         # Find path to mmap file
         output_path = Path(mc.mmap_file[0])
         if data_path is not None:
@@ -122,7 +124,7 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
 
     MC_Projection = getattr(np, f"nan{proj_type}")(MotionCorrectedMovie, axis=0)
 
-    viewer.add_image(MC_Projection)
+    viewer.add_image(MC_Projection, name=proj_type)
 
 
 if __name__ == "__main__":

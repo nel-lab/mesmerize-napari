@@ -112,9 +112,10 @@ def main(batch_path, uuid, data_path: str = None):
     df.to_pickle(batch_path)
 
 
-def load_output(parent, viewer, batch_item: pd.Series):
+def load_output(viewer, batch_item: pd.Series):
     print('Loading outputs of CNMF')
-    path = batch_item["outputs"].item()["cnmf_outputs"]
+    print(batch_item["outputs"])
+    path = batch_item["outputs"].item()["cnmf_hdf5"]
     cnmf_obj = load_CNMF(path)
 
     dims = cnmf_obj.dims
@@ -209,7 +210,7 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
     Cn = cm.local_correlations(images.transpose(1, 2, 0))
     Cn[np.isnan(Cn)] = 0
     # Add correlation map to napari viewer
-    viewer.add_image(Cn)
+    viewer.add_image(Cn, name="Correlation Map")
 
 
 if __name__ == "__main__":

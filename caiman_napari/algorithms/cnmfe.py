@@ -1,5 +1,5 @@
 import pathlib
-
+import click
 import matplotlib.widgets
 import napari
 import numpy as np
@@ -25,19 +25,24 @@ import traceback
 from napari.viewer import Viewer
 import time
 from time import sleep
-from ..utils import _organize_coordinates
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication
+# Below import statment not working, investigate why
+#from ..utils import _organize_coordinates
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+if __name__ != '__main__':
+    from ..napari1d_manager import napari1d_run
 
-
-
-def main(batch_path, uuid):
+@click.command()
+@click.option('--batch-path', type=str)
+@click.option('--uuid', type=str)
+@click.option('--data-path')
+def main(batch_path, uuid, data_path: str = None):
     df = pd.read_pickle(batch_path)
     item = df[df['uuid'] == uuid].squeeze()
 
@@ -230,6 +235,36 @@ def load_output(viewer, batch_item: pd.Series):
                 opacity=0.7,
             )
 
+def load_projection(viewer, batch_item: pd.Series, proj_type):
+    """
+    Load correlation map from cnmf memmap file
 
+    Parameters
+    ----------
+    viewer: Viewer
+        Viewer instance to load the projection in
+
+    batch_item: pd.Series
+
+    proj_type: None
+        Not used
+
+    """
+    # Get cnmf memmap
+    fname_new = batch_item["outputs"].item()["cnmfe_memmap"]
+    # Get order f images
+    Yr, dims, T = cm.load_memmap(fname_new)
+    images = np.reshape(Yr.T, [T] + list(dims), order='F')
+    # Get correlation map
+    Cn = cm.local_correlations(images.transpose(1, 2, 0))
+    Cn[np.isnan(Cn)] = 0
+    # Add correlation map to napari viewer
+    viewer.add_image(Cn, name="Correlation Map (1P)")
+
+def _organize_coordinates(contour: dict):
+    coors = contour['coordinates']
+    coors = coors[~np.isnan(coors).any(axis=1)]
+
+    return coors
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main()

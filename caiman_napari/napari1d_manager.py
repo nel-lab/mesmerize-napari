@@ -16,7 +16,7 @@ import pyqtgraph as pg
 from napari._qt.widgets.qt_viewer_dock_widget import QtViewerDockWidget
 
 def napari1d_run(batch_item: pd.Series, shapes: dict):
-    viewer = napari.Viewer()
+    viewer = napari.Viewer(title="CNMF Visualization")
     ## Load correlation image
     # Get cnmf memmap
     fname_new = batch_item["outputs"].item()["cnmf_memmap"]
@@ -31,7 +31,7 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     # Display video in viewer
     viewer.add_image(images, name="Movie")
     # Load cnmf file
-    path = batch_item["outputs"].item()["cnmf_outputs"]
+    path = batch_item["outputs"].item()["cnmf_hdf5"]
     cnmf_obj = load_CNMF(path)
 
 
@@ -73,13 +73,13 @@ def napari1d_run(batch_item: pd.Series, shapes: dict):
     layer = viewer1d.add_inf_line(data=[1], orientation="vertical", color="red", width=3, name="slider")
     viewer1d.add_layer(layer=layer)
 
-    # toggle control panel on (shows list of layers)
-    qt_viewer.on_toggle_controls_dialog()
 
     @viewer1d.bind_key('n')
     def print_names(viewer1d):
         print([layer.name for layer in viewer1d.layers])
         viewer1d.layers.enabled = True
+        # toggle control panel on (shows list of layers)
+        qt_viewer.on_toggle_controls_dialog()
 
     # Confirmed the time variable updates real time
     @viewer.dims.events.current_step.connect
