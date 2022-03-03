@@ -19,6 +19,7 @@ import os
 from pathlib import Path
 
 
+
 @click.command()
 @click.option('--batch-path', type=str)
 @click.option('--uuid', type=str)
@@ -66,34 +67,38 @@ def main(batch_path, uuid, data_path: str = None):
         if data_path is not None:
             output_path = Path(output_path).relative_to(data_path)
 
+        print("mc finished successfully!")
+
+        print("Computing correlation image")
+        Cns = local_correlations_movie_offline([mc.mmap_file[0]],
+                                               remove_baseline=True, window=1000, stride=1000,
+                                               winSize_baseline=100, quantil_min_baseline=10,
+                                               dview=dview)
+        Cn = Cns.max(axis=0)
+        Cn[np.isnan(Cn)] = 0
+        cn_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_cn.npy'))
+        np.save(cn_path, Cn, allow_pickle=False)
+
+        print("finished computing correlation image")
+
         d = dict()
         d.update(
             {
-                "mcorr_output": output_path,
+                "mcorr-output-path": output_path,
+                "corr-img-path": Path(cn_path),
                 "success": True,
                 "traceback": None
             }
         )
     except:
         d = {"success": False, "traceback": traceback.format_exc()}
+        print("mc failed, stored traceback in output")
 
     print(d)
     # Add dictionary to output column of series
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # Save DataFrame to disk
     df.to_pickle(batch_path)
-
-
-def load_output(parent, viewer, batch_item: pd.Series):
-    print('Loading outputs of MC')
-    path = batch_item['outputs'].item()["mcorr_output"][0]
-
-    parent.input_movie_path = path
-
-    Yr, dims, T = cm.load_memmap(path)
-    MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
-    viewer.add_image(MotionCorrectedMovie)
-    viewer.grid.enabled = True
 
 
 def load_projection(viewer, batch_item: pd.Series, proj_type):
@@ -110,40 +115,14 @@ def load_projection(viewer, batch_item: pd.Series, proj_type):
 
     """
     print("loading projection")
-    path = batch_item['outputs'].item()["mcorr_output"][0]
+    path = ().joinpath(batch_item['outputs'].item()["mcorr-output-path"])
 
-    Yr, dims, T = cm.load_memmap(path)
+    Yr, dims, T = cm.load_memmap(str(path))
     MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
 
     MC_Projection = getattr(np, f"nan{proj_type}")(MotionCorrectedMovie, axis=0)
 
     viewer.add_image(MC_Projection)
-
-    load_correlation_image(viewer, batch_item)
-
-
-    # Load Correlation Image
-def load_correlation_image(viewer, batch_item: pd.Series):
-    print("loading correlation image)")
-    path = batch_item['outputs'].item()['mcorr_output'][0]
-    # Set up parallel processing
-    # adapted from current demo notebook
-    n_processes = psutil.cpu_count() - 1
-    # Start cluster for parallel processing
-    c, dview, n_processes = cm.cluster.setup_cluster(
-        backend='local',
-        n_processes=n_processes,
-        single_thread=False
-    )
-
-    Cns = local_correlations_movie_offline([path],
-                                           remove_baseline=True, window=1000, stride=1000,
-                                           winSize_baseline=100, quantil_min_baseline=10,
-                                           dview=dview)
-    Cn = Cns.max(axis=0)
-    Cn[np.isnan(Cn)] = 0
-    correlation_image = Cn
-    viewer.add_image(correlation_image)
 
 
 if __name__ == "__main__":

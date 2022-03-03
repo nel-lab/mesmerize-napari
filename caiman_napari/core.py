@@ -9,14 +9,13 @@ import pathlib
 from pathlib import Path
 from typing import *
 from PyQt5 import QtCore
-from functools import partial
+from functools import partial, wraps
 from uuid import uuid4, UUID
 from subprocess import Popen
 from functools import lru_cache
 from caiman import load_memmap
-from caiman.source_extraction.cnmf.cnmf import load_CNMF
+from caiman.source_extraction.cnmf.cnmf import CNMF, load_CNMF
 from caiman.utils.visualization import get_contours as caiman_get_contours
-
 
 # Start of Core Utilities
 CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
@@ -96,8 +95,19 @@ class CaimanDataFrameExtensions:
         self._df = df
         self.path = None
 
-    def uloc(self, u: Union[str, UUID]):
-        return self._df.loc[self._df['uuid'] == str(u)]
+    def uloc(self, u: Union[str, UUID]) -> pd.Series:
+        """
+        Return the series corresponding to the passed UUID
+        """
+        df_u = self._df.loc[self._df['uuid'] == str(u)]
+
+        if df_u.index.size == 0:
+            raise KeyError("Item with given UUID not found in dataframe")
+        elif df_u.index.size > 1:
+            raise KeyError(f"Duplicate items with given UUID found in dataframe, something is wrong\n"
+                           f"{df_u}")
+
+        return df_u.squeeze()
 
     def add_item(self, algo: str, name: str, input_movie_path: str, params: dict):
         """
@@ -153,6 +163,27 @@ class CaimanDataFrameExtensions:
         self._df.reset_index(drop=True, inplace=True)
         # Save new df to disc
         self._df.to_pickle(self.path)
+
+
+def validate(algo: str = None):
+    def dec(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            if self._series['outputs'] is None:
+                raise ValueError("Item has not been run")
+
+            if algo is not None:
+                if algo not in self._series['algo']:
+                    raise ValueError(f"MCorr extension called for non-MCorr item, "
+                                     f"this is a <{self._series}> item")
+
+            if not self._series['outputs']['success']:
+                raise ValueError("Cannot load output of an unsuccessful item")
+            return func(self, *args, **kwargs)
+
+        return wrapper
+
+    return dec
 
 
 @pd.api.extensions.register_series_accessor("caiman")
@@ -274,23 +305,43 @@ class CaimanSeriesExtensions:
 
         return self.process
 
+    @validate()
     def get_input_movie_path(self) -> Path:
         return _get_full_data_path(self._series['input_movie_path'])
 
-    def get_cnmf_output_path(self):
-        return _get_full_data_path(self._series['outputs'].item()['cnmf_hdf5'])
+    @validate()
+    def get_correlation_image(self) -> np.ndarray:
+        path = _get_full_data_path(self._series['outputs']['corr-img-path'])
+        return np.load(str(path))
 
-    @lru_cache(1)
-    def get_cnmf_obj(self):
-        return load_CNMF(self.get_cnmf_output_path())
-
-    @lru_cache(1)
-    def get_cnmf_spatial_mask(self):
+    @validate()
+    def get_projection(self, proj_type: str):
         pass
 
-    @lru_cache(1)
-    def get_cnmf_spatial_contours(self, ixs: np.ndarray):
-        cnmf_obj = self.get_cnmf_obj()
+
+@pd.api.extensions.register_series_accessor("cnmf")
+class CNMFExtensions:
+    """
+    Extensions for managing CNMF output data
+    """
+    def __init__(self, s: pd.Series):
+        self._series = s
+
+    @validate('cnmf')
+    def get_output_path(self) -> Path:
+        return _get_full_data_path(self._series['outputs']['cnmf-hdf5'])
+
+    @validate('cnmf')
+    def get_output(self) -> CNMF:
+        return load_CNMF(self.get_cnmf_output_path())
+
+    @validate('cnmf')
+    def spatial_mask(self) -> np.ndarray:
+        pass
+
+    @validate('cnmf')
+    def spatial_contours(self, ixs: np.ndarray) -> List[dict]:
+        cnmf_obj = self.get_output()
 
         dims = cnmf_obj.dims
         if dims is None:  # I think that one of these is `None` if loaded from an hdf5 file
@@ -307,24 +358,22 @@ class CaimanSeriesExtensions:
 
         return contours
 
-    @lru_cache(1)
-    def get_mcorr_movie_path(self):
-        pass
 
-    def clear_cache(self):
-        self.get_cnmf_obj.clear_cache()
+@pd.api.extensions.register_series_accessor("mcorr")
+class MCorrExtensions:
+    """
+    Extensions for managing motion correction outputs
+    """
+    def __init__(self, s: pd.Series):
+        self._series = s
 
-    def get_projection(self) -> np.ndarray:
-        pass
+    @validate('mcorr')
+    def get_output_path(self) -> Path:
+        return _get_full_data_path(self._series['outputs']['mcorr-output-path'])
 
-    def get_mcorr_output_path(self):
-        return _get_full_data_path(self._series['outputs'].item()['mcorr_output'])
-
-    def get_correlation_image(self) -> np.ndarray:
-        pass
-
-    def get_mcorr_movie(self) -> np.ndarray:
-        path = self.get_mcorr_output_path()
+    @validate('mcorr')
+    def get_output(self):
+        path = self.get_output_path()
         Yr, dims, T = load_memmap(str(path))
         mc_movie = np.reshape(Yr.T, [T] + list(dims), order='F')
         return mc_movie
