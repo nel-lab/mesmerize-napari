@@ -10,7 +10,7 @@ from caiman_napari.utils import *
 from caiman.summary_images import local_correlations_movie_offline
 import traceback
 from napari.viewer import Viewer
-
+from pathlib import Path
 
 
 @click.command()
