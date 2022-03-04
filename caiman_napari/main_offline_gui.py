@@ -326,23 +326,17 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self._open_movie(output_path, name=f'mcorr: {s["name"]}')
 
         elif algo in ['cnmf', 'cnmfe']:
-            movie_path = s.caiman.get_input_movie_path()
-            self._open_movie(movie_path)
-            self.viz_cnmf()
+            if self.ui.radioButtonROIMask.isChecked():
+                napari1d_run(self._selected_series(), 'mask')
+
+            elif self.ui.radioButtonROIOutline.isChecked():
+                napari1d_run(self._selected_series(), 'outline')
 
     def load_correlation_image(self):
         s = self._selected_series()
         corr_img = s.caiman.get_correlation_image()
         self.viewer.add_image(corr_img, name=f'corr: {s["name"]}')
 
-    def viz_cnmf(self):
-        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
-        uuid = item_gui.data(3)
-        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
-        print('algo', algo)
-        r = self.dataframe.loc[self.dataframe['uuid'] == uuid]
-        print('item', r)
-        getattr(algorithms, algo).load_output(self.viewer, batch_item=r)
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()

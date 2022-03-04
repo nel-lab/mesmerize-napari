@@ -327,20 +327,42 @@ class CNMFExtensions:
     def __init__(self, s: pd.Series):
         self._series = s
 
+    def get_memmap(self) -> np.ndarray:
+        path = self._series['outputs']['cnmf-memmap-path']
+        # Get order f images
+        Yr, dims, T = load_memmap(path)
+        images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        return images
+
     @validate('cnmf')
     def get_output_path(self) -> Path:
-        return _get_full_data_path(self._series['outputs']['cnmf-hdf5'])
+        return _get_full_data_path(self._series['outputs']['cnmf-hdf5-path'])
 
     @validate('cnmf')
     def get_output(self) -> CNMF:
-        return load_CNMF(self.get_cnmf_output_path())
+        return load_CNMF(self.get_output_path())
 
     @validate('cnmf')
-    def spatial_mask(self) -> np.ndarray:
-        pass
+    def get_spatial_masks(self, ixs: np.ndarray, threshold: float = 0.01) -> np.ndarray:
+        cnmf_obj = self.get_output()
+
+        dims = cnmf_obj.dims
+        if dims is None:
+            dims = cnmf_obj.estimate.dims
+
+        masks = np.zeros(shape=(dims[0], dims[1], len(ixs)), dtype=bool)
+
+        for n, ix in enumerate(ixs):
+            s = cnmf_obj.estimates.A[:, ix].toarray().reshape(cnmf_obj.dims)
+            s[s >= threshold] = 1
+            s[s < threshold] = 0
+
+            masks[:, :, n] = s.astype(bool)
+
+        return masks
 
     @validate('cnmf')
-    def spatial_contours(self, ixs: np.ndarray) -> List[dict]:
+    def get_spatial_contours(self, ixs: np.ndarray) -> List[dict]:
         cnmf_obj = self.get_output()
 
         dims = cnmf_obj.dims
@@ -358,6 +380,17 @@ class CNMFExtensions:
 
         return contours
 
+    @validate('cnmf')
+    def get_spatial_contour_coors(self, ixs: np.ndarray) -> List[np.ndarray]:
+        contours = self.get_spatial_contours(ixs)
+
+        coordinates = []
+        for contour in contours:
+            coors = contour['coordinates']
+            coordinates.append(coors[~np.isnan(coors).any(axis=1)])
+
+        return coordinates
+
 
 @pd.api.extensions.register_series_accessor("mcorr")
 class MCorrExtensions:
@@ -372,7 +405,7 @@ class MCorrExtensions:
         return _get_full_data_path(self._series['outputs']['mcorr-output-path'])
 
     @validate('mcorr')
-    def get_output(self):
+    def get_output(self) -> np.ndarray:
         path = self.get_output_path()
         Yr, dims, T = load_memmap(str(path))
         mc_movie = np.reshape(Yr.T, [T] + list(dims), order='F')

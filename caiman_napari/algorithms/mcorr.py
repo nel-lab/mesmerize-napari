@@ -1,23 +1,14 @@
 import traceback
-
 import click
 import numpy as np
 import caiman as cm
-from caiman.source_extraction.cnmf import cnmf as cnmf
-from caiman.utils.utils import load_dict_from_hdf5
 from caiman.source_extraction.cnmf.params import CNMFParams
 from caiman.motion_correction import MotionCorrect
 from caiman.summary_images import local_correlations_movie_offline
-from caiman.utils.utils import download_demo
 import psutil
-import json
-from tqdm import tqdm
-import sys
-from napari.utils import io
 import pandas as pd
 import os
 from pathlib import Path
-
 
 
 @click.command()
@@ -61,9 +52,8 @@ def main(batch_path, uuid, data_path: str = None):
         # Run MC
         fnames = [input_movie_path]
         mc = MotionCorrect(fnames, dview=dview, **opts.get_group('motion'))
-        # Initial code: mc.motion_correct(save_movie=True, base_name_prefix=uuid)
-        ## Not sure purpose of the base_name_prefix param
-        mc.motion_correct(save_movie=True)
+        mc.motion_correct(save_movie=True, base_name_prefix=uuid)
+
         # Find path to mmap file
         output_path = Path(mc.mmap_file[0])
         if data_path is not None:
@@ -101,30 +91,6 @@ def main(batch_path, uuid, data_path: str = None):
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # Save DataFrame to disk
     df.to_pickle(batch_path)
-
-
-def load_projection(viewer, batch_item: pd.Series, proj_type):
-    """
-
-    Parameters
-    ----------
-    viewer: Viewer
-        Viewer instance to load the projection into
-    batch_item: pd.Series
-
-    proj_type: str
-        define type of projection to display {mean, sd, max}
-
-    """
-    print("loading projection")
-    path = ().joinpath(batch_item['outputs'].item()["mcorr-output-path"])
-
-    Yr, dims, T = cm.load_memmap(str(path))
-    MotionCorrectedMovie = np.reshape(Yr.T, [T] + list(dims), order='F')
-
-    MC_Projection = getattr(np, f"nan{proj_type}")(MotionCorrectedMovie, axis=0)
-
-    viewer.add_image(MC_Projection, name=proj_type)
 
 
 if __name__ == "__main__":
