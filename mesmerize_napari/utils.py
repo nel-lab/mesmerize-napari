@@ -1,10 +1,11 @@
-from qtpy.QtWidgets import QWidget, QFileDialog
+from qtpy.QtWidgets import QWidget, QFileDialog, QMessageBox
 from qtpy import QtGui
 import numpy as np
 from matplotlib import cm as matplotlib_color_map
 from functools import wraps
 import os
 from stat import S_IEXEC
+import traceback
 from typing import *
 
 
@@ -19,6 +20,11 @@ if os.name == 'nt':
 else:
     IS_WINDOWS = False
     HOME = 'HOME'
+
+if 'MESMERIZE_LRU_CACHE' in os.environ.keys():
+    MESMERIZE_LRU_CACHE = os.environ['MESMERIZE_LRU_CACHE']
+else:
+    MESMERIZE_LRU_CACHE = 10
 
 
 qualitative_colormaps = ['Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1',
@@ -59,6 +65,120 @@ def use_open_file_dialog(title: str = 'Choose file', start_dir: Union[str, None]
             func(self, path, *args, **kwargs)
         return fn
     return wrapper
+
+
+def use_save_file_dialog(title: str = 'Save file', start_dir: Union[str, None] = None, ext: str = None):
+    """
+    Use to pass a file path, for saving, into the decorated function using QFileDialog.getSaveFileName
+
+    :param title:       Title of the dialog box
+    :param start_dir:   Directory that is first shown in the dialog box.
+    :param exts:        List of file extensions to set the filter in the dialog box
+    """
+    def wrapper(func):
+        @wraps(func)
+        def fn(self, *args, **kwargs):
+            if ext is None:
+                raise ValueError('Must specify extension')
+            if ext.startswith('*'):
+                ex = ext[1:]
+            else:
+                ex = ext
+
+            if isinstance(self, QWidget):
+                parent = self
+            else:
+                parent = None
+
+            path = QFileDialog.getSaveFileName(parent, title, start_dir, f'(*{ex})')
+            if not path[0]:
+                return
+            path = path[0]
+            if not path.endswith(ex):
+                path = f'{path}{ex}'
+
+            func(self, path, *args, **kwargs)
+
+        return fn
+    return wrapper
+
+
+def use_open_dir_dialog(title: str = 'Open directory', start_dir: Union[str, None] = None):
+    """
+    Use to pass a dir path, to open, into the decorated function using QFileDialog.getExistingDirectory
+    :param title:       Title of the dialog box
+    :param start_dir:   Directory that is first shown in the dialog box.
+    Example:
+    .. code-block:: python
+        @use_open_dir_dialog('Select Project Directory', '')
+        def load_data(self, path, *args, **kwargs):
+            my_func_to_do_stuff_and_load_data(path)
+    """
+    def wrapper(func):
+        @wraps(func)
+        def fn(self, *args, **kwargs):
+            if isinstance(self, QWidget):
+                parent = self
+            else:
+                parent = None
+
+            path = QFileDialog.getExistingDirectory(parent, title)
+            if not path:
+                return
+            func(self, path, *args, **kwargs)
+        return fn
+    return wrapper
+
+
+def present_exceptions(title: str = 'error', msg: str = 'The following error occurred.'):
+    """
+    Use to catch exceptions and present them to the user in a QMessageBox warning dialog.
+    The traceback from the exception is also shown.
+
+    This decorator can be stacked on top of other decorators.
+
+    Example:
+
+    .. code-block: python
+
+            @present_exceptions('Error loading file')
+            @use_open_file_dialog('Choose file')
+                def select_file(self, path: str, *args):
+                    pass
+
+
+    :param title:       Title of the dialog box
+    :param msg:         Message to display above the traceback in the dialog box
+    :param help_func:   A helper function which is called if the user clicked the "Help" button
+    """
+
+    def catcher(func):
+        @wraps(func)
+        def fn(self, *args, **kwargs):
+            try:
+                return func(self, *args, **kwargs)
+            except Exception as e:
+                tb = traceback.format_exc()
+
+                mb = QMessageBox()
+                mb.setIcon(QMessageBox.Warning)
+                mb.setWindowTitle(title)
+                mb.setText(msg)
+                mb.setInformativeText(f"{e.__class__.__name__}: {e}")
+                mb.setDetailedText(tb)
+                mb.setStandardButtons(
+                    QMessageBox.Ok | QMessageBox.Help
+                )
+
+
+                # getLogger().info(
+                #     f"{e.__class__.__name__}: {e}\n"
+                #     f"{traceback.format_exc()}"
+                # )
+
+        return fn
+
+    return catcher
 
 
 def auto_colormap(
@@ -176,19 +296,39 @@ def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Opt
 
     if not IS_WINDOWS:
         with open(sh_file, 'w') as f:
-            f.write(
-                f'#!/bin/bash\n'
-                f'export PATH={os.environ["PATH"]}\n'
-                f'export PYTHONPATH={os.environ["PYTHONPATH"]}\n'
-                f'export VIRTUAL_ENV={os.environ["VIRTUAL_ENV"]}\n'
-                f'export LD_LIBRARY_PATH={os.environ["LD_LIBRARY_PATH"]}\n'
-            )
+            if 'CONDA_PREFIX' in os.environ.keys():
+                f.write(
+                    f'#!/bin/bash\n'
+                    f'export CONDA_PREFIX={os.environ["CONDA_PREFIX"]}\n'
+                    f'export CONDA_PYTHON_EXE={os.environ["CONDA_PYTHON_EXE"]}\n'
+                    f'export CONDA_PREFIX_1={os.environ["CONDA_PREFIX_1"]}\n'
+                )
+
+            elif 'VIRTUAL_ENV' in os.environ.keys():
+                f.write(
+                    f'#!/bin/bash\n'
+                    f'export PATH={os.environ["PATH"]}\n'
+                    f'export VIRTUAL_ENV={os.environ["VIRTUAL_ENV"]}\n'
+                    f'export LD_LIBRARY_PATH={os.environ["LD_LIBRARY_PATH"]}\n'
+                )
+
+            if 'PYTHONPATH' in os.environ.keys():
+                f.write(f'export PYTHONPATH={os.environ["PYTHONPATH"]}\n')
 
             # for k, v in os.environ.items():  # copy the current environment
             #     if '\n' in v:
             #         continue
             #
                 # f.write(f'export {k}="{v}"\n')
+
+            # User-setable n-processes
+            if 'MESMERIZE_N_PROCESSES' in os.environ.keys():
+                f.write(f'export MESMERIZE_N_PROCESSES={os.environ["MESMERIZE_N_PROCESSES"]}\n')
+
+            f.write(
+                f'export OPENBLAS_NUM_THREADS=1\n'
+                f'export MKL_NUM_THREADS=1\n'
+            )
 
             f.write(f'python {module_path} {args_str}')  # call the script to run
 
@@ -203,3 +343,11 @@ def make_runfile(module_path: str, args_str: Optional[str] = None, filename: Opt
     os.chmod(sh_file, st.st_mode | S_IEXEC)
 
     return sh_file
+
+
+def _organize_coordinates(contour: dict):
+    coors = contour['coordinates']
+    coors = coors[~np.isnan(coors).any(axis=1)]
+
+    return coors
+

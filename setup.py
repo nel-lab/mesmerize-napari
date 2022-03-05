@@ -1,13 +1,13 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
-    name='caiman-napari-prototype',
+    name='mesmerize-napari',
     version='0.0',
-    packages=['caiman_napari'],
-    url='',
-    license='',
-    author='kushal',
+    packages=find_packages(),
+    url='https://github.com/nel-lab/mesmerize-napari',
+    license='Apache',
+    author='Kushal Kolar, Arjun Putcha',
     author_email='',
-    description='caiman plugin for napari',
-    entry_points={'napari.plugin': 'Caiman-CNMF = caiman_napari'}
+    description='Mesmerize-like CaImAn functionality for napari',
+    entry_points={'napari.plugin': 'Mesmerize = mesmerize_napari'}
 )
