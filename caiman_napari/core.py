@@ -79,7 +79,7 @@ def create_batch(path: str = None):
     return df
 
 
-def _get_full_data_path(path: Path) -> Path:
+def get_full_data_path(path: Path) -> Path:
     if PARENT_DATA_PATH is not None:
         return PARENT_DATA_PATH.joinpath(path)
 
@@ -201,7 +201,7 @@ class CaimanSeriesExtensions:
         global PARENT_DATA_PATH
 
         # Get the dir that contains the input movie
-        parent_path = _get_full_data_path(Path(self._series.input_movie_path).parent)
+        parent_path = get_full_data_path(Path(self._series.input_movie_path).parent)
 
         # Create the runfile in the same dir using this Series' UUID as the filename
         runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
@@ -276,7 +276,7 @@ class CaimanSeriesExtensions:
         global PARENT_DATA_PATH
 
         # Get the dir that contains the input movie
-        parent_path = _get_full_data_path(Path(self._series.input_movie_path).parent)
+        parent_path = get_full_data_path(Path(self._series.input_movie_path).parent)
 
         # Create the runfile in the same dir using this Series' UUID as the filename
         runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
@@ -306,11 +306,11 @@ class CaimanSeriesExtensions:
 
     @validate()
     def get_input_movie_path(self) -> Path:
-        return _get_full_data_path(self._series['input_movie_path'])
+        return get_full_data_path(self._series['input_movie_path'])
 
     @validate()
     def get_correlation_image(self) -> np.ndarray:
-        path = _get_full_data_path(self._series['outputs']['corr-img-path'])
+        path = get_full_data_path(self._series['outputs']['corr-img-path'])
         return np.load(str(path))
 
     @validate()
@@ -335,7 +335,7 @@ class CNMFExtensions:
 
     @validate('cnmf')
     def get_output_path(self) -> Path:
-        return _get_full_data_path(self._series['outputs']['cnmf-hdf5-path'])
+        return get_full_data_path(self._series['outputs']['cnmf-hdf5-path'])
 
     @validate('cnmf')
     def get_output(self) -> CNMF:
@@ -401,7 +401,7 @@ class MCorrExtensions:
 
     @validate('mcorr')
     def get_output_path(self) -> Path:
-        return _get_full_data_path(self._series['outputs']['mcorr-output-path'])
+        return get_full_data_path(self._series['outputs']['mcorr-output-path'])
 
     @validate('mcorr')
     def get_output(self) -> np.ndarray:
