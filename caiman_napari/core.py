@@ -174,8 +174,7 @@ def validate(algo: str = None):
 
             if algo is not None:
                 if algo not in self._series['algo']:
-                    raise ValueError(f"MCorr extension called for non-MCorr item, "
-                                     f"this is a <{self._series}> item")
+                    raise ValueError(f"<{algo} extension called for a <{self._series}> item")
 
             if not self._series['outputs']['success']:
                 raise ValueError("Cannot load output of an unsuccessful item")
