@@ -125,7 +125,7 @@ def test_all_algos():
         df = load_batch(batch_path)
 
         assert parent_data_path.joinpath(
-            df.iloc[-1]['outputs']['mcorr_output']
+            df.iloc[-1]['outputs']['mcorr-output-path']
         ) == \
             parent_data_path.joinpath(
                 'input_movies',
