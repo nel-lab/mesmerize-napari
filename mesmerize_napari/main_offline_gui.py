@@ -16,6 +16,7 @@ from . import algorithms
 import caiman as cm
 import numpy as np
 import psutil
+from .napari1d_manager import napari1d_run
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -24,11 +25,11 @@ elif IS_WINDOWS:
     from win32api import TerminateProcess, CloseHandle
 
 
-
 COLORS_HEX = \
     {
         'orange': '#ffb347',
         'green': '#77dd77',
+        'dark-green': '#009603',
         'red': '#fe0d00',
         'blue': '#85e3ff',
         'yellow': '#ffff00',
@@ -44,7 +45,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.show()
 
-        self.input_movie_path = None
+        self.input_movie_path: str = None
 
         self.dataframe: pd.DataFrame = None
         self.dataframe_file_path: str = None
@@ -74,8 +75,31 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
         # Show MCorr Projections
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
+        
+        self.ui.pushButtonViewInput.clicked.connect(self.view_input)
+
+        self.ui.lineEditParentDataPath.textChanged.connect(self.set_parent_data_path)
 
         self.qprocess: QtCore.QProcess = None
+
+        self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
+        # Disable param windows until opening movie
+        self.ui.pushButtonParamsCNMFE.setEnabled(False)
+        self.ui.pushButtonParamsCNMF.setEnabled(False)
+        self.ui.pushButtonParamsMCorr.setEnabled(False)
+
+    def set_parent_data_path(self):
+        path = Path(self.ui.lineEditParentDataPath.text())
+        if not path.is_dir():
+            self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['red']}}}")
+        else:
+            self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}")
+            set_parent_data_path(path)
+
+    @use_open_dir_dialog("Select Parent Data Directory")
+    def set_parent_data_path_dialog(self, path):
+        self.ui.lineEditParentDataPath.setText(path)
+        self.set_parent_data_path()
 
     @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
     def open_movie(self, path: str, *args, **kwargs):
@@ -83,16 +107,24 @@ class MainOfflineGUI(QtWidgets.QWidget):
             return
 
         self._open_movie(path)
+        # Enable param windows
+        self.ui.pushButtonParamsCNMFE.setEnabled(True)
+        self.ui.pushButtonParamsCNMF.setEnabled(True)
+        self.ui.pushButtonParamsMCorr.setEnabled(True)
 
-    def _open_movie(self, path):
-        self.input_movie_path = path
+    def _open_movie(self, path: Union[Path, str], name: str = None):
+        self.input_movie_path = str(path)
         file_ext = pathlib.Path(self.input_movie_path).suffix
         if file_ext == '.mmap':
-            Yr, dims, T = cm.load_memmap(path)
+            Yr, dims, T = cm.load_memmap(self.input_movie_path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')
-            self.viewer.add_image(images)
+            self.viewer.add_image(images, name=name)
         else:
             self.viewer.open(self.input_movie_path)
+            
+    def view_input(self):
+        path = self._selected_series().caiman.get_input_movie_path()
+        self._open_movie(path)
 
     def clear_viewer(self) -> bool:
         if len(self.viewer.layers) == 0:
@@ -138,13 +170,21 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.set_list_widget_item_color(i)
 
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
+        if self.dataframe is None:
+            QtWidgets.QMessageBox.warning('No Batch', 'You must open or create a batch before adding items.')
+            return
+
+        if self.input_movie_path is None:
+            QtWidgets.QMessageBox.warning('No movie open', 'You must open a movie to add to the batch.')
+            return
+
         if input_movie_path is None:
             input_movie_path = self.input_movie_path
 
         self.dataframe.caiman.add_item(
             algo=algo, name=name, input_movie_path=input_movie_path, params=parameters
         )
-        print("after add_item", self.dataframe.params)
+        print(f"Added <{algo}> item to batch!")
 
         uuid = self.dataframe.iloc[-1]['uuid']
 
@@ -268,21 +308,38 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.cnmfe_gui = CNMFEWidget(parent=self)
         self.cnmfe_gui.show()
 
+    def _selected_uuid(self) -> str:
+        # Find uuid for selected item
+        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
+        uuid = item_gui.data(3)
+        return uuid
+
+    def _selected_series(self) -> pd.Series:
+        u = self._selected_uuid()
+        return self.dataframe.caiman.uloc(u)
+
     def load_output(self):
         # clear napari viewer before loading new movies
         if not self.clear_viewer():
             return
-        # Find uuid for selected item
-        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
-        uuid = item_gui.data(3)
-        # Algorithm name for selected item
-        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
-        # Open input movie for selected item
-        movie_path = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'input_movie_path'].item()
-        # self._open_movie(movie_path)
-        print("show outputs for: ", algo)
-        r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
-        getattr(algorithms, algo).load_output(self.viewer, r)
+
+        s = self._selected_series()  # pandas series corresponding to the item
+        algo = s['algo']
+        if algo == 'mcorr':
+            output_path = s.mcorr.get_output_path()
+            self._open_movie(output_path, name=f'mcorr: {s["name"]}')
+
+        elif algo in ['cnmf', 'cnmfe']:
+            if self.ui.radioButtonROIMask.isChecked():
+                napari1d_run(self._selected_series(), 'mask')
+
+            elif self.ui.radioButtonROIOutline.isChecked():
+                napari1d_run(self._selected_series(), 'outline')
+
+    def load_correlation_image(self):
+        s = self._selected_series()
+        corr_img = s.caiman.get_correlation_image()
+        self.viewer.add_image(corr_img, name=f'corr: {s["name"]}')
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
@@ -292,6 +349,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
+
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():

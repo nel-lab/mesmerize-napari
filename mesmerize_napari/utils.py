@@ -21,6 +21,11 @@ else:
     IS_WINDOWS = False
     HOME = 'HOME'
 
+if 'MESMERIZE_LRU_CACHE' in os.environ.keys():
+    MESMERIZE_LRU_CACHE = os.environ['MESMERIZE_LRU_CACHE']
+else:
+    MESMERIZE_LRU_CACHE = 10
+
 
 qualitative_colormaps = ['Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1',
               'Set2', 'Set3', 'tab10', 'tab20', 'tab20b', 'tab20c']
@@ -94,6 +99,33 @@ def use_save_file_dialog(title: str = 'Save file', start_dir: Union[str, None] =
 
             func(self, path, *args, **kwargs)
 
+        return fn
+    return wrapper
+
+
+def use_open_dir_dialog(title: str = 'Open directory', start_dir: Union[str, None] = None):
+    """
+    Use to pass a dir path, to open, into the decorated function using QFileDialog.getExistingDirectory
+    :param title:       Title of the dialog box
+    :param start_dir:   Directory that is first shown in the dialog box.
+    Example:
+    .. code-block:: python
+        @use_open_dir_dialog('Select Project Directory', '')
+        def load_data(self, path, *args, **kwargs):
+            my_func_to_do_stuff_and_load_data(path)
+    """
+    def wrapper(func):
+        @wraps(func)
+        def fn(self, *args, **kwargs):
+            if isinstance(self, QWidget):
+                parent = self
+            else:
+                parent = None
+
+            path = QFileDialog.getExistingDirectory(parent, title)
+            if not path:
+                return
+            func(self, path, *args, **kwargs)
         return fn
     return wrapper
 
