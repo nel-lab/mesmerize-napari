@@ -51,13 +51,13 @@ def napari1d_run(batch_item: pd.Series, roi_type: str):
     # Display Correlation Image in viewer
     # viewer.add_image(Cn, name="Correlation Image")
     # Display video in viewer
-    movie = batch_item.caiman.get_input_movie_path()
-    if movie.endswith('mmap'):
-        Yr, dims, T = load_memmap(movie)
+    movie_path = str(batch_item.caiman.get_input_movie_path())
+    if movie_path.endswith('mmap'):
+        Yr, dims, T = load_memmap(movie_path)
         images = np.reshape(Yr.T, [T] + list(dims), order='F')
         viewer.add_image(images, name="Movie")
     else:
-        viewer.open(movie)
+        viewer.open(movie_path)
     # Load cnmf file
     # path = batch_item["outputs"].item()["cnmf_hdf5"]
     # cnmf_obj = load_CNMF(path)
@@ -118,15 +118,21 @@ def napari1d_run(batch_item: pd.Series, roi_type: str):
         masks_good = batch_item.cnmf.get_spatial_masks(cnmf_obj.estimates.idx_components)
         masks_bad = batch_item.cnmf.get_spatial_masks(cnmf_obj.estimates.idx_components_bad)
 
-        viewer.add_labels(
-            data=masks_good,
-            color=colors_good
-        )
+        for i in range(len(masks_good)):
+            viewer.add_labels(data=masks_good[:, :, i])#, color=colors_good[i])
 
-        viewer.add_labels(
-            data=masks_bad,
-            color=colors_bad
-        )
+        # for i in range(len(masks_bad)):
+        #     viewer.add_labels(data=masks_bad[:, :, i], color=masks_bad[i])
+
+        # viewer.add_labels(
+        #     data=masks_good,
+        #     # color=colors_good
+        # )
+        #
+        # viewer.add_labels(
+        #     data=masks_bad,
+        #     # color=colors_bad
+        # )
 
     # Traces
     good_traces = cnmf_obj.estimates.C[cnmf_obj.estimates.idx_components]
@@ -143,27 +149,11 @@ def napari1d_run(batch_item: pd.Series, roi_type: str):
     viewer1d.text_overlay.position = "top_right"
     viewer1d.text_overlay.font_size = 15
     # Create layer for infinite line
-    layer = viewer1d.add_inf_line(data=[1], orientation="vertical", color="red", width=3, name="slider")
-    viewer1d.add_layer(layer=layer)
+    infline_layer = viewer1d.add_inf_line(data=[1], orientation="vertical", color="red", width=3, name="slider")
+    infline_layer.move(index=0, pos=[1000])
+    viewer1d.add_layer(layer=infline_layer)
 
-
-    @viewer1d.bind_key('n')
-    def print_names(viewer1d):
-        print([layer.name for layer in viewer1d.layers])
-        viewer1d.layers.enabled = True
-        # toggle control panel on (shows list of layers)
-        qt_viewer.on_toggle_controls_dialog()
-
-    # Confirmed the time variable updates real time
-    @viewer.dims.events.current_step.connect
-    def update_slider(event):
-        time = viewer.dims.current_step[0]
-        viewer.text_overlay.text = f"{time:1.1f} time"
-        # Remove most recent layer, recreate new line
-        viewer1d.layers.remove(viewer1d.layers[-1])
-        viewer1d.add_inf_line([time], orientation="vertical", color="red", width=3)
-
-    #viewer1d.layers.toggle_selected_visibility()
+    viewer1d.layers.toggle_selected_visibility()
 
     lines = []
     for i in tqdm(range(np.shape(good_traces)[0])):
@@ -172,7 +162,16 @@ def napari1d_run(batch_item: pd.Series, roi_type: str):
     for i in tqdm(range(np.shape(bad_traces)[0])):
         y = bad_traces[i,:]
         lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i), color=colors_bad[i]))
-    # viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
+    viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
-    napari.run()
+    @viewer1d.bind_key('n')
+    def print_names(viewer1d):
+        print([layer.name for layer in viewer1d.layers])
+        viewer1d.layers.enabled = True
+        qt_viewer.on_toggle_controls_dialog()
 
+    @viewer.dims.events.current_step.connect
+    def update_slider(event):
+        time = viewer.dims.current_step[0]
+        print(time)
+        infline_layer.move(index=0, pos=[time])
