@@ -25,7 +25,6 @@ elif IS_WINDOWS:
     from win32api import TerminateProcess, CloseHandle
 
 
-
 COLORS_HEX = \
     {
         'orange': '#ffb347',
@@ -341,7 +340,6 @@ class MainOfflineGUI(QtWidgets.QWidget):
         s = self._selected_series()
         corr_img = s.caiman.get_correlation_image()
         self.viewer.add_image(corr_img, name=f'corr: {s["name"]}')
-
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()

@@ -1,8 +1,6 @@
 from PyQt5 import QtWidgets
 from .mcorr_pytemplate import Ui_MCORRWidget
-from .utils import *
 from .core import *
-from napari import Viewer
 
 
 class MCORRWidget(QtWidgets.QDockWidget):

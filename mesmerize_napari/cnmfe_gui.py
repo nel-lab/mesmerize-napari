@@ -3,6 +3,7 @@ from .cnmfe_pytemplate import Ui_CNMFEDockWidget
 from .utils import *
 from .core import *
 
+
 class CNMFEWidget(QtWidgets.QDockWidget):
     def __init__(self, parent):
         QtWidgets.QDockWidget.__init__(self, parent=parent)
@@ -12,7 +13,7 @@ class CNMFEWidget(QtWidgets.QDockWidget):
         self.ui.btnAddToBatchCNMFE.clicked.connect(self._add_item_cnmfe)
 
     @present_exceptions()
-    def _add_item_corr_pnr(self, *args) -> Tuple[str, dict]:
+    def _add_item_corr_pnr(self, *args):
         gSig = self.ui.spinBoxGSig.value()
         downsample_ratio = self.ui.spinBoxDownsample.value()
         cnmfe_kwargs = \
@@ -33,7 +34,7 @@ class CNMFEWidget(QtWidgets.QDockWidget):
         self.add_item(name, d)
 
     @present_exceptions()
-    def _add_item_cnmfe(self, *args, group_params: bool = True) -> Tuple[str, bool, dict]:
+    def _add_item_cnmfe(self, *args, group_params: bool = True):
         low_rank_background = self.ui.checkBox_low_rank_background.isChecked()
         keep_memmap = self.ui.checkBoxKeepMemmap.isChecked()
         # CNMF kwargs

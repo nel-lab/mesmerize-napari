@@ -1,7 +1,5 @@
 import os
-
 import numpy as np
-
 from .algorithms import *
 from .utils import make_runfile, IS_WINDOWS, MESMERIZE_LRU_CACHE
 import pandas as pd
@@ -17,8 +15,9 @@ from caiman import load_memmap
 from caiman.source_extraction.cnmf.cnmf import CNMF, load_CNMF
 from caiman.utils.visualization import get_contours as caiman_get_contours
 
+
 # Start of Core Utilities
-CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time for now
+CURRENT_BATCH_PATH: pathlib.Path = None  # only one batch at a time
 PARENT_DATA_PATH: pathlib.Path = None
 
 
