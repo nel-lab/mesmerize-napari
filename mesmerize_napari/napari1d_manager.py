@@ -8,7 +8,7 @@ import napari_plot
 from napari_plot._qt.qt_viewer import QtViewer
 from qtpy.QtWidgets import QVBoxLayout
 from caiman import load_memmap
-from caiman_napari.utils import *
+from mesmerize_napari.utils import *
 import caiman as cm
 import pandas as pd
 import pyqtgraph as pg
