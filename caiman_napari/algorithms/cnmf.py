@@ -86,15 +86,24 @@ def main(batch_path, uuid, data_path: str = None):
         output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
 
         cnm.save(output_path)
+
+        if data_path is not None:
+            cnmf_hdf5_path = Path(output_path).relative_to(data_path)
+            cnmf_memmap_path = Path(fname_new).relative_to(data_path)
+        else:
+            cnmf_hdf5_path = output_path
+            cnmf_memmap_path = fname_new
+
         d = dict()
         d.update(
             {
-                "cnmf-hdf5-path": output_path,
-                "cnmf-memmap-path": fname_new,
+                "cnmf-hdf5-path": cnmf_hdf5_path,
+                "cnmf-memmap-path": cnmf_memmap_path,
                 "success": True,
                 "traceback": None
             }
         )
+
     except:
         d = {"success": False, "traceback": traceback.format_exc()}
     # Add dictionary to output column of series
