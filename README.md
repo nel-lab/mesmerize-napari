@@ -15,7 +15,8 @@ backend built with pandas extensions can be used directly, or through the GUI wi
 The pandas extensions interface with CaImAn algorithms using `QProcess`
 
 ## Streaming demo
-**Very redimentary at the moment**
+**Very rudimentary at the moment**
+
 Napari can stream calcium imaging movies in realtime while pyqtgraph is used to show calcium traces. Please note that due to limitations of GIF images, this GIF doesn't fully represent the high level of responsiveness and interactivity during live streaming.
 ![streaming](./screenshots/napari_streaming.gif)
 
