@@ -62,8 +62,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>297</width>
-             <height>365</height>
+             <width>294</width>
+             <height>332</height>
             </rect>
            </property>
            <attribute name="label">
@@ -186,6 +186,13 @@
              </layout>
             </item>
             <item>
+             <widget class="QPushButton" name="pushButtonViewInput">
+              <property name="text">
+               <string>View Input</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -205,8 +212,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>297</width>
-             <height>365</height>
+             <width>289</width>
+             <height>346</height>
             </rect>
            </property>
            <attribute name="label">
@@ -223,8 +230,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>297</width>
-             <height>365</height>
+             <width>289</width>
+             <height>346</height>
             </rect>
            </property>
            <attribute name="label">
@@ -314,6 +321,9 @@
            <widget class="QRadioButton" name="radioButtonROIOutline">
             <property name="text">
              <string>Outline ROIs</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

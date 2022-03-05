@@ -76,6 +76,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
         # Show MCorr Projections
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
+        
+        self.ui.pushButtonViewInput.clicked.connect(self.view_input)
 
         self.ui.lineEditParentDataPath.textChanged.connect(self.set_parent_data_path)
 
@@ -88,13 +90,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonParamsMCorr.setEnabled(False)
 
     def set_parent_data_path(self):
-        global PARENT_DATA_PATH
         path = Path(self.ui.lineEditParentDataPath.text())
         if not path.is_dir():
             self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['red']}}}")
         else:
             self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}")
-            PARENT_DATA_PATH = path
+            set_parent_data_path(path)
 
     @use_open_dir_dialog("Select Parent Data Directory")
     def set_parent_data_path_dialog(self, path):
@@ -121,6 +122,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.viewer.add_image(images, name=name)
         else:
             self.viewer.open(self.input_movie_path)
+            
+    def view_input(self):
+        path = self._selected_series().caiman.get_input_movie_path()
+        self._open_movie(path)
 
     def clear_viewer(self) -> bool:
         if len(self.viewer.layers) == 0:
