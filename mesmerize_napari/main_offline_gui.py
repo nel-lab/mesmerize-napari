@@ -17,6 +17,7 @@ import caiman as cm
 import numpy as np
 import psutil
 from .napari1d_manager import napari1d_run
+from .evaluate_components import EvalComponentsWidgets
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -83,10 +84,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.qprocess: QtCore.QProcess = None
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
-        # Disable param windows until opening movie
-        self.ui.pushButtonParamsCNMFE.setEnabled(False)
-        self.ui.pushButtonParamsCNMF.setEnabled(False)
-        self.ui.pushButtonParamsMCorr.setEnabled(False)
+
+        self.evaluate_components_window = EvalComponentsWidgets(parent=self)
+        self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
 
     def set_parent_data_path(self):
         path = Path(self.ui.lineEditParentDataPath.text())
@@ -107,10 +107,6 @@ class MainOfflineGUI(QtWidgets.QWidget):
             return
 
         self._open_movie(path)
-        # Enable param windows
-        self.ui.pushButtonParamsCNMFE.setEnabled(True)
-        self.ui.pushButtonParamsCNMF.setEnabled(True)
-        self.ui.pushButtonParamsMCorr.setEnabled(True)
 
     def _open_movie(self, path: Union[Path, str], name: str = None):
         self.input_movie_path = str(path)

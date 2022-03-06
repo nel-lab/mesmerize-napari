@@ -45,7 +45,7 @@
      </widget>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_compute">
        <attribute name="title">
@@ -62,8 +62,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>294</width>
-             <height>332</height>
+             <width>297</width>
+             <height>377</height>
             </rect>
            </property>
            <attribute name="label">
@@ -212,8 +212,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>289</width>
-             <height>346</height>
+             <width>99</width>
+             <height>99</height>
             </rect>
            </property>
            <attribute name="label">
@@ -230,8 +230,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>289</width>
-             <height>346</height>
+             <width>99</width>
+             <height>99</height>
             </rect>
            </property>
            <attribute name="label">
@@ -298,6 +298,13 @@
          <widget class="QPushButton" name="pushButtonVizDownsampledMCorrrMovie">
           <property name="text">
            <string>Downsampled MCorr movie</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonEvaluateCNMFComponents">
+          <property name="text">
+           <string>Evaluate CNMF Components</string>
           </property>
          </widget>
         </item>
