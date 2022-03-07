@@ -119,7 +119,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.viewer.open(self.input_movie_path)
             
     def view_input(self):
-        path = self._selected_series().caiman.get_input_movie_path()
+        path = self.selected_series().caiman.get_input_movie_path()
         self._open_movie(path)
 
     def clear_viewer(self) -> bool:
@@ -310,7 +310,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         uuid = item_gui.data(3)
         return uuid
 
-    def _selected_series(self) -> pd.Series:
+    def selected_series(self) -> pd.Series:
         u = self._selected_uuid()
         return self.dataframe.caiman.uloc(u)
 
@@ -319,7 +319,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         if not self.clear_viewer():
             return
 
-        s = self._selected_series()  # pandas series corresponding to the item
+        s = self.selected_series()  # pandas series corresponding to the item
         algo = s['algo']
         if algo == 'mcorr':
             output_path = s.mcorr.get_output_path()
@@ -327,13 +327,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         elif algo in ['cnmf', 'cnmfe']:
             if self.ui.radioButtonROIMask.isChecked():
-                napari1d_run(self._selected_series(), 'mask')
+                napari1d_run(self.selected_series(), 'mask')
 
             elif self.ui.radioButtonROIOutline.isChecked():
-                napari1d_run(self._selected_series(), 'outline')
+                napari1d_run(self.selected_series(), 'outline')
 
     def load_correlation_image(self):
-        s = self._selected_series()
+        s = self.selected_series()
         corr_img = s.caiman.get_correlation_image()
         self.viewer.add_image(corr_img, name=f'corr: {s["name"]}')
 

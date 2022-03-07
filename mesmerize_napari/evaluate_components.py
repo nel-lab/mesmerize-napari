@@ -1,6 +1,8 @@
 from PyQt5 import QtWidgets, QtCore
 from .eval_components_template import Ui_MainWindow
-from caiman.source_extraction.cnmf.cnmf import CNMFParams
+
+from .core import CNMFExtensions
+from caiman.source_extraction.cnmf.cnmf import CNMFParams, CNMF
 
 
 class EvalComponentsWidgets(QtWidgets.QMainWindow):
@@ -39,5 +41,12 @@ class EvalComponentsWidgets(QtWidgets.QMainWindow):
 
     def update_components(self):
         params = self.get_params()
+        cnmf_obj: CNMF = self.parent().selected_series.cnmf.get_output()
+        cnmf_obj.params.quality.update(params)
 
-        print(params)
+        cnmf_obj.estimates.filer_components(
+            imgs=self.parent().selected_series.cnmf.get_input_memmap(),
+            params=cnmf_obj.params,
+        )
+
+
