@@ -325,12 +325,26 @@ class CNMFExtensions:
     def __init__(self, s: pd.Series):
         self._series = s
 
-    def get_memmap(self) -> np.ndarray:
+    def get_cnmf_memmap(self) -> np.ndarray:
         path = self._series['outputs']['cnmf-memmap-path']
         # Get order f images
         Yr, dims, T = load_memmap(path)
-        images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        images = np.reshape(Yr.T, [T] + list(dims), order='C')
         return images
+
+    def get_input_memmap(self) -> np.ndarray:
+        """
+        Return the F-order memmap if the input to the
+        CNMF batch item was a mcorr output memmap
+        """
+        movie_path = str(self._series.caiman.get_input_movie_path())
+        if movie_path.endswith('mmap'):
+            Yr, dims, T = load_memmap(movie_path)
+            images = np.reshape(Yr.T, [T] + list(dims), order='F')
+            return images
+        else:
+            raise TypeError(f"Input movie for CNMF was not a memmap, path to input movie is:\n"
+                            f"{movie_path}")
 
     @validate('cnmf')
     def get_output_path(self) -> Path:
