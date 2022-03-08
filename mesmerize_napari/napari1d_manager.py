@@ -4,6 +4,7 @@ from skimage import measure
 import numpy as np
 import napari
 from napari import Viewer
+from napari.layers import Shapes
 import napari_plot
 from napari_plot._qt.qt_viewer import QtViewer
 from qtpy.QtWidgets import QVBoxLayout
@@ -15,6 +16,8 @@ import pyqtgraph as pg
 from napari._qt.widgets.qt_viewer_dock_widget import QtViewerDockWidget
 from .core import CaimanSeriesExtensions, CNMFExtensions
 from tqdm import tqdm
+from PyQt5 import QtWidgets, QtCore
+from .evaluate_components import EvalComponentsWidgets
 
 
 def _get_roi_colormap(self, n_colors) -> Tuple[List[np.ndarray], List[np.ndarray]]:
@@ -41,6 +44,8 @@ class CNMFViewer:
     def __init__(self, batch_item: pd.Series, roi_type: str):
         self.batch_item = batch_item
         self.viewer = napari.Viewer(title="CNMF Visualization")
+        self.eval_gui = EvalComponentsWidgets(cnmf_viewer=self)
+        self.eval_gui.show()
         ## Load correlation image
         # Get cnmf memmap
         # fname_new = batch_item["outputs"].item()["cnmf-memmap"]
@@ -67,7 +72,27 @@ class CNMFViewer:
         self.cnmf_obj = batch_item.cnmf.get_output()
         self.roi_type = roi_type
 
+        self.napari_spatial_layer_good = None
+        self.napari_spatial_layer_bad = None
+
+        self.plot_spatial()
+
     def plot_spatial(self):
+        if self.napari_spatial_layer_good is not None:
+            self.viewer.layers.remove(self.napari_spatial_layer_good)
+            self.napari_spatial_layer_good = None
+        if self.napari_spatial_layer_bad is not None:
+            self.viewer.layers.remove(self.napari_spatial_layer_bad)
+            self.napari_spatial_layer_bad = None
+        # for l_ix in reversed(range(len(self.viewer.layers), 0)):
+        #     if type(self.viewer.layers[l_ix]) is Shapes:
+        #         print(f'Deleting layer: {l_ix}')
+        #         del self.viewer.layers[l_ix]
+
+        # for l in self.viewer.layers:
+        #     if type(l) is Shapes:
+        #         self.viewer.layers.remove(l)
+
         self.colors_good = auto_colormap(
             n_colors=len(self.cnmf_obj.estimates.idx_components),
             cmap='hsv',
@@ -98,7 +123,7 @@ class CNMFViewer:
             coors_good = self.batch_item.cnmf.get_spatial_contour_coors(self.cnmf_obj.estimates.idx_components)
             coors_bad = self.batch_item.cnmf.get_spatial_contour_coors(self.cnmf_obj.estimates.idx_components_bad)
 
-            self.viewer.add_shapes(
+            self.napari_spatial_layer_good = self.viewer.add_shapes(
                 data=coors_good,
                 shape_type='polygon',
                 edge_width=0.5,
@@ -108,7 +133,7 @@ class CNMFViewer:
                 name='good components',
             )
 
-            self.viewer.add_shapes(
+            self.napari_spatial_layer_bad = self.viewer.add_shapes(
                 data=coors_bad,
                 shape_type='polygon',
                 edge_width=0.5,
@@ -117,6 +142,7 @@ class CNMFViewer:
                 opacity=0.7,
                 name='bad components',
             )
+            self.napari_spatial_layer_bad.visible = False
 
         elif self.roi_type == 'mask':
             masks_good = self.batch_item.cnmf.get_spatial_masks(self.cnmf_obj.estimates.idx_components)

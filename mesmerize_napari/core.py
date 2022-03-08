@@ -329,7 +329,7 @@ class CNMFExtensions:
         path = self._series['outputs']['cnmf-memmap-path']
         # Get order f images
         Yr, dims, T = load_memmap(path)
-        images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        images = np.reshape(Yr.T, [T] + list(dims), order='C')
         return images
 
     def get_input_memmap(self) -> np.ndarray:
@@ -337,7 +337,7 @@ class CNMFExtensions:
         Return the F-order memmap if the input to the
         CNMF batch item was a mcorr output memmap
         """
-        movie_path = str(self.caiman.get_input_movie_path())
+        movie_path = str(self._series.caiman.get_input_movie_path())
         if movie_path.endswith('mmap'):
             Yr, dims, T = load_memmap(movie_path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')

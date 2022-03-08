@@ -16,7 +16,7 @@ from . import algorithms
 import caiman as cm
 import numpy as np
 import psutil
-from .napari1d_manager import napari1d_run
+from .napari1d_manager import CNMFViewer
 from .evaluate_components import EvalComponentsWidgets
 
 if not IS_WINDOWS:
@@ -85,8 +85,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
-        self.evaluate_components_window = EvalComponentsWidgets(parent=self)
-        self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
+        # self.evaluate_components_window = EvalComponentsWidgets(parent=self)
+        # self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
 
     def set_parent_data_path(self):
         path = Path(self.ui.lineEditParentDataPath.text())
@@ -327,10 +327,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         elif algo in ['cnmf', 'cnmfe']:
             if self.ui.radioButtonROIMask.isChecked():
-                napari1d_run(self.selected_series(), 'mask')
+                CNMFViewer(self.selected_series(), 'mask')
 
             elif self.ui.radioButtonROIOutline.isChecked():
-                napari1d_run(self.selected_series(), 'outline')
+                CNMFViewer(self.selected_series(), 'outline')
 
     def load_correlation_image(self):
         s = self.selected_series()
