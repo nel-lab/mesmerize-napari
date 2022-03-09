@@ -230,7 +230,10 @@ def auto_colormap(
 
     if spacing == 'uniform':
         if not cmap in qualitative_colormaps:
-            cm_ixs = np.linspace(0, 210, n_colors, dtype=int)
+            if cmap =='hsv':
+                cm_ixs = np.linspace(30, 210, n_colors, dtype=int)
+            else:
+                cm_ixs = np.linspace(0, 210, n_colors, dtype=int)
         else:
             if n_colors > len(lut):
                 raise ValueError('Too many colors requested for the chosen cmap')
