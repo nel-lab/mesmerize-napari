@@ -62,6 +62,7 @@ class CNMFViewer:
         self.napari_spatial_layer_bad = None
 
         self.plot_spatial()
+        self.plot_temporal()
 
     def plot_spatial(self):
         if self.roi_type == 'outline':
@@ -104,7 +105,7 @@ class CNMFViewer:
     def update_visible_components(self):
         edge_colors, fc = self.get_colors()
         self.spatial_layer.edge_color = edge_colors
-        self.spatial_layer.refresh()
+        self.temporal_layer.color = edge_colors
 
     def get_colors(self):
         n_components = self.cnmf_obj.estimates.A.shape[1]
@@ -126,6 +127,9 @@ class CNMFViewer:
 
         return colors, face_colors
 
+    def show_bad_components(self, b: bool):
+        pass
+
     def plot_temporal(self):
         # Traces
         good_traces = self.cnmf_obj.estimates.C[self.cnmf_obj.estimates.idx_components]
@@ -133,38 +137,37 @@ class CNMFViewer:
 
         print("good traces", np.shape(good_traces))
         print("bad traces", np.shape(bad_traces))
-        viewer1d = napari_plot.ViewerModel1D()
-        qt_viewer = QtViewer(viewer1d)
-        viewer1d.axis.y_label = "Intensity"
-        viewer1d.axis.x_label = "Time"
-        viewer1d.text_overlay.visible = True
-        viewer1d.text_overlay.position = "top_right"
-        viewer1d.text_overlay.font_size = 15
-        # Create layer for infinite line
-        self.infline_layer = viewer1d.add_inf_line(data=[1], orientation="vertical", color="red", width=3, name="slider")
-        self.infline_layer.move(index=0, pos=[1000])
-        viewer1d.add_layer(layer=self.infline_layer)
+        self.viewer1d = napari_plot.Viewer()
+        qt_viewer = QtViewer(self.viewer1d)
+        self.viewer1d.axis.y_label = "Intensity"
+        self.viewer1d.axis.x_label = "Time"
+        self.viewer1d.text_overlay.visible = True
+        self.viewer1d.text_overlay.position = "top_right"
+        self.viewer1d.text_overlay.font_size = 15
 
-        self.viewer.dims.current_step.connect(self.update_slider)
+        n_pts = self.cnmf_obj.estimates.C.shape[1]
+        n_lines = self.cnmf_obj.estimates.C.shape[0]
+        xs = [np.linspace(0, n_pts, n_pts)]
+        ys = []
+        for i in range(n_lines):
+            ys.append(self.cnmf_obj.estimates.C[i])
 
-        viewer1d.layers.toggle_selected_visibility()
+        self.temporal_layer = self.viewer1d.add_multi_line(
+            data=dict(xs=xs, ys=ys),
+            color=self.get_colors()[0],
+            name='temporal'
+        )
 
-        lines = []
-        for i in tqdm(range(np.shape(good_traces)[0])):
-            y = good_traces[i,:]
-            lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i), color=self.colors_good[i]))
-        for i in tqdm(range(np.shape(bad_traces)[0])):
-            y = bad_traces[i,:]
-            lines.append(viewer1d.add_line(np.c_[np.arange(len(y)), y], name=str(i), color=self.colors_bad[i]))
         self.viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
-    # @viewer1d.bind_key('n')
-    # def print_names(viewer1d):
-    #     print([layer.name for layer in viewer1d.layers])
-    #     viewer1d.layers.enabled = True
-    #     qt_viewer.on_toggle_controls_dialog()
+        # Create layer for infinite line
+        self.infline_layer = self.viewer1d.add_inf_line(
+            data=[1], orientation="vertical", color="red", width=3, name="slider"
+        )
+        self.infline_layer.move(index=0, pos=[1000])
+        self.viewer1d.add_layer(layer=self.infline_layer)
+        self.viewer.dims.events.current_step.connect(self.update_slider)
 
-    # @viewer.dims.events.current_step.connect
     def update_slider(self, event):
         time = self.viewer.dims.current_step[0]
         print(time)
