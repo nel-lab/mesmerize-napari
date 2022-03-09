@@ -46,18 +46,7 @@ class CNMFViewer:
         self.viewer = napari.Viewer(title="CNMF Visualization")
         self.eval_gui = EvalComponentsWidgets(cnmf_viewer=self)
         self.eval_gui.show()
-        ## Load correlation image
-        # Get cnmf memmap
-        # fname_new = batch_item["outputs"].item()["cnmf-memmap"]
-        # # Get order f images
-        # Yr, dims, T = cm.load_memmap(fname_new)
-        # images = np.reshape(Yr.T, [T] + list(dims), order='F')
-        # # Get correlation map
-        # Cn = cm.local_correlations(images.transpose(1, 2, 0))
-        # Cn[np.isnan(Cn)] = 0
-        # Display Correlation Image in viewer
-        # viewer.add_image(Cn, name="Correlation Image")
-        # Display video in viewer
+
         movie_path = str(batch_item.caiman.get_input_movie_path())
         if movie_path.endswith('mmap'):
             Yr, dims, T = load_memmap(movie_path)
@@ -65,9 +54,6 @@ class CNMFViewer:
             self.viewer.add_image(images, name="Movie")
         else:
             self.viewer.open(movie_path)
-        # Load cnmf file
-        # path = batch_item["outputs"].item()["cnmf_hdf5"]
-        # cnmf_obj = load_CNMF(path)
 
         self.cnmf_obj = batch_item.cnmf.get_output()
         self.roi_type = roi_type
@@ -78,71 +64,22 @@ class CNMFViewer:
         self.plot_spatial()
 
     def plot_spatial(self):
-        if self.napari_spatial_layer_good is not None:
-            self.viewer.layers.remove(self.napari_spatial_layer_good)
-            self.napari_spatial_layer_good = None
-        if self.napari_spatial_layer_bad is not None:
-            self.viewer.layers.remove(self.napari_spatial_layer_bad)
-            self.napari_spatial_layer_bad = None
-        # for l_ix in reversed(range(len(self.viewer.layers), 0)):
-        #     if type(self.viewer.layers[l_ix]) is Shapes:
-        #         print(f'Deleting layer: {l_ix}')
-        #         del self.viewer.layers[l_ix]
-
-        # for l in self.viewer.layers:
-        #     if type(l) is Shapes:
-        #         self.viewer.layers.remove(l)
-
-        self.colors_good = auto_colormap(
-            n_colors=len(self.cnmf_obj.estimates.idx_components),
-            cmap='hsv',
-            output='mpl'
-        )
-
-        self.colors_good_zero_alpha = auto_colormap(
-            n_colors=len(self.cnmf_obj.estimates.idx_components),
-            cmap='hsv',
-            output='mpl',
-            alpha=0.0
-        )
-
-        self.colors_bad = auto_colormap(
-            n_colors=len(self.cnmf_obj.estimates.idx_components_bad),
-            cmap='hsv',
-            output='mpl'
-        )
-
-        self.colors_bad_zero_alpha = auto_colormap(
-            n_colors=len(self.cnmf_obj.estimates.idx_components_bad),
-            cmap='hsv',
-            output='mpl',
-            alpha=0.0
-        )
-
         if self.roi_type == 'outline':
-            coors_good = self.batch_item.cnmf.get_spatial_contour_coors(self.cnmf_obj.estimates.idx_components)
-            coors_bad = self.batch_item.cnmf.get_spatial_contour_coors(self.cnmf_obj.estimates.idx_components_bad)
+            coors = self.batch_item.cnmf.get_spatial_contour_coors(
+                np.arange(0, self.cnmf_obj.estimates.A.shape[1])
+            )
 
-            self.napari_spatial_layer_good = self.viewer.add_shapes(
-                data=coors_good,
+            edge_colors, face_colors = self.get_colors()
+
+            self.spatial_layer: Shapes = self.viewer.add_shapes(
+                data=coors,
                 shape_type='polygon',
                 edge_width=0.5,
-                edge_color=self.colors_good,
-                face_color=self.colors_good_zero_alpha,
+                edge_color=edge_colors,
+                face_color=face_colors,
                 opacity=0.7,
                 name='good components',
             )
-
-            self.napari_spatial_layer_bad = self.viewer.add_shapes(
-                data=coors_bad,
-                shape_type='polygon',
-                edge_width=0.5,
-                edge_color=self.colors_bad,
-                face_color=self.colors_bad_zero_alpha,
-                opacity=0.7,
-                name='bad components',
-            )
-            self.napari_spatial_layer_bad.visible = False
 
         elif self.roi_type == 'mask':
             masks_good = self.batch_item.cnmf.get_spatial_masks(self.cnmf_obj.estimates.idx_components)
@@ -163,6 +100,31 @@ class CNMFViewer:
             #     data=masks_bad,
             #     # color=colors_bad
             # )
+
+    def update_visible_components(self):
+        edge_colors, fc = self.get_colors()
+        self.spatial_layer.edge_color = edge_colors
+        self.spatial_layer.refresh()
+
+    def get_colors(self):
+        n_components = self.cnmf_obj.estimates.A.shape[1]
+        colors = np.vstack(auto_colormap(
+            n_colors=n_components,
+            cmap='hsv',
+            output='mpl'
+        ))
+
+        colors[self.cnmf_obj.estimates.idx_components, -1] = 0.8
+        colors[self.cnmf_obj.estimates.idx_components_bad, -1] = 0.0
+
+        face_colors = np.vstack(auto_colormap(
+            n_colors=n_components,
+            cmap='hsv',
+            output='mpl',
+            alpha=0.0
+        ))
+
+        return colors, face_colors
 
     def plot_temporal(self):
         # Traces
