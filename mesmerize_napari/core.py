@@ -29,6 +29,19 @@ ALGO_MODULES = \
     }
 
 
+QPROCESS_BACKEND = 'qprocess'
+SUBPROCESS_BACKEND = 'subprocess'
+SLURM_BACKEND = 'slurm'
+
+
+COMPUTE_BACKENDS =\
+[
+    QPROCESS_BACKEND,
+    SUBPROCESS_BACKEND,
+    SLURM_BACKEND
+]
+
+
 DATAFRAME_COLUMNS = ['algo', 'name', 'input_movie_path', 'params', 'outputs', 'uuid']
 
 
@@ -192,75 +205,15 @@ class CaimanSeriesExtensions:
     """
     def __init__(self, s: pd.Series):
         self._series = s
-        self.process: QtCore.QProcess = None
+        self.process: [Union, QtCore.QProcess, Popen] = None
 
-    def _run_qprocess(self):
-        pass
-
-    def _run_subprocess(self):
-        global PARENT_DATA_PATH
-
-        # Get the dir that contains the input movie
-        parent_path = get_full_data_path(Path(self._series.input_movie_path).parent)
-
-        # Create the runfile in the same dir using this Series' UUID as the filename
-        runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
-
-        args_str = f'--batch-path {CURRENT_BATCH_PATH} --uuid {self._series.uuid}'
-        if PARENT_DATA_PATH is not None:
-            args_str += f' --data-path {PARENT_DATA_PATH}'
-
-
-    # make the runfile
-        runfile = make_runfile(
-            module_path=os.path.abspath(ALGO_MODULES[self._series['algo']].__file__), # caiman algorithm
-            filename=runfile_path,  # path to create runfile
-            args_str=args_str
-        )
-
-        self.process = Popen(runfile, cwd=parent_path)
-        self.process.wait()
-
-    def submit_slurm(self):
-        parent_path = Path(self._series.input_movie_path).parent
-
-        # Create the runfile in the same dir using this Series' UUID as the filename
-        runfile_path = str(parent_path.joinpath(self._series['uuid'] + '.runfile'))
-
-        if PARENT_DATA_PATH is not None:
-            args_str = f'{CURRENT_BATCH_PATH} {self._series.uuid} {PARENT_DATA_PATH}'
-        else:
-            f'{CURRENT_BATCH_PATH} {self._series.uuid}'
-
-        # make the runfile
-        runfile = make_runfile(
-            module_path=os.path.abspath(ALGO_MODULES[self._series['algo']].__file__), # caiman algorithm
-            filename=runfile_path,  # path to create runfile
-            args_str=args_str  # batch file path (which contains the params) and UUID are passed as args
-        )
-
-        submission_command = f'sbatch --ntasks=1 --cpus-per-task=16 --mem=90000 --wrap="{runfile}"'
-
-        Popen(submission_command.split(' '))
-
-    def run(
-            self, callbacks_finished: List[callable],
+    def _run_qprocess(
+            self,
+            runfile_path: str,
+            callbacks_finished: List[callable],
             callback_std_out: Optional[callable] = None
-    ):
-        """--cpus-per-task=16 --cpus-per-task=16
-        Run a CaImAn algorithm in an external process.
+    ) -> QtCore.QProcess:
 
-        NoRMCorre, CNMF, or CNMFE will be run for this Series.
-        Each Series (DataFrame row) has a `input_movie_path` and `params` for the algorithm
-
-        Parameters
-        ----------
-        callbacks_finished: List[callable]
-            List of callback functions that are called when the external process has finished.
-
-        callback_std_out: Optional[callable]
-            callback function to pipe the stdout
-        """
         # Create a QProcess
         self.process = QtCore.QProcess()
         self.process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
@@ -272,6 +225,68 @@ class CaimanSeriesExtensions:
         # connect the callback functions for when the process finishes
         for f in callbacks_finished:
             self.process.finished.connect(f)
+
+        # Set working dir for the external process
+        self.process.setWorkingDirectory(os.path.dirname(self._series.input_movie_path))
+
+        # Start the external process
+        if IS_WINDOWS:
+            self.process.start('powershell.exe', [runfile_path])
+        else:
+            self.process.start(runfile_path)
+
+        return self.process
+
+    def _run_subprocess(
+            self,
+            runfile_path: str,
+            callbacks_finished: List[callable],
+            callback_std_out: Optional[callable] = None
+    ):
+        global PARENT_DATA_PATH
+
+        # Get the dir that contains the input movie
+        parent_path = get_full_data_path(Path(self._series.input_movie_path).parent)
+
+        self.process = Popen(runfile_path, cwd=parent_path)
+        return self.process
+
+    def _run_slurm(
+            self,
+            runfile_path: str,
+            callbacks_finished: List[callable],
+            callback_std_out: Optional[callable] = None
+    ):
+        submission_command = f'sbatch --ntasks=1 --cpus-per-task=16 --mem=90000 --wrap="{runfile_path}"'
+
+        Popen(submission_command.split(' '))
+
+    def run(
+            self,
+            backend: str,
+            callbacks_finished: List[callable],
+            callback_std_out: Optional[callable] = None
+    ):
+        """
+        Run a CaImAn algorithm in an external process using the chosen backend
+
+        NoRMCorre, CNMF, or CNMFE will be run for this Series.
+        Each Series (DataFrame row) has a `input_movie_path` and `params` for the algorithm
+
+        Parameters
+        ----------
+        backend: str
+            One of the available backends
+
+        callbacks_finished: List[callable]
+            List of callback functions that are called when the external process has finished.
+
+        callback_std_out: Optional[callable]
+            callback function to pipe the stdout
+        """
+        if backend not in COMPUTE_BACKENDS:
+            raise KeyError(f'Invalid `backend`, choose from the following backends:\n'
+                           f'{COMPUTE_BACKENDS}')
 
         global PARENT_DATA_PATH
 
@@ -292,15 +307,7 @@ class CaimanSeriesExtensions:
             args_str=args_str
         )
 
-        # Set working dir for the external process
-        self.process.setWorkingDirectory(os.path.dirname(self._series.input_movie_path))
-
-        # Start the external process
-        if IS_WINDOWS:
-            self.process.start('powershell.exe', [runfile])
-        else:
-            print(runfile)
-            self.process.start(runfile)
+        self.process = getattr(self, f"_run_{backend}")(runfile, callbacks_finished, callback_std_out)
 
         return self.process
 
