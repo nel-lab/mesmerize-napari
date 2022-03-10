@@ -46,7 +46,7 @@ def main(batch_path, uuid, data_path: str = None):
     try:
         fname_new = cm.save_memmap(
             [input_movie_path],
-            base_name='memmap_',
+            base_name=f'{uuid}_cnmf-memmap_',
             order='C',
             dview=dview
         )
