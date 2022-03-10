@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import traceback
 from pathlib import Path
+from mesmerize_napari.core import set_parent_data_path, get_full_data_path
 
 
 @click.command()
@@ -20,13 +21,12 @@ def main(batch_path, uuid, data_path: str = None):
     item = df[df['uuid'] == uuid].squeeze()
 
     input_movie_path = item['input_movie_path']
-    
-    if data_path is not None:
-        data_path = Path(data_path)
-        input_movie_path = str(data_path.joinpath(input_movie_path))
-    
+
+    set_parent_data_path(data_path)
+    input_movie_path = str(get_full_data_path(input_movie_path))
+
     params = item['params']
-    print("_cnmf params", params)
+    print("cnmf params", params)
 
     # adapted from current demo notebook
     n_processes = psutil.cpu_count() - 1
@@ -74,14 +74,14 @@ def main(batch_path, uuid, data_path: str = None):
         print("fitting images")
         cnm = cnm.fit(images)
         #
-        if params['refit'] == True:
+        if params['refit'] is True:
             print('refitting')
             cnm = cnm.refit(images, dview=dview)
 
         print("Eval")
         cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
 
-        output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
+        output_path = str(get_full_data_path(input_movie_path).parent.joinpath(f"{uuid}.hdf5").resolve())
 
         cnm.save(output_path)
 
