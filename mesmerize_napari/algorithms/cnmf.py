@@ -9,7 +9,10 @@ import numpy as np
 import pandas as pd
 import traceback
 from pathlib import Path
-from mesmerize_napari.core import set_parent_data_path, get_full_data_path
+
+# prevent circular import
+if __name__ == '__main__':
+    from mesmerize_napari.core import set_parent_data_path, get_full_data_path
 
 
 @click.command()

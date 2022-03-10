@@ -10,6 +10,10 @@ import pandas as pd
 import os
 from pathlib import Path
 
+# prevent circular import
+if __name__ == '__main__':
+    from mesmerize_napari.core import set_parent_data_path, get_full_data_path
+
 
 @click.command()
 @click.option('--batch-path', type=str)
@@ -20,11 +24,9 @@ def main(batch_path, uuid, data_path: str = None):
     item = df[df['uuid'] == uuid].squeeze()
 
     input_movie_path = item['input_movie_path']
-    if data_path is not None:
-        data_path = Path(data_path)
-        input_movie_path = data_path.joinpath(input_movie_path)
 
-    input_movie_path = str(input_movie_path)
+    set_parent_data_path(data_path)
+    input_movie_path = str(get_full_data_path(input_movie_path))
 
     params = item['params']
 
