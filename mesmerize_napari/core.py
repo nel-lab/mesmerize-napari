@@ -79,6 +79,7 @@ def create_batch(path: str = None):
 
 
 def get_full_data_path(path: Path) -> Path:
+    path = Path(path)
     if PARENT_DATA_PATH is not None:
         return PARENT_DATA_PATH.joinpath(path)
 
@@ -316,6 +317,15 @@ class CaimanSeriesExtensions:
     def get_projection(self, proj_type: str):
         pass
 
+    # TODO: finish the copy_data() extension
+    # def copy_data(self, new_parent_dir: Union[Path, str]):
+    #     """
+    #     Copy all data associated with this series to a different parent dir
+    #     """
+    #     movie_path = get_full_data_path(self._series['input_movie_path'])
+    #     output_paths = []
+    #     for p in self._series['outputs']
+
 
 @pd.api.extensions.register_series_accessor("cnmf")
 class CNMFExtensions:
@@ -325,12 +335,26 @@ class CNMFExtensions:
     def __init__(self, s: pd.Series):
         self._series = s
 
-    def get_memmap(self) -> np.ndarray:
+    def get_cnmf_memmap(self) -> np.ndarray:
         path = self._series['outputs']['cnmf-memmap-path']
         # Get order f images
         Yr, dims, T = load_memmap(path)
-        images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        images = np.reshape(Yr.T, [T] + list(dims), order='C')
         return images
+
+    def get_input_memmap(self) -> np.ndarray:
+        """
+        Return the F-order memmap if the input to the
+        CNMF batch item was a mcorr output memmap
+        """
+        movie_path = str(self._series.caiman.get_input_movie_path())
+        if movie_path.endswith('mmap'):
+            Yr, dims, T = load_memmap(movie_path)
+            images = np.reshape(Yr.T, [T] + list(dims), order='F')
+            return images
+        else:
+            raise TypeError(f"Input movie for CNMF was not a memmap, path to input movie is:\n"
+                            f"{movie_path}")
 
     @validate('cnmf')
     def get_output_path(self) -> Path:
@@ -359,10 +383,9 @@ class CNMFExtensions:
 
         return masks
 
-    @validate('cnmf')
-    def get_spatial_contours(self, ixs: np.ndarray) -> List[dict]:
-        cnmf_obj = self.get_output()
-
+    @staticmethod
+    @lru_cache(5)
+    def _get_spatial_contour_coors(cnmf_obj: CNMF):
         dims = cnmf_obj.dims
         if dims is None:  # I think that one of these is `None` if loaded from an hdf5 file
             dims = cnmf_obj.estimates.dims
@@ -371,12 +394,24 @@ class CNMFExtensions:
         dims = dims[1], dims[0]
 
         contours = caiman_get_contours(
-            cnmf_obj.estimates.A[:, ixs],
+            cnmf_obj.estimates.A,
             dims,
             swap_dim=True
         )
 
         return contours
+
+    @validate('cnmf')
+    def get_spatial_contours(self, ixs: np.ndarray) -> List[dict]:
+        cnmf_obj = self.get_output()
+        contours = self._get_spatial_contour_coors(cnmf_obj)
+
+        contours_selection = list()
+        for i in range(len(contours)):
+            if i in ixs:
+                contours_selection.append(contours[i])
+
+        return contours_selection
 
     @validate('cnmf')
     def get_spatial_contour_coors(self, ixs: np.ndarray) -> List[np.ndarray]:
