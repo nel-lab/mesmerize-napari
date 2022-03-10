@@ -137,7 +137,8 @@ class CNMFViewer:
 
         print("good traces", np.shape(good_traces))
         print("bad traces", np.shape(bad_traces))
-        self.viewer1d = napari_plot.Viewer()
+        # Set show=False to prevent second window from opening with temporal traces
+        self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
         self.viewer1d.axis.y_label = "Intensity"
         self.viewer1d.axis.x_label = "Time"
