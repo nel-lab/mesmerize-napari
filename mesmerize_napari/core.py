@@ -78,7 +78,7 @@ def create_batch(path: str = None):
     return df
 
 
-def get_full_data_path(path: Path) -> Path:
+def get_full_data_path(path: Union[Path, str]) -> Path:
     path = Path(path)
     if PARENT_DATA_PATH is not None:
         return PARENT_DATA_PATH.joinpath(path)
