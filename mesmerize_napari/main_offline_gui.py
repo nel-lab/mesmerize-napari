@@ -214,7 +214,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
         callbacks = [partial(self.item_finished, index)]
         std_out = self._print_qprocess_std_out
 
-        self.qprocess = self.dataframe.iloc[index].caiman.run(callbacks_finished=callbacks, callback_std_out=std_out)
+        self.qprocess = self.dataframe.iloc[index].caiman.run(
+            backend=QPROCESS_BACKEND,
+            callbacks_finished=callbacks,
+            callback_std_out=std_out
+        )
         self.set_list_widget_item_color(index, 'yellow')
 
     def _print_qprocess_std_out(self, proc):
