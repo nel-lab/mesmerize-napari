@@ -51,4 +51,4 @@ class EvalComponentsWidgets(QtWidgets.QMainWindow):
             params=cnmf_obj.params,
         )
 
-        self.cnmf_viewer.plot_spatial()
+        self.cnmf_viewer.update_visible_components()

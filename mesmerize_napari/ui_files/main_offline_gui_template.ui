@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>329</width>
-    <height>797</height>
+    <width>355</width>
+    <height>910</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
      </widget>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_compute">
        <attribute name="title">
@@ -62,8 +62,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>297</width>
-             <height>377</height>
+             <width>323</width>
+             <height>472</height>
             </rect>
            </property>
            <attribute name="label">
@@ -95,6 +95,16 @@
              </layout>
             </item>
             <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Recent Parent Data Paths</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBoxRecentParentDataPaths"/>
+            </item>
+            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_9">
               <item>
                <widget class="QPushButton" name="pushButtonOpenBatch">
@@ -111,6 +121,16 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Recent Batches</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBoxRecentBatches"/>
             </item>
             <item>
              <widget class="QPushButton" name="pushButtonOpenMovie">
@@ -212,8 +232,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>99</width>
-             <height>99</height>
+             <width>323</width>
+             <height>472</height>
             </rect>
            </property>
            <attribute name="label">
@@ -230,8 +250,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>99</width>
-             <height>99</height>
+             <width>323</width>
+             <height>472</height>
             </rect>
            </property>
            <attribute name="label">
@@ -302,13 +322,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButtonEvaluateCNMFComponents">
-          <property name="text">
-           <string>Evaluate CNMF Components</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="pushButtonVizReconstructedMovie">
           <property name="text">
            <string>Reconstructed post-CNMF movie</string>
@@ -344,10 +357,15 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>pushButtonOpenBatch</tabstop>
-  <tabstop>pushButtonNewBatch</tabstop>
   <tabstop>listWidgetItems</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>lineEditParentDataPath</tabstop>
+  <tabstop>pushButtonParentDataPath</tabstop>
+  <tabstop>comboBoxRecentParentDataPaths</tabstop>
+  <tabstop>pushButtonOpenBatch</tabstop>
+  <tabstop>pushButtonNewBatch</tabstop>
+  <tabstop>comboBoxRecentBatches</tabstop>
+  <tabstop>pushButtonOpenMovie</tabstop>
   <tabstop>pushButtonParamsMCorr</tabstop>
   <tabstop>pushButtonParamsCNMF</tabstop>
   <tabstop>pushButtonParamsCNMFE</tabstop>
@@ -355,10 +373,16 @@
   <tabstop>pushButtonAbort</tabstop>
   <tabstop>pushButtonStart</tabstop>
   <tabstop>pushButtonStartItem</tabstop>
+  <tabstop>pushButtonViewInput</tabstop>
   <tabstop>textBrowserParams</tabstop>
   <tabstop>textBrowserStdOut</tabstop>
   <tabstop>comboBoxProjectionOpts</tabstop>
   <tabstop>pushButtonViewProjection</tabstop>
+  <tabstop>pushButtonVizCorrelationImage</tabstop>
+  <tabstop>pushButtonVizDownsampledMCorrrMovie</tabstop>
+  <tabstop>pushButtonVizReconstructedMovie</tabstop>
+  <tabstop>radioButtonROIMask</tabstop>
+  <tabstop>radioButtonROIOutline</tabstop>
  </tabstops>
  <resources/>
  <connections/>
