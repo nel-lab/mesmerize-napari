@@ -240,7 +240,7 @@ class CaimanSeriesExtensions:
     def _run_subprocess(
             self,
             runfile_path: str,
-            callbacks_finished: List[callable],
+            callbacks_finished: List[callable] = None,
             callback_std_out: Optional[callable] = None
     ):
         global PARENT_DATA_PATH
