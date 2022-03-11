@@ -51,9 +51,9 @@ class CNMFViewer:
         if movie_path.endswith('mmap'):
             Yr, dims, T = load_memmap(movie_path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')
-            self.viewer.add_image(images, name="Movie")
+            self.viewer.add_image(images, name="Movie", colormap='gnuplot2')
         else:
-            self.viewer.open(movie_path)
+            self.viewer.open(movie_path, colormap='gnuplot2')
 
         self.cnmf_obj = batch_item.cnmf.get_output()
         self.roi_type = roi_type

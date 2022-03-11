@@ -114,9 +114,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         if file_ext == '.mmap':
             Yr, dims, T = cm.load_memmap(self.input_movie_path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')
-            self.viewer.add_image(images, name=name)
+            self.viewer.add_image(images, name=name, colormap='gnuplot2')
         else:
-            self.viewer.open(self.input_movie_path)
+            self.viewer.open(self.input_movie_path, colormap='gnuplot2')
             
     def view_input(self):
         path = self.selected_series().caiman.get_input_movie_path()
@@ -339,7 +339,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def load_correlation_image(self):
         s = self.selected_series()
         corr_img = s.caiman.get_correlation_image()
-        self.viewer.add_image(corr_img, name=f'corr: {s["name"]}')
+        self.viewer.add_image(corr_img, name=f'corr: {s["name"]}', colormap='gnuplot2')
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
