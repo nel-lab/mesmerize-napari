@@ -73,13 +73,16 @@ def main(batch_path, uuid, data_path: str = None):
         cn_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_cn.npy'))
         np.save(cn_path, Cn, allow_pickle=False)
 
+        if data_path is not None:
+            cn_path = Path(cn_path).relative_to(data_path)
+
         print("finished computing correlation image")
 
         d = dict()
         d.update(
             {
                 "mcorr-output-path": output_path,
-                "corr-img-path": Path(cn_path),
+                "corr-img-path": cn_path,
                 "success": True,
                 "traceback": None
             }
