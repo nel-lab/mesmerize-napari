@@ -88,9 +88,16 @@ def main(batch_path, uuid, data_path: str = None):
 
         cnm.save(output_path)
 
+        Cn = cm.local_correlations(images.transpose(1, 2, 0))
+        Cn[np.isnan(Cn)] = 0
+
+        corr_img_path = Path(input_movie_path).parent.joinpath(f'{uuid}_cn.npy').resolve()
+        np.save(str(corr_img_path), Cn, allow_pickle=False)
+
         if data_path is not None:
             cnmf_hdf5_path = Path(output_path).relative_to(data_path)
             cnmf_memmap_path = Path(fname_new).relative_to(data_path)
+            corr_img_path = corr_img_path.relative_to(data_path)
         else:
             cnmf_hdf5_path = output_path
             cnmf_memmap_path = fname_new
@@ -100,6 +107,7 @@ def main(batch_path, uuid, data_path: str = None):
             {
                 "cnmf-hdf5-path": cnmf_hdf5_path,
                 "cnmf-memmap-path": cnmf_memmap_path,
+                "corr-img-path": corr_img_path,
                 "success": True,
                 "traceback": None
             }
@@ -111,33 +119,6 @@ def main(batch_path, uuid, data_path: str = None):
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # save dataframe to disc
     df.to_pickle(batch_path)
-
-
-def load_projection(viewer, batch_item: pd.Series, proj_type):
-    """
-    Load correlation map from cnmf memmap file
-
-    Parameters
-    ----------
-    viewer: Viewer
-        Viewer instance to load the projection in
-
-    batch_item: pd.Series
-
-    proj_type: None
-        Not used
-
-    """
-    # Get cnmf memmap
-    fname_new = batch_item["outputs"].item()["cnmf_memmap"]
-    # Get order f images
-    Yr, dims, T = cm.load_memmap(fname_new)
-    images = np.reshape(Yr.T, [T] + list(dims), order='F')
-    # Get correlation map
-    Cn = cm.local_correlations(images.transpose(1, 2, 0))
-    Cn[np.isnan(Cn)] = 0
-    # Add correlation map to napari viewer
-    viewer.add_image(Cn, name="Correlation Map")
 
 
 if __name__ == "__main__":
