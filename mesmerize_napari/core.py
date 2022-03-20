@@ -74,11 +74,15 @@ def _get_item_uuid(item: Union[int, str, UUID]) -> UUID:
     pass
 
 
-def create_batch(path: str = None):
+def create_batch(path: str = None, remove_existing: bool = False):
     if pathlib.Path(path).is_file():
-        raise FileExistsError(
-            f'Batch file already exists at specified location: {path}'
-        )
+        if remove_existing:
+            os.remove(path)
+        else:
+            raise FileExistsError(
+                f'Batch file already exists at specified location: {path}'
+            )
+
     if not Path(path).parent.is_dir():
         os.makedirs(Path(path).parent)
 
