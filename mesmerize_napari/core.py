@@ -79,6 +79,8 @@ def create_batch(path: str = None):
         raise FileExistsError(
             f'Batch file already exists at specified location: {path}'
         )
+    if not Path(path).parent.is_dir():
+        os.makedirs(Path(path).parent)
 
     df = pd.DataFrame(columns=DATAFRAME_COLUMNS)
     df.caiman.path = path
