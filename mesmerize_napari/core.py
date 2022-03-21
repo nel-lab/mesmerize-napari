@@ -349,10 +349,10 @@ class CNMFExtensions:
         self._series = s
 
     def get_cnmf_memmap(self) -> np.ndarray:
-        path = self._series['outputs']['cnmf-memmap-path']
+        path = get_full_data_path(self._series['outputs']['cnmf-memmap-path'])
         # Get order f images
-        Yr, dims, T = load_memmap(path)
-        images = np.reshape(Yr.T, [T] + list(dims), order='C')
+        Yr, dims, T = load_memmap(str(path))
+        images = np.reshape(Yr.T, [T] + list(dims), order='F')
         return images
 
     def get_input_memmap(self) -> np.ndarray:
