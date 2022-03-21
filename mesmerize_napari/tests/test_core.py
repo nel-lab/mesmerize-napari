@@ -97,6 +97,7 @@ def test_create_batch():
 
 def test_mcorr():
     algo = 'mcorr'
+    global batch_path
     df, batch_path = _create_tmp_batch()
     print(f"Testing mcorr")
     input_movie_path = get_datafile(algo)
@@ -139,7 +140,25 @@ def test_mcorr():
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
 
-
+def test_cnmf():
+    df = load_batch(batch_path)
+    algo = 'cnmf'
+    assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
+        os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
+    input_movie_path = get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
+                           )
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[algo]
+    )
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[algo]
+    assert df.iloc[-1]['outputs'] is None
 
 def test_remove_item():
     pass
