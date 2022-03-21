@@ -139,7 +139,6 @@ def test_mcorr():
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
 
-    teardown_module()
 
 
 def test_remove_item():
