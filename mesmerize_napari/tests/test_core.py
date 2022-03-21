@@ -17,11 +17,10 @@ from caiman.paths import caiman_datadir
 
 
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp')
-data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
-vid_dir = os.path.join(caiman_datadir(), 'example_movies')
-os.makedirs(tmp_dir, exist_ok=True)
-os.makedirs(data_dir, exist_ok=True)
+vid_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'videos')
 
+os.makedirs(tmp_dir, exist_ok=True)
+os.makedirs(vid_dir, exist_ok=True)
 
 def get_tmp_filename():
     return os.path.join(tmp_dir, f'{uuid4()}.pickle')
@@ -29,7 +28,12 @@ def get_tmp_filename():
 
 def clear_tmp():
     shutil.rmtree(tmp_dir)
-    shutil.rmtree(data_dir)
+
+    test = os.listdir(vid_dir)
+    for item in test:
+        if item.endswith(".npy") | item.endswith(".mmap") | item.endswith(".runfile"):
+            os.remove(os.path.join(vid_dir, item))
+
 
 
 def get_datafile(fname: str):
@@ -91,8 +95,7 @@ def test_create_batch():
         create_batch(fname)
 
 
-def test_all_algos():
-    #set_parent_data_path(data_dir)
+def test_mcorr():
     algo = 'mcorr'
     df, batch_path = _create_tmp_batch()
     print(f"Testing mcorr")
@@ -114,35 +117,29 @@ def test_all_algos():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
 
-    parent_data_path = set_parent_data_path(caiman_datadir())
-    print("parent data path:", parent_data_path)
-    print("check 1:", df.iloc[-1]['input_movie_path'])
-    # assert df.iloc[-1]['input_movie_path'] == f'example_movies/{algo}.tif'
-    # assert parent_data_path.joinpath(df.iloc[-1]['input_movie_path']) == input_movie_path
+    assert df.iloc[-1]['input_movie_path'] == os.path.join(vid_dir, f'{algo}.tif')
 
-    # set_parent_data_path(data_dir)
-    # df.iloc[-1].caiman._run_subprocess()
-    #
-    # df = load_batch(batch_path)
-    # print(df)
-    #
-    # assert parent_data_path.joinpath(
-    #     df.iloc[-1]['outputs']['mcorr-output-path']
-    # ) == \
-    #     parent_data_path.joinpath(
-    #         'example_movies',
-    #         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'
-    #     )
-    #
-    # assert parent_data_path.joinpath(df.iloc[-1]['outputs']['mcorr-output-path']) == \
-    #     get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']) == \
-    #        parent_data_path.joinpath(
-    #            'example_movies',
-    #            f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'
-    #        )
-    #
-    # assert df.iloc[-1]['outputs']['success'] is True
-    # assert df.iloc[-1]['outputs']['traceback'] is None
+    set_parent_data_path(vid_dir)
+    df.iloc[-1].caiman._run_subprocess()
+
+    df = load_batch(batch_path)
+    print(df)
+    assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
+        os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
+
+    assert Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        )) == \
+        get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
+                           )== \
+        Path(os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'))
+
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+
+    teardown_module()
 
 
 def test_remove_item():
