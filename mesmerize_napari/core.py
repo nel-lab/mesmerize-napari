@@ -29,9 +29,9 @@ ALGO_MODULES = \
     }
 
 
-QPROCESS_BACKEND = 'qprocess'
-SUBPROCESS_BACKEND = 'subprocess'
-SLURM_BACKEND = 'slurm'
+QPROCESS_BACKEND = 'qprocess'  #: QProcess backend for use in napari
+SUBPROCESS_BACKEND = 'subprocess'  #: subprocess backend, for use output a Qt application such as a notebook
+SLURM_BACKEND = 'slurm'  #: SLURM backend, not yet implemented
 
 
 COMPUTE_BACKENDS =\
@@ -46,17 +46,44 @@ DATAFRAME_COLUMNS = ['algo', 'name', 'input_movie_path', 'params', 'outputs', 'u
 
 
 def set_parent_data_path(path: Union[Path, str]) -> Path:
+    """
+    Set the global `PARENT_DATA_PATH`
+
+    Parameters
+    ----------
+    path: Union[Path, str]
+        Full parent data path
+    """
     global PARENT_DATA_PATH
     PARENT_DATA_PATH = Path(path)
     return PARENT_DATA_PATH
 
 
 def get_parent_data_path() -> Path:
+    """
+    Get the global `PARENT_DATA_PATH`
+    Returns
+    -------
+    Path
+        global `PARENT_DATA_PATH`
+
+    """
     global PARENT_DATA_PATH
     return PARENT_DATA_PATH
 
 
 def load_batch(batch_file: Union[str, pathlib.Path]) -> pd.DataFrame:
+    """
+    Load the batch pickle file, also sets the global `CURRENT_BATCH_PATH`
+
+    Parameters
+    ----------
+    batch_file: Union[str, Path])
+
+    Returns
+    -------
+
+    """
     global CURRENT_BATCH_PATH
 
     df = pd.read_pickle(
@@ -74,7 +101,24 @@ def _get_item_uuid(item: Union[int, str, UUID]) -> UUID:
     pass
 
 
-def create_batch(path: str = None, remove_existing: bool = False):
+def create_batch(path: str = None, remove_existing: bool = False) -> pd.DataFrame:
+    """
+    Create a new batch DataFrame
+
+    Parameters
+    ----------
+    path: str
+        path to save the new batch DataFrame
+
+    remove_existing: bool
+        If `True`, remove an existing batch DataFrame file if it exists at the given `path`
+
+    Returns
+    -------
+    pd.DataFrame
+        New empty batch DataFrame
+
+    """
     if pathlib.Path(path).is_file():
         if remove_existing:
             os.remove(path)
@@ -319,10 +363,23 @@ class CaimanSeriesExtensions:
 
     @validate()
     def get_input_movie_path(self) -> Path:
+        """
+        Returns
+        -------
+        Path
+            full path to the input movie file
+        """
+
         return get_full_data_path(self._series['input_movie_path'])
 
     @validate()
     def get_correlation_image(self) -> np.ndarray:
+        """
+        Returns
+        -------
+        np.ndarray
+            correlation image
+        """
         path = get_full_data_path(self._series['outputs']['corr-img-path'])
         return np.load(str(path))
 
@@ -349,6 +406,14 @@ class CNMFExtensions:
         self._series = s
 
     def get_cnmf_memmap(self) -> np.ndarray:
+        """
+        Get the CNMF memmap
+
+        Returns
+        -------
+        np.ndarray
+            numpy memmap array used for CNMF
+        """
         path = get_full_data_path(self._series['outputs']['cnmf-memmap-path'])
         # Get order f images
         Yr, dims, T = load_memmap(str(path))
@@ -359,6 +424,11 @@ class CNMFExtensions:
         """
         Return the F-order memmap if the input to the
         CNMF batch item was a mcorr output memmap
+
+        Returns
+        -------
+        np.ndarray
+            numpy memmap array of the input
         """
         movie_path = str(self._series.caiman.get_input_movie_path())
         if movie_path.endswith('mmap'):
@@ -371,14 +441,45 @@ class CNMFExtensions:
 
     @validate('cnmf')
     def get_output_path(self) -> Path:
+        """
+        Returns
+        -------
+        Path
+            Path to the Caiman CNMF hdf5 output file
+        """
         return get_full_data_path(self._series['outputs']['cnmf-hdf5-path'])
 
     @validate('cnmf')
     def get_output(self) -> CNMF:
+        """
+        Returns
+        -------
+        CNMF
+            Returns the Caiman CNMF object
+        """
         return load_CNMF(self.get_output_path())
 
     @validate('cnmf')
     def get_spatial_masks(self, ixs: np.ndarray, threshold: float = 0.01) -> np.ndarray:
+        """
+        Get binary masks of the spatial components at the given `ixs`
+
+        Basically created from cnmf.estimates.A
+
+        Parameters
+        ----------
+        ixs: np.ndarray
+            numpy array containing integer indices for which you want spatial masks
+
+        threshold: float
+            threshold
+
+        Returns
+        -------
+        np.ndarray
+            shape is [dim_0, dim_1, n_components]
+
+        """
         cnmf_obj = self.get_output()
 
         dims = cnmf_obj.dims
