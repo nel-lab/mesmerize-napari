@@ -383,7 +383,7 @@ class CNMFExtensions:
 
         dims = cnmf_obj.dims
         if dims is None:
-            dims = cnmf_obj.estimate.dims
+            dims = cnmf_obj.estimates.dims
 
         masks = np.zeros(shape=(dims[0], dims[1], len(ixs)), dtype=bool)
 
