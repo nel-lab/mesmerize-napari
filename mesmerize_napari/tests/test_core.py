@@ -121,7 +121,9 @@ def test_mcorr():
 
     # set_parent_data_path(vid_dir)
     # df.iloc[-1].caiman._run_subprocess()
-    df.iloc[-1].caiman.run(backend=SUBPROCESS_BACKEND, callbacks_finished=None)
+    process = df.iloc[-1].caiman.run(
+        backend=SUBPROCESS_BACKEND,
+        callbacks_finished=None)
 
     df = load_batch(batch_path)
     print(df)
