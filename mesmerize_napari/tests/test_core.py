@@ -2,7 +2,7 @@ import os
 from glob import glob
 import pandas as pd
 from ..core import create_batch, load_batch, CaimanDataFrameExtensions, CaimanSeriesExtensions,\
-    set_parent_data_path, get_parent_data_path
+    set_parent_data_path, get_parent_data_path, get_full_data_path
 from ..core import ALGO_MODULES, DATAFRAME_COLUMNS
 from uuid import uuid4
 from typing import *
@@ -13,13 +13,15 @@ from .params import test_params
 from uuid import UUID
 from pathlib import Path
 import shutil
+from caiman.paths import caiman_datadir
+from ..core import SUBPROCESS_BACKEND
 
 
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp')
-data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
-os.makedirs(tmp_dir, exist_ok=True)
-os.makedirs(data_dir, exist_ok=True)
+vid_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'videos')
 
+os.makedirs(tmp_dir, exist_ok=True)
+os.makedirs(vid_dir, exist_ok=True)
 
 def get_tmp_filename():
     return os.path.join(tmp_dir, f'{uuid4()}.pickle')
@@ -27,18 +29,31 @@ def get_tmp_filename():
 
 def clear_tmp():
     shutil.rmtree(tmp_dir)
-    shutil.rmtree(data_dir)
+
+    test = os.listdir(vid_dir)
+    for item in test:
+        if item.endswith(".npy") | item.endswith(".mmap") | item.endswith(".runfile"):
+            os.remove(os.path.join(vid_dir, item))
 
 
-def download_data(algo: str):
+
+def get_datafile(fname: str):
+    local_path = Path(os.path.join(vid_dir, f'{fname}.tif'))
+    if local_path.is_file():
+        return local_path
+    else:
+        download_data(fname)
+
+
+def download_data(fname: str):
     """
     Download the large network files from Zenodo
     """
     url = {
         'mcorr': 'https://caiman.flatironinstitute.org/~neuro/caiman_downloadables/demoMovie.tif',
         'cnmf': None,
-        'cnmfe': None,
-    }.get(algo)
+        'cnmfe': 'https://caiman.flatironinstitute.org/~neuro/caiman_downloadables/data_endoscope.tif',
+    }.get(fname)
 
     print(f'Downloading test data from: {url}')
 
@@ -46,11 +61,7 @@ def download_data(algo: str):
     total_size_in_bytes = int(response.headers.get('content-length', 0))
     block_size = 1024  # 1 Kibibyte
     progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True)
-
-    os.mkdir(os.path.join(data_dir, 'input_movies'))
-
-    path = os.path.join(data_dir, 'input_movies', f'{algo}.tif')
-
+    path = os.path.join(vid_dir, f'{fname}.tif')
     with open(path, 'wb') as file:
         for data in response.iter_content(block_size):
             progress_bar.update(len(data))
@@ -85,57 +96,114 @@ def test_create_batch():
         create_batch(fname)
 
 
-def test_load_batch():
-    pass
-
-
-def test_all_algos():
-    set_parent_data_path(data_dir)
-
-    ALGO_MODULES = {'mcorr': None}  # temporary until other algo tests are ready
-
+def test_mcorr():
+    algo = 'mcorr'
     df, batch_path = _create_tmp_batch()
-    for algo in list(ALGO_MODULES.keys()):
-        print(f"Testing {algo}")
-        input_movie_path = download_data(algo)
+    print(f"Testing mcorr")
+    input_movie_path = get_datafile(algo)
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[algo]
+    )
 
-        df.caiman.add_item(
-            algo=algo,
-            name=f'test-{algo}',
-            input_movie_path=input_movie_path,
-            params=test_params[algo]
-        )
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[algo]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
 
-        assert df.iloc[-1]['algo'] == algo
-        assert df.iloc[-1]['name'] == f'test-{algo}'
-        assert df.iloc[-1]['params'] == test_params[algo]
-        assert df.iloc[-1]['outputs'] is None
-        try:
-            UUID(df.iloc[-1]['uuid'])
-        except:
-            pytest.fail("Something wrong with setting UUID for batch items")
+    assert df.iloc[-1]['input_movie_path'] == os.path.join(vid_dir, f'{algo}.tif')
 
-        parent_data_path = get_parent_data_path()
+    # set_parent_data_path(vid_dir)
+    # df.iloc[-1].caiman._run_subprocess()
+    df.iloc[-1].caiman.run(backend=SUBPROCESS_BACKEND, callbacks_finished=None)
 
-        assert df.iloc[-1]['input_movie_path'] == f'input_movies/{algo}.tif'
-        assert parent_data_path.joinpath(df.iloc[-1]['input_movie_path']) == input_movie_path
+    df = load_batch(batch_path)
+    print(df)
+    print(df.iloc[-1]['outputs']['traceback'])
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+    assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
+        os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
-        df.iloc[-1].caiman._run_subprocess()
+    assert Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        )) == \
+        get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
+                           )== \
+        Path(os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'))
 
-        df = load_batch(batch_path)
-
-        assert parent_data_path.joinpath(
-            df.iloc[-1]['outputs']['mcorr-output-path']
-        ) == \
-            parent_data_path.joinpath(
-                'input_movies',
-                f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'
-            )
-
-        assert df.iloc[-1]['outputs']['success'] is True
-        assert df.iloc[-1]['outputs']['traceback'] is None
+#
+# def test_cnmf():
+#     # First run mcorr to get mmap for MC movie
+#     algo = 'mcorr'
+#     df, batch_path = _create_tmp_batch()
+#     print("Testing mcorr")
+#     input_movie_path = get_datafile(algo)
+#     print("movie path:", input_movie_path)
+#     parent_path = get_parent_data_path()
+#     df.caiman.add_item(
+#         algo=algo,
+#         name=f'test-{algo}',
+#         input_movie_path=input_movie_path,
+#         params=test_params[algo]
+#     )
+#
+#     assert df.iloc[-1]['algo'] == algo
+#     assert df.iloc[-1]['name'] == f'test-{algo}'
+#     assert df.iloc[-1]['params'] == test_params[algo]
+#     assert df.iloc[-1]['outputs'] is None
+#     print("df input path", df.iloc[-1]['input_movie_path'])
+#     try:
+#         UUID(df.iloc[-1]['uuid'])
+#     except:
+#         pytest.fail("Something wrong with setting UUID for batch items")
+#     print('df input path:', df.iloc[-1]['input_movie_path'])
+#     assert df.iloc[-1]['input_movie_path'] == os.path.join(vid_dir, f'{algo}.tif')
+#
+#     # Run mcorr
+#     df.iloc[-1].caiman._run_subprocess()
+#     df = load_batch(batch_path)
+#     # Confirm output path is as expected
+#     assert df.iloc[-1]['outputs']['success'] is True
+#     assert df.iloc[-1]['outputs']['traceback'] is None
+#     assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+#                         ) == \
+#         os.path.join(vid_dir,
+#         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
+#
+#     algo = 'cnmf'
+#     print("Testing cnmf")
+#     input_movie_path = df.iloc[-1]['outputs']['mcorr-output-path']
+#     df.caiman.add_item(
+#         algo=algo,
+#         name=f'test-{algo}',
+#         input_movie_path=input_movie_path,
+#         params=test_params[algo]
+#     )
+#
+#     assert df.iloc[-1]['algo'] == algo
+#     assert df.iloc[-1]['name'] == f'test-{algo}'
+#     assert df.iloc[-1]['params'] == test_params[algo]
+#     assert df.iloc[-1]['outputs'] is None
+#     try:
+#         UUID(df.iloc[-1]['uuid'])
+#     except:
+#         pytest.fail("Something wrong with setting UUID for batch items")
+#     print('df input path:', df.iloc[-1]['input_movie_path'])
+#     assert Path(df.iloc[-1]['input_movie_path']) == input_movie_path
+#
+#     df.iloc[-1].caiman._run_subprocess()
+#     df = load_batch(batch_path)
+#     # Confirm output path is as expected
 
 
 def test_remove_item():
     pass
-
