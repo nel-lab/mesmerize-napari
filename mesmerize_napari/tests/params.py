@@ -41,5 +41,30 @@ test_params =\
                     },
                 'refit': True,
             },
-        'cnmfe': None,
+        'cnmfe':
+            {
+                'do_cnmfe': True,
+                'keep_memmap': True,
+                'cnmfe_kwargs':
+                    {
+                        'gSig': (10,10),
+                        'gSiz': (41,41),
+                        'p': 1,
+                        'min_corr': 0.89,
+                        'min_pnr': 4,
+                        'rf': 50,
+                        'stride': 30,
+                        'gnb': 1,
+                        'nb_patch': 1,
+                        'K': 10,
+                        'ssub': 1,
+                        'tsub': 1,
+                        'ring_size_factor': 1.5,
+                        'merge_thresh': 0.7,
+                        'low_rank_background': False,
+                        'method_deconvolution': 'oasis',
+                        'update_background_components': True,
+                        'del_duplicates': True
+                    }
+            },
     }
