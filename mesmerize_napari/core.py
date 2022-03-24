@@ -55,7 +55,10 @@ def set_parent_data_path(path: Union[Path, str]) -> Path:
         Full parent data path
     """
     global PARENT_DATA_PATH
-    PARENT_DATA_PATH = Path(path)
+    try:
+        PARENT_DATA_PATH = Path(path)
+    except:
+        PARENT_DATA_PATH = Path('')
     return PARENT_DATA_PATH
 
 
