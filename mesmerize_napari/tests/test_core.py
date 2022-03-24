@@ -31,7 +31,7 @@ def clear_tmp():
 
     test = os.listdir(vid_dir)
     for item in test:
-        if item.endswith(".npy") | item.endswith(".mmap") | item.endswith(".runfile"):
+        if item.endswith(".npy") | item.endswith(".mmap") | item.endswith(".runfile") | item.endswith(".hdf5"):
             os.remove(os.path.join(vid_dir, item))
 
 
@@ -96,6 +96,7 @@ def test_create_batch():
 
 
 def test_mcorr():
+    set_parent_data_path(vid_dir)
     algo = 'mcorr'
     df, batch_path = _create_tmp_batch()
     print(f"Testing mcorr")
@@ -117,9 +118,9 @@ def test_mcorr():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert df.iloc[-1]['input_movie_path'] == os.path.join(vid_dir, f'{algo}.tif')
+    assert os.path.join(vid_dir,df.iloc[-1]['input_movie_path']) == \
+           os.path.join(vid_dir, f'{algo}.tif')
 
-    # set_parent_data_path(vid_dir)
     # df.iloc[-1].caiman._run_subprocess()
     process = df.iloc[-1].caiman.run(
         backend=SUBPROCESS_BACKEND,
@@ -144,6 +145,7 @@ def test_mcorr():
         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'))
 
 def test_cnmf():
+    set_parent_data_path(vid_dir)
     algo = 'mcorr'
     df, batch_path = _create_tmp_batch()
     print(f"Testing mcorr")
@@ -165,7 +167,8 @@ def test_cnmf():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert df.iloc[-1]['input_movie_path'] == os.path.join(vid_dir, f'{algo}.tif')
+    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
+           os.path.join(vid_dir, f'{algo}.tif')
 
     process = df.iloc[-1].caiman.run(
         backend=SUBPROCESS_BACKEND,
@@ -187,7 +190,7 @@ def test_cnmf():
 
     algo = 'cnmf'
     print("Testing cnmf")
-    input_movie_path = df.iloc[-1]['outputs']['mcorr-output-path']
+    input_movie_path = os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path'])
     df.caiman.add_item(
         algo=algo,
         name=f'test-{algo}',
@@ -204,7 +207,7 @@ def test_cnmf():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
     print('df input path:', df.iloc[-1]['input_movie_path'])
-    assert Path(df.iloc[-1]['input_movie_path']) == input_movie_path
+    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == input_movie_path
 
     process = df.iloc[-1].caiman.run(
         backend=SUBPROCESS_BACKEND,
