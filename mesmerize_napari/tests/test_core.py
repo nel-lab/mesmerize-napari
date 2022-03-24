@@ -177,10 +177,6 @@ def test_cnmf():
     print(df.iloc[-1]['outputs']['traceback'])
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
-    assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
-                        ) == \
-        os.path.join(vid_dir,
-        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
     assert Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
                         )) == \
@@ -218,7 +214,18 @@ def test_cnmf():
     df = load_batch(batch_path)
     print(df)
     # Confirm output path is as expected
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+    assert Path(os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_60_d2_80_d3_1_order_C_frames_2000_.mmap')) == \
+           get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path']) == \
+          Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-memmap-path']
+                       ))
 
-#
-# def test_remove_item():
-#     pass
+    assert Path(os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}.hdf5')) == \
+        get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path']) == \
+        Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-hdf5-path']))
+
+def test_remove_item():
+    pass
