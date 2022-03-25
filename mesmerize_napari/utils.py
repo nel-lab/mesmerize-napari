@@ -8,6 +8,8 @@ from stat import S_IEXEC
 import traceback
 from typing import *
 import re as regex
+from pathlib import Path
+
 
 # Useful functions adapted from mesmerize
 
