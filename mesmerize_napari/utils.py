@@ -7,7 +7,7 @@ import os
 from stat import S_IEXEC
 import traceback
 from typing import *
-
+import re as regex
 
 # Useful functions adapted from mesmerize
 
@@ -29,6 +29,13 @@ else:
 
 qualitative_colormaps = ['Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1',
               'Set2', 'Set3', 'tab10', 'tab20', 'tab20b', 'tab20c']
+
+
+def validate_path(path: Union[str, Path]):
+    if not regex.match("^[A-Za-z0-9._-]*$", str(path)):
+        raise ValueError("Paths must only contain alphanumeric characters, "
+                         "hyphens ( - ), underscores ( _ ) or periods ( . )")
+    return path
 
 
 def use_open_file_dialog(title: str = 'Choose file', start_dir: Union[str, None] = None, exts: List[str] = None):
@@ -96,6 +103,8 @@ def use_save_file_dialog(title: str = 'Save file', start_dir: Union[str, None] =
             path = path[0]
             if not path.endswith(ex):
                 path = f'{path}{ex}'
+
+            path = validate_path(path)
 
             func(self, path, *args, **kwargs)
 

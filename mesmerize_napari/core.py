@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from .algorithms import *
-from .utils import make_runfile, IS_WINDOWS, MESMERIZE_LRU_CACHE
+from .utils import make_runfile, IS_WINDOWS, MESMERIZE_LRU_CACHE, validate_path
 import pandas as pd
 import pathlib
 from pathlib import Path
@@ -55,6 +55,7 @@ def set_parent_data_path(path: Union[Path, str]) -> Path:
         Full parent data path
     """
     global PARENT_DATA_PATH
+    path = validate_path(path)
     PARENT_DATA_PATH = Path(path)
     return PARENT_DATA_PATH
 
@@ -85,6 +86,7 @@ def load_batch(batch_file: Union[str, pathlib.Path]) -> pd.DataFrame:
 
     """
     global CURRENT_BATCH_PATH
+    batch_file = validate_path(batch_file)
 
     df = pd.read_pickle(
         pathlib.Path(batch_file)
@@ -119,6 +121,8 @@ def create_batch(path: str = None, remove_existing: bool = False) -> pd.DataFram
         New empty batch DataFrame
 
     """
+    path = validate_path(path)
+
     if pathlib.Path(path).is_file():
         if remove_existing:
             os.remove(path)
@@ -195,6 +199,7 @@ class CaimanDataFrameExtensions:
 
         global PARENT_DATA_PATH
         input_movie_path = Path(input_movie_path)
+        validate_path(input_movie_path)
 
         if PARENT_DATA_PATH is not None:
             input_movie_path = input_movie_path.relative_to(PARENT_DATA_PATH)
