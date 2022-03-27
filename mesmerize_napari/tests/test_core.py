@@ -16,15 +16,14 @@ import shutil
 from caiman.paths import caiman_datadir
 
 
-tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp')
-vid_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'videos')
+tmp_dir = Path(os.path.dirname(os.path.abspath(__file__)), 'tmp')
+vid_dir = Path(os.path.dirname(os.path.abspath(__file__)), 'videos')
 
 os.makedirs(tmp_dir, exist_ok=True)
 os.makedirs(vid_dir, exist_ok=True)
 
 def get_tmp_filename():
     return os.path.join(tmp_dir, f'{uuid4()}.pickle')
-
 
 def clear_tmp():
     shutil.rmtree(tmp_dir)
@@ -119,8 +118,8 @@ def test_mcorr():
         pytest.fail("Something wrong with setting UUID for batch items")
 
     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-                  Path(vid_dir, f"{algo}.tif") == \
-                  Path(vid_dir, df.iloc[-1]['input_movie_path'])
+                  vid_dir.joinpath(f"{algo}.tif") == \
+                  vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
 
 
     # df.iloc[-1].caiman._run_subprocess()
@@ -134,16 +133,16 @@ def test_mcorr():
     print(df.iloc[-1]['outputs']['traceback'])
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
-    assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['mcorr-output-path']
                         ) == \
-        os.path.join(vid_dir,
+        vid_dir.joinpath(
         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
-    assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['mcorr-output-path']
                         ) == \
         get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
                            )== \
-        Path(vid_dir,
+        vid_dir.joinpath(
         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
 def test_cnmf():
@@ -169,8 +168,8 @@ def test_cnmf():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
-           os.path.join(vid_dir, f'{algo}.tif')
+    assert vid_dir.joinpath(df.iloc[-1]['input_movie_path']) == \
+           vid_dir.joinpath(f'{algo}.tif')
 
     process = df.iloc[-1].caiman.run(
         backend=SUBPROCESS_BACKEND,
@@ -183,16 +182,16 @@ def test_cnmf():
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
 
-    assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['mcorr-output-path']
                         ) == \
         get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
                            )== \
-        Path(vid_dir,
+        vid_dir.joinpath(
         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
     algo = 'cnmf'
     print("Testing cnmf")
-    input_movie_path = os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path'])
+    input_movie_path = vid_dir.joinpath(df.iloc[-1]['outputs']['mcorr-output-path'])
     df.caiman.add_item(
         algo=algo,
         name=f'test-{algo}',
@@ -209,7 +208,7 @@ def test_cnmf():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
     print('df input path:', df.iloc[-1]['input_movie_path'])
-    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == input_movie_path
+    assert vid_dir.joinpath(df.iloc[-1]['input_movie_path']) == input_movie_path
 
     process = df.iloc[-1].caiman.run(
         backend=SUBPROCESS_BACKEND,
@@ -221,16 +220,16 @@ def test_cnmf():
     # Confirm output path is as expected
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
-    assert Path(os.path.join(vid_dir,
-        f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_60_d2_80_d3_1_order_C_frames_2000_.mmap')) == \
+    assert vid_dir.joinpath(
+        f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_60_d2_80_d3_1_order_C_frames_2000_.mmap') == \
            get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path']) == \
-          Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-memmap-path']
-                       ))
+          vid_dir.joinpath(df.iloc[-1]['outputs']['cnmf-memmap-path']
+                       )
 
-    assert Path(os.path.join(vid_dir,
-        f'{df.iloc[-1]["uuid"]}.hdf5')) == \
+    assert vid_dir.joinpath(
+        f'{df.iloc[-1]["uuid"]}.hdf5') == \
         get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path']) == \
-        Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-hdf5-path']))
+        vid_dir.joinpath(df.iloc[-1]['outputs']['cnmf-hdf5-path'])
 
 def test_cnmfe():
     # Test if pnr and cn alone work
@@ -257,8 +256,8 @@ def test_cnmfe():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
-           os.path.join(vid_dir, f'{algo}.tif')
+    assert vid_dir.joinpath(df.iloc[-1]['input_movie_path']) == \
+           vid_dir.joinpath(f'{algo}.tif')
 
     process = df.iloc[-1].caiman.run(
         backend=SUBPROCESS_BACKEND,
@@ -269,12 +268,12 @@ def test_cnmfe():
     # Confirm output path is as expected
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
-    assert Path(vid_dir,
+    assert vid_dir.joinpath(
                 'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
            get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
-    assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}_pnr.pikl') == \
+    assert tmp_dir.joinpath(f'{df.iloc[-1]["uuid"]}_pnr.pikl') == \
            get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['pnr'])
-    assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}_cn_filter.pikl') == \
+    assert tmp_dir.joinpath(f'{df.iloc[-1]["uuid"]}_cn_filter.pikl') == \
            get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['cn'])
 
     # Test if running full cnmfe works
@@ -298,8 +297,8 @@ def test_cnmfe():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
-           os.path.join(vid_dir, f'{algo}.tif')
+    assert vid_dir.joinpath(df.iloc[-1]['input_movie_path']) == \
+           vid_dir.joinpath(f'{algo}.tif')
 
     process = df.iloc[-1].caiman.run(
         backend=SUBPROCESS_BACKEND,
@@ -310,10 +309,10 @@ def test_cnmfe():
     # Confirm output path is as expected
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
-    assert Path(vid_dir,
+    assert vid_dir.joinpath(
                 'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
         get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
-    assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}.hdf5') == \
+    assert tmp_dir.joinpath(f'{df.iloc[-1]["uuid"]}.hdf5') == \
         get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs'])
 
 def test_remove_item():
@@ -340,8 +339,8 @@ def test_remove_item():
         pytest.fail("Something wrong with setting UUID for batch items")
 
     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-                  Path(vid_dir, f"{algo}.tif") == \
-                  Path(vid_dir, df.iloc[-1]['input_movie_path'])
+                  vid_dir.joinpath(f"{algo}.tif") == \
+                  vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
 
     df.caiman.add_item(
         algo=algo,
@@ -360,8 +359,8 @@ def test_remove_item():
         pytest.fail("Something wrong with setting UUID for batch items")
 
     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-                  Path(vid_dir, f"{algo}.tif") == \
-                  Path(vid_dir, df.iloc[-1]['input_movie_path'])
+                  vid_dir.joinpath(f"{algo}.tif") == \
+                  vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
     # Check removing specific rows works
     assert df.iloc[0]['name'] == f'test-{algo}'
     assert df.iloc[1]['name'] == f'test1-{algo}'
