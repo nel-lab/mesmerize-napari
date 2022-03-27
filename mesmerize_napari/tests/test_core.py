@@ -95,226 +95,226 @@ def test_create_batch():
         create_batch(fname)
 
 
-# def test_mcorr():
-#     set_parent_data_path(vid_dir)
-#     algo = 'mcorr'
-#     df, batch_path = _create_tmp_batch()
-#     print(f"Testing mcorr")
-#     input_movie_path = get_datafile(algo)
-#     print(input_movie_path)
-#     df.caiman.add_item(
-#         algo=algo,
-#         name=f'test-{algo}',
-#         input_movie_path=input_movie_path,
-#         params=test_params[algo]
-#     )
-#
-#     assert df.iloc[-1]['algo'] == algo
-#     assert df.iloc[-1]['name'] == f'test-{algo}'
-#     assert df.iloc[-1]['params'] == test_params[algo]
-#     assert df.iloc[-1]['outputs'] is None
-#     try:
-#         UUID(df.iloc[-1]['uuid'])
-#     except:
-#         pytest.fail("Something wrong with setting UUID for batch items")
-#
-#     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-#                   Path(vid_dir, f"{algo}.tif") == \
-#                   Path(vid_dir, df.iloc[-1]['input_movie_path'])
-#
-#
-#     # df.iloc[-1].caiman._run_subprocess()
-#     process = df.iloc[-1].caiman.run(
-#         backend=SUBPROCESS_BACKEND,
-#         callbacks_finished=None)
-#     process.wait()
-#
-#     df = load_batch(batch_path)
-#     print(df)
-#     print(df.iloc[-1]['outputs']['traceback'])
-#     assert df.iloc[-1]['outputs']['success'] is True
-#     assert df.iloc[-1]['outputs']['traceback'] is None
-#     assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
-#                         ) == \
-#         os.path.join(vid_dir,
-#         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
-#
-#     assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
-#                         ) == \
-#         get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
-#                            )== \
-#         Path(vid_dir,
-#         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
-#
-# def test_cnmf():
-#     set_parent_data_path(vid_dir)
-#     algo = 'mcorr'
-#     df, batch_path = _create_tmp_batch()
-#     print(f"Testing mcorr")
-#     input_movie_path = get_datafile(algo)
-#     print(input_movie_path)
-#     df.caiman.add_item(
-#         algo=algo,
-#         name=f'test-{algo}',
-#         input_movie_path=input_movie_path,
-#         params=test_params[algo]
-#     )
-#
-#     assert df.iloc[-1]['algo'] == algo
-#     assert df.iloc[-1]['name'] == f'test-{algo}'
-#     assert df.iloc[-1]['params'] == test_params[algo]
-#     assert df.iloc[-1]['outputs'] is None
-#     try:
-#         UUID(df.iloc[-1]['uuid'])
-#     except:
-#         pytest.fail("Something wrong with setting UUID for batch items")
-#
-#     assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
-#            os.path.join(vid_dir, f'{algo}.tif')
-#
-#     process = df.iloc[-1].caiman.run(
-#         backend=SUBPROCESS_BACKEND,
-#         callbacks_finished=None)
-#     process.wait()
-#
-#     df = load_batch(batch_path)
-#     print(df)
-#     print(df.iloc[-1]['outputs']['traceback'])
-#     assert df.iloc[-1]['outputs']['success'] is True
-#     assert df.iloc[-1]['outputs']['traceback'] is None
-#
-#     assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
-#                         ) == \
-#         get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
-#                            )== \
-#         Path(vid_dir,
-#         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
-#
-#     algo = 'cnmf'
-#     print("Testing cnmf")
-#     input_movie_path = os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path'])
-#     df.caiman.add_item(
-#         algo=algo,
-#         name=f'test-{algo}',
-#         input_movie_path=input_movie_path,
-#         params=test_params[algo]
-#     )
-#
-#     assert df.iloc[-1]['algo'] == algo
-#     assert df.iloc[-1]['name'] == f'test-{algo}'
-#     assert df.iloc[-1]['params'] == test_params[algo]
-#     assert df.iloc[-1]['outputs'] is None
-#     try:
-#         UUID(df.iloc[-1]['uuid'])
-#     except:
-#         pytest.fail("Something wrong with setting UUID for batch items")
-#     print('df input path:', df.iloc[-1]['input_movie_path'])
-#     assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == input_movie_path
-#
-#     process = df.iloc[-1].caiman.run(
-#         backend=SUBPROCESS_BACKEND,
-#         callbacks_finished=None)
-#     process.wait()
-#
-#     df = load_batch(batch_path)
-#     print(df)
-#     # Confirm output path is as expected
-#     assert df.iloc[-1]['outputs']['success'] is True
-#     assert df.iloc[-1]['outputs']['traceback'] is None
-#     assert Path(os.path.join(vid_dir,
-#         f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_60_d2_80_d3_1_order_C_frames_2000_.mmap')) == \
-#            get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path']) == \
-#           Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-memmap-path']
-#                        ))
-#
-#     assert Path(os.path.join(vid_dir,
-#         f'{df.iloc[-1]["uuid"]}.hdf5')) == \
-#         get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path']) == \
-#         Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-hdf5-path']))
-#
-# def test_cnmfe():
-#     # Test if pnr and cn alone work
-#     set_parent_data_path(vid_dir)
-#     algo = 'cnmfe'
-#     param_name = 'cnmfe_partial'
-#     df, batch_path = _create_tmp_batch()
-#     print(f"testing cnmfe - partial")
-#     input_movie_path = get_datafile(algo)
-#     print(input_movie_path)
-#     df.caiman.add_item(
-#         algo=algo,
-#         name=f'test-{algo}',
-#         input_movie_path=input_movie_path,
-#         params=test_params[param_name]
-#     )
-#
-#     assert df.iloc[-1]['algo'] == algo
-#     assert df.iloc[-1]['name'] == f'test-{algo}'
-#     assert df.iloc[-1]['params'] == test_params[param_name]
-#     assert df.iloc[-1]['outputs'] is None
-#     try:
-#         UUID(df.iloc[-1]['uuid'])
-#     except:
-#         pytest.fail("Something wrong with setting UUID for batch items")
-#
-#     assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
-#            os.path.join(vid_dir, f'{algo}.tif')
-#
-#     process = df.iloc[-1].caiman.run(
-#         backend=SUBPROCESS_BACKEND,
-#         callbacks_finished=None)
-#     process.wait()
-#
-#     df = load_batch(batch_path)
-#     # Confirm output path is as expected
-#     assert df.iloc[-1]['outputs']['success'] is True
-#     assert df.iloc[-1]['outputs']['traceback'] is None
-#     assert Path(vid_dir,
-#                 'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
-#            get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
-#     assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}_pnr.pikl') == \
-#            get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['pnr'])
-#     assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}_cn_filter.pikl') == \
-#            get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['cn'])
-#
-#     # Test if running full cnmfe works
-#     algo = 'cnmfe'
-#     param_name = 'cnmfe_full'
-#     input_movie_path = get_datafile(algo)
-#     print(input_movie_path)
-#     df.caiman.add_item(
-#          algo=algo,
-#          name=f'test-{algo}',
-#          input_movie_path=input_movie_path,
-#          params=test_params[param_name]
-#      )
-#
-#     assert df.iloc[-1]['algo'] == algo
-#     assert df.iloc[-1]['name'] == f'test-{algo}'
-#     assert df.iloc[-1]['params'] == test_params[param_name]
-#     assert df.iloc[-1]['outputs'] is None
-#     try:
-#         UUID(df.iloc[-1]['uuid'])
-#     except:
-#         pytest.fail("Something wrong with setting UUID for batch items")
-#
-#     assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
-#            os.path.join(vid_dir, f'{algo}.tif')
-#
-#     process = df.iloc[-1].caiman.run(
-#         backend=SUBPROCESS_BACKEND,
-#         callbacks_finished=None)
-#     process.wait()
-#
-#     df = load_batch(batch_path)
-#     # Confirm output path is as expected
-#     assert df.iloc[-1]['outputs']['success'] is True
-#     assert df.iloc[-1]['outputs']['traceback'] is None
-#     assert Path(vid_dir,
-#                 'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
-#         get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
-#     assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}.hdf5') == \
-#         get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs'])
+def test_mcorr():
+    set_parent_data_path(vid_dir)
+    algo = 'mcorr'
+    df, batch_path = _create_tmp_batch()
+    print(f"Testing mcorr")
+    input_movie_path = get_datafile(algo)
+    print(input_movie_path)
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[algo]
+    )
+
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[algo]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
+
+    assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
+                  Path(vid_dir, f"{algo}.tif") == \
+                  Path(vid_dir, df.iloc[-1]['input_movie_path'])
+
+
+    # df.iloc[-1].caiman._run_subprocess()
+    process = df.iloc[-1].caiman.run(
+        backend=SUBPROCESS_BACKEND,
+        callbacks_finished=None)
+    process.wait()
+
+    df = load_batch(batch_path)
+    print(df)
+    print(df.iloc[-1]['outputs']['traceback'])
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+    assert os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
+        os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
+
+    assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
+        get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
+                           )== \
+        Path(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
+
+def test_cnmf():
+    set_parent_data_path(vid_dir)
+    algo = 'mcorr'
+    df, batch_path = _create_tmp_batch()
+    print(f"Testing mcorr")
+    input_movie_path = get_datafile(algo)
+    print(input_movie_path)
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[algo]
+    )
+
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[algo]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
+
+    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
+           os.path.join(vid_dir, f'{algo}.tif')
+
+    process = df.iloc[-1].caiman.run(
+        backend=SUBPROCESS_BACKEND,
+        callbacks_finished=None)
+    process.wait()
+
+    df = load_batch(batch_path)
+    print(df)
+    print(df.iloc[-1]['outputs']['traceback'])
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+
+    assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
+        get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
+                           )== \
+        Path(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
+
+    algo = 'cnmf'
+    print("Testing cnmf")
+    input_movie_path = os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path'])
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[algo]
+    )
+
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[algo]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
+    print('df input path:', df.iloc[-1]['input_movie_path'])
+    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == input_movie_path
+
+    process = df.iloc[-1].caiman.run(
+        backend=SUBPROCESS_BACKEND,
+        callbacks_finished=None)
+    process.wait()
+
+    df = load_batch(batch_path)
+    print(df)
+    # Confirm output path is as expected
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+    assert Path(os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_60_d2_80_d3_1_order_C_frames_2000_.mmap')) == \
+           get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path']) == \
+          Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-memmap-path']
+                       ))
+
+    assert Path(os.path.join(vid_dir,
+        f'{df.iloc[-1]["uuid"]}.hdf5')) == \
+        get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path']) == \
+        Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['cnmf-hdf5-path']))
+
+def test_cnmfe():
+    # Test if pnr and cn alone work
+    set_parent_data_path(vid_dir)
+    algo = 'cnmfe'
+    param_name = 'cnmfe_partial'
+    df, batch_path = _create_tmp_batch()
+    print(f"testing cnmfe - partial")
+    input_movie_path = get_datafile(algo)
+    print(input_movie_path)
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[param_name]
+    )
+
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[param_name]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
+
+    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
+           os.path.join(vid_dir, f'{algo}.tif')
+
+    process = df.iloc[-1].caiman.run(
+        backend=SUBPROCESS_BACKEND,
+        callbacks_finished=None)
+    process.wait()
+
+    df = load_batch(batch_path)
+    # Confirm output path is as expected
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+    assert Path(vid_dir,
+                'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
+           get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
+    assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}_pnr.pikl') == \
+           get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['pnr'])
+    assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}_cn_filter.pikl') == \
+           get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['cn'])
+
+    # Test if running full cnmfe works
+    algo = 'cnmfe'
+    param_name = 'cnmfe_full'
+    input_movie_path = get_datafile(algo)
+    print(input_movie_path)
+    df.caiman.add_item(
+         algo=algo,
+         name=f'test-{algo}',
+         input_movie_path=input_movie_path,
+         params=test_params[param_name]
+     )
+
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[param_name]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
+
+    assert os.path.join(vid_dir, df.iloc[-1]['input_movie_path']) == \
+           os.path.join(vid_dir, f'{algo}.tif')
+
+    process = df.iloc[-1].caiman.run(
+        backend=SUBPROCESS_BACKEND,
+        callbacks_finished=None)
+    process.wait()
+
+    df = load_batch(batch_path)
+    # Confirm output path is as expected
+    assert df.iloc[-1]['outputs']['success'] is True
+    assert df.iloc[-1]['outputs']['traceback'] is None
+    assert Path(vid_dir,
+                'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
+        get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
+    assert Path(tmp_dir, f'{df.iloc[-1]["uuid"]}.hdf5') == \
+        get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs'])
 
 def test_remove_item():
     set_parent_data_path(vid_dir)
