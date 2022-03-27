@@ -118,8 +118,10 @@ def test_mcorr():
     except:
         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert os.path.join(vid_dir,df.iloc[-1]['input_movie_path']) == \
-           os.path.join(vid_dir, f'{algo}.tif')
+    assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
+                  Path(vid_dir, f"{algo}.tif") == \
+                  Path(vid_dir, df.iloc[-1]['input_movie_path'])
+
 
     # df.iloc[-1].caiman._run_subprocess()
     process = df.iloc[-1].caiman.run(
@@ -137,12 +139,12 @@ def test_mcorr():
         os.path.join(vid_dir,
         f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
-    assert Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
-                        )) == \
+    assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
         get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
                            )== \
-        Path(os.path.join(vid_dir,
-        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'))
+        Path(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
 def test_cnmf():
     set_parent_data_path(vid_dir)
@@ -181,12 +183,12 @@ def test_cnmf():
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
 
-    assert Path(os.path.join(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
-                        )) == \
+    assert Path(vid_dir, df.iloc[-1]['outputs']['mcorr-output-path']
+                        ) == \
         get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
                            )== \
-        Path(os.path.join(vid_dir,
-        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap'))
+        Path(vid_dir,
+        f'{df.iloc[-1]["uuid"]}-mcorr_els__d1_60_d2_80_d3_1_order_F_frames_2000_.mmap')
 
     algo = 'cnmf'
     print("Testing cnmf")
