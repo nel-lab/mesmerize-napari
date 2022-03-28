@@ -96,6 +96,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}")
             set_parent_data_path(path)
 
+
+
     @use_open_dir_dialog("Select Parent Data Directory")
     def set_parent_data_path_dialog(self, path):
         self.ui.lineEditParentDataPath.setText(path)
@@ -144,6 +146,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
+        rel_path = os.path.relpath(path, get_parent_data_path())
+        self.ui.batchPath.setText(rel_path)
 
     @use_open_file_dialog('Choose batch', '', ['*.pickle'])
     def open_batch(self, path: str, *args, **kwargs):
@@ -151,6 +155,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.dataframe_file_path = path
 
         self.ui.listWidgetItems.clear()
+        rel_path = os.path.relpath(path, get_parent_data_path())
+        self.ui.batchPath.setText(rel_path)
 
         # Iterate through dataframe, add each item to list widget
         ## For now, instead of name I'm adding the uuid

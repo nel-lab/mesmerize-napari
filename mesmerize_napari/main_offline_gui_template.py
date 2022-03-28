@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './ui_files/main_offline_gui_template.ui'
+# Form implementation generated from reading ui file 'main_offline_gui_template.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -32,6 +32,9 @@ class Ui_MainOfflineGUIWidget(object):
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.batchPath = QtWidgets.QLabel(self.groupBox_3)
+        self.batchPath.setObjectName("batchPath")
+        self.verticalLayout_2.addWidget(self.batchPath)
         self.listWidgetItems = QtWidgets.QListWidget(self.groupBox_3)
         self.listWidgetItems.setObjectName("listWidgetItems")
         self.verticalLayout_2.addWidget(self.listWidgetItems)
@@ -44,7 +47,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.toolBox = QtWidgets.QToolBox(self.tab_compute)
         self.toolBox.setObjectName("toolBox")
         self.page_3 = QtWidgets.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 323, 472))
+        self.page_3.setGeometry(QtCore.QRect(0, 0, 315, 462))
         self.page_3.setObjectName("page_3")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.page_3)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
@@ -121,7 +124,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.verticalLayout_5.addItem(spacerItem)
         self.toolBox.addItem(self.page_3, "")
         self.page = QtWidgets.QWidget()
-        self.page.setGeometry(QtCore.QRect(0, 0, 323, 472))
+        self.page.setGeometry(QtCore.QRect(0, 0, 315, 462))
         self.page.setObjectName("page")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.page)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
@@ -130,7 +133,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.verticalLayout_6.addWidget(self.textBrowserParams)
         self.toolBox.addItem(self.page, "")
         self.page_2 = QtWidgets.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 323, 472))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 315, 462))
         self.page_2.setObjectName("page_2")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
@@ -215,6 +218,7 @@ class Ui_MainOfflineGUIWidget(object):
         MainOfflineGUIWidget.setWindowTitle(_translate("MainOfflineGUIWidget", "Form"))
         self.label_2.setText(_translate("MainOfflineGUIWidget", "CaImAn Offline"))
         self.groupBox_3.setTitle(_translate("MainOfflineGUIWidget", "Batch Items"))
+        self.batchPath.setText(_translate("MainOfflineGUIWidget", "No Batch Open"))
         self.lineEditParentDataPath.setPlaceholderText(_translate("MainOfflineGUIWidget", "Parent Data Path"))
         self.pushButtonParentDataPath.setText(_translate("MainOfflineGUIWidget", "..."))
         self.label.setText(_translate("MainOfflineGUIWidget", "Recent Parent Data Paths"))
@@ -246,3 +250,13 @@ class Ui_MainOfflineGUIWidget(object):
         self.radioButtonROIMask.setText(_translate("MainOfflineGUIWidget", "Mask ROIS"))
         self.radioButtonROIOutline.setText(_translate("MainOfflineGUIWidget", "Outline ROIs"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_visualize), _translate("MainOfflineGUIWidget", "Visualize"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainOfflineGUIWidget = QtWidgets.QWidget()
+    ui = Ui_MainOfflineGUIWidget()
+    ui.setupUi(MainOfflineGUIWidget)
+    MainOfflineGUIWidget.show()
+    sys.exit(app.exec_())

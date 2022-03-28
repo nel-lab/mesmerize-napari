@@ -39,6 +39,13 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
+        <widget class="QLabel" name="batchPath">
+         <property name="text">
+          <string>No Batch Open</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QListWidget" name="listWidgetItems"/>
        </item>
       </layout>
@@ -62,8 +69,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>323</width>
-             <height>472</height>
+             <width>315</width>
+             <height>462</height>
             </rect>
            </property>
            <attribute name="label">
@@ -232,8 +239,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>323</width>
-             <height>472</height>
+             <width>315</width>
+             <height>462</height>
             </rect>
            </property>
            <attribute name="label">
@@ -250,8 +257,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>323</width>
-             <height>472</height>
+             <width>315</width>
+             <height>462</height>
             </rect>
            </property>
            <attribute name="label">
