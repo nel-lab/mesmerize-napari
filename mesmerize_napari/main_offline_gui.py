@@ -85,6 +85,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
+        self.ui.pushButtonVizDownsampledMCorrrMovie.clicked.connect(self.downsample_mcorr)
         # self.evaluate_components_window = EvalComponentsWidgets(parent=self)
         # self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
 
@@ -350,7 +351,16 @@ class MainOfflineGUI(QtWidgets.QWidget):
         r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
         getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
 
-
+    def downsample_mcorr(self):
+        # s = self.selected_series()
+        # algo = s['algo']
+        # if algo == 'mcorr':
+        #     output_path = s.mcorr.get_output_path()
+        #     self._open_movie(output_path, name=f'mcorr: {s["name"]}')
+        #     Yr, dims, T = cm.load_memmap(self.input_movie_path)
+        #     images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        #     self.viewer.add_image(images, name=name, colormap='gnuplot2')
+        pass
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return MainOfflineGUI
