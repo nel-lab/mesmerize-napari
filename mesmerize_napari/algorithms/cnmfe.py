@@ -9,7 +9,10 @@ import pandas as pd
 import pickle
 import traceback
 from napari.viewer import Viewer
+from pathlib import Path
 
+if __name__ == '__main__':
+    from mesmerize_napari.core import set_parent_data_path, get_full_data_path
 
 @click.command()
 @click.option('--batch-path', type=str)
@@ -20,6 +23,9 @@ def main(batch_path, uuid, data_path: str = None):
     item = df[df['uuid'] == uuid].squeeze()
 
     input_movie_path = item['input_movie_path']
+    set_parent_data_path(data_path)
+    input_movie_path = str(get_full_data_path(input_movie_path))
+
     params = item['params']
     print("cnmfe params:", params)
 
@@ -53,11 +59,18 @@ def main(batch_path, uuid, data_path: str = None):
         )
 
         if not params['do_cnmfe']:
-             pnr_output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}_pnr.pikl").resolve())
-             cn_output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}_cn_filter.pikl").resolve())
+             pnr_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_pnr.pikl").resolve())
+             cn_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_cn_filter.pikl").resolve())
 
              pickle.dump(cn_filter, open(pnr_output_path, 'wb'), protocol=4)
              pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
+
+             if data_path is not None:
+                 pnr_output_path = Path(pnr_output_path).relative_to(data_path)
+                 cn_output_path = Path(cn_output_path).relative_to(data_path)
+                 cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
+             else:
+                 cnmfe_memmap_path = fname_new
 
              output_file_list = \
                  {
@@ -67,11 +80,12 @@ def main(batch_path, uuid, data_path: str = None):
 
              print(output_file_list)
 
+
              d = dict()
              d.update(
                  {
                      "cnmfe_outputs": output_file_list,
-                     "cnmfe_memmap": fname_new,
+                     "cnmfe_memmap": cnmfe_memmap_path,
                      "success": True,
                      "traceback": None
                  }
@@ -99,14 +113,21 @@ def main(batch_path, uuid, data_path: str = None):
             print("evaluating components")
             cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
 
-            output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
+            output_path = str(Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
             cnm.save(output_path)
+
+            if data_path is not None:
+                output_path = Path(output_path).relative_to(data_path)
+                cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
+            else:
+                output_path = Path(output_path)
+                cnmfe_memmap_path = Path(fname_new)
 
             d = dict()
             d.update(
                 {
                     "cnmfe_outputs": output_path,
-                    "cnmfe_memmap": fname_new,
+                    "cnmfe_memmap": cnmfe_memmap_path,
                     "success": True,
                     "traceback": None
                 }

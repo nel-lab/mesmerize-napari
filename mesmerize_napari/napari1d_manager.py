@@ -149,6 +149,7 @@ class CNMFViewer:
         n_lines = self.cnmf_obj.estimates.C.shape[0]
         xs = [np.linspace(0, n_pts, n_pts)]
         ys = []
+
         for i in range(n_lines):
             ys.append(self.cnmf_obj.estimates.C[i])
 
