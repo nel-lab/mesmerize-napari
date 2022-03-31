@@ -112,16 +112,6 @@ def main(batch_path, uuid, data_path: str = None):
     # Save DataFrame to disk
     df.to_pickle(batch_path)
 
-def load_projection(viewer, r, proj_type):
-    # fname_new = r['outputs'][0]['projection-paths']
-    projections = ['mean-projection-paths', 'std-projection-paths', 'max-projection-paths']
-    print(r['outputs'][0])
-    for proj in projections:
-        if str(proj_type) in proj:
-            image = np.load(r['outputs'][0][str(proj)])
-            name = f"{proj_type}_projection"
-
-    viewer.add_image(image, name=name)
 
 if __name__ == "__main__":
     main()

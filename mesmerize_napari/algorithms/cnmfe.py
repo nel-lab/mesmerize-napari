@@ -159,32 +159,5 @@ def main(batch_path, uuid, data_path: str = None):
     df.to_pickle(batch_path)
 
 
-def load_projection(viewer, batch_item: pd.Series, proj_type):
-    """
-    Load correlation map from cnmf memmap file
-
-    Parameters
-    ----------
-    viewer: Viewer
-        Viewer instance to load the projection in
-
-    batch_item: pd.Series
-
-    proj_type: None
-        Not used
-
-    """
-    # Get cnmf memmap
-    fname_new = batch_item["outputs"].item()["cnmfe_memmap"]
-    # Get order f images
-    Yr, dims, T = cm.load_memmap(fname_new)
-    images = np.reshape(Yr.T, [T] + list(dims), order='F')
-    # Get correlation map
-    Cn = cm.local_correlations(images.transpose(1, 2, 0))
-    Cn[np.isnan(Cn)] = 0
-    # Add correlation map to napari viewer
-    viewer.add_image(Cn, name="Correlation Map (1P)")
-
-
 if __name__ == "__main__":
     main()
