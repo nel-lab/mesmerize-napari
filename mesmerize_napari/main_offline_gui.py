@@ -347,12 +347,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
-        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
-        uuid = item_gui.data(3)
-        # Algorithm name for selected item
-        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
-        r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
-        getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
+        s = self.selected_series()
+        projection = s.caiman.get_projection(proj_type=proj_type)
+        self.viewer.add_image(projection, name=f'{proj_type} projection {s["name"]}', colormap='gnuplot2')
 
     def downsample_mcorr(self):
         # s = self.selected_series()

@@ -95,9 +95,9 @@ def main(batch_path, uuid, data_path: str = None):
             {
                 "mcorr-output-path": output_path,
                 "corr-img-path": cn_path,
-                "mean-projection-paths": mean_projection_path,
-                "std-projection-paths": std_projection_path,
-                "max-projection-paths": max_projection_path,
+                "mean-projection-path": mean_projection_path,
+                "std-projection-path": std_projection_path,
+                "max-projection-path": max_projection_path,
                 "success": True,
                 "traceback": None
             }

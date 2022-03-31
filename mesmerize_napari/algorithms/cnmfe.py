@@ -41,7 +41,7 @@ def main(batch_path, uuid, data_path: str = None):
     try:
         fname_new = cm.save_memmap(
             [input_movie_path],
-            base_name=f'{uuid}_cnmf-memmap',
+            base_name=f'{uuid}_cnmf-memmap_',
             order='C',
             dview=dview
         )
@@ -51,6 +51,14 @@ def main(batch_path, uuid, data_path: str = None):
 
         Yr, dims, T = cm.load_memmap(fname_new)
         images = np.reshape(Yr.T, [T] + list(dims), order='F')
+
+        mean_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_mean_projection.npy'))
+        std_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_std_projection.npy'))
+        max_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_max_projection.npy'))
+        np.save(mean_projection_path, np.mean(images, axis=0))
+        np.save(std_projection_path, np.std(images, axis=0))
+        np.save(max_projection_path, np.max(images, axis=0))
+
         downsample_ratio = params['downsample_ratio']
         # in fname new load in memmap order C
 
@@ -78,6 +86,9 @@ def main(batch_path, uuid, data_path: str = None):
                      "cnmf-memmap-path": cnmfe_memmap_path,
                      "corr-img-path": cn_output_path,
                      "pnr-img-path": pnr_output_path,
+                     "mean-projection-path": mean_projection_path,
+                     "std-projection-path": std_projection_path,
+                     "max-projection-path": max_projection_path,
                      "success": True,
                      "traceback": None
                  }
@@ -130,6 +141,9 @@ def main(batch_path, uuid, data_path: str = None):
                     "cnmf-memmap-path": cnmfe_memmap_path,
                     "corr-img-path": cn_output_path,
                     "pnr-image-path": pnr_output_path,
+                    "mean-projection-path": mean_projection_path,
+                    "std-projection-path": std_projection_path,
+                    "max-projection-path": max_projection_path,
                     "success": True,
                     "traceback": None
                 }

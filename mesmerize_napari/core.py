@@ -398,8 +398,9 @@ class CaimanSeriesExtensions:
         return np.load(str(path))
 
     @validate()
-    def get_projection(self, proj_type: str):
-        pass
+    def get_projection(self, proj_type: str) -> np.ndarray:
+        path = get_full_data_path(self._series['outputs'][f"{proj_type}-projection-path"])
+        return np.load(path)
 
     # TODO: finish the copy_data() extension
     # def copy_data(self, new_parent_dir: Union[Path, str]):
