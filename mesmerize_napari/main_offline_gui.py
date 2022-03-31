@@ -340,6 +340,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def load_correlation_image(self):
         s = self.selected_series()
         corr_img = s.caiman.get_correlation_image()
+        if s['algo'] == 'cnmfe':
+            pnr_img = s.caiman.get_pnr_image()
+            self.viewer.add_image(pnr_img, name=f'pnr: {s["name"]}', colormap='gnuplot2')
         self.viewer.add_image(corr_img, name=f'corr: {s["name"]}', colormap='gnuplot2')
 
     def view_projections(self):

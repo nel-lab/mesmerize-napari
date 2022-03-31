@@ -41,7 +41,7 @@ def main(batch_path, uuid, data_path: str = None):
     try:
         fname_new = cm.save_memmap(
             [input_movie_path],
-            base_name='memmap_',
+            base_name=f'{uuid}_cnmf-memmap',
             order='C',
             dview=dview
         )
@@ -59,11 +59,11 @@ def main(batch_path, uuid, data_path: str = None):
         )
 
         if not params['do_cnmfe']:
-             pnr_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_pnr.pikl").resolve())
-             cn_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_cn_filter.pikl").resolve())
+             pnr_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
+             cn_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
 
-             pickle.dump(cn_filter, open(pnr_output_path, 'wb'), protocol=4)
-             pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
+             np.save(str(cn_output_path), cn_filter, allow_pickle=False)
+             np.save(str(pnr_output_path), pnr, allow_pickle=False)
 
              if data_path is not None:
                  pnr_output_path = Path(pnr_output_path).relative_to(data_path)
@@ -72,20 +72,12 @@ def main(batch_path, uuid, data_path: str = None):
              else:
                  cnmfe_memmap_path = fname_new
 
-             output_file_list = \
-                 {
-                     'cn': cn_output_path,
-                     'pnr': pnr_output_path,
-                 }
-
-             print(output_file_list)
-
-
              d = dict()
              d.update(
                  {
-                     "cnmfe_outputs": output_file_list,
-                     "cnmfe_memmap": cnmfe_memmap_path,
+                     "cnmf-memmap-path": cnmfe_memmap_path,
+                     "corr-img-path": cn_output_path,
+                     "pnr-img-path": pnr_output_path,
                      "success": True,
                      "traceback": None
                  }
@@ -93,6 +85,13 @@ def main(batch_path, uuid, data_path: str = None):
              print('dict for non-cnmfe:', d)
 
         else:
+            cn_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
+            pnr_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
+
+            np.save(str(cn_output_path), cn_filter, allow_pickle=False)
+            np.save(str(pnr_output_path), pnr, allow_pickle=False)
+            #pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
+
             cnmfe_params_dict = \
                 {
                     "method_init": 'corr_pnr',
@@ -119,6 +118,7 @@ def main(batch_path, uuid, data_path: str = None):
             if data_path is not None:
                 output_path = Path(output_path).relative_to(data_path)
                 cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
+                cn_output_path = Path(cn_output_path).relative_to(data_path)
             else:
                 output_path = Path(output_path)
                 cnmfe_memmap_path = Path(fname_new)
@@ -126,8 +126,10 @@ def main(batch_path, uuid, data_path: str = None):
             d = dict()
             d.update(
                 {
-                    "cnmfe_outputs": output_path,
-                    "cnmfe_memmap": cnmfe_memmap_path,
+                    "cnmf-hdf5-path": output_path,
+                    "cnmf-memmap-path": cnmfe_memmap_path,
+                    "corr-img-path": cn_output_path,
+                    "pnr-image-path": pnr_output_path,
                     "success": True,
                     "traceback": None
                 }
