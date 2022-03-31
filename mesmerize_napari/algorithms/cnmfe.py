@@ -67,8 +67,8 @@ def main(batch_path, uuid, data_path: str = None):
         )
 
         if not params['do_cnmfe']:
-             pnr_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
-             cn_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
+             pnr_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
+             cn_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
 
              np.save(str(cn_output_path), cn_filter, allow_pickle=False)
              np.save(str(pnr_output_path), pnr, allow_pickle=False)
@@ -96,8 +96,8 @@ def main(batch_path, uuid, data_path: str = None):
              print('dict for non-cnmfe:', d)
 
         else:
-            cn_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
-            pnr_output_path = str(Path(batch_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
+            cn_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
+            pnr_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
 
             np.save(str(cn_output_path), cn_filter, allow_pickle=False)
             np.save(str(pnr_output_path), pnr, allow_pickle=False)
@@ -123,21 +123,22 @@ def main(batch_path, uuid, data_path: str = None):
             print("evaluating components")
             cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
 
-            output_path = str(Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
+            output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}.hdf5").resolve())
             cnm.save(output_path)
 
             if data_path is not None:
-                output_path = Path(output_path).relative_to(data_path)
+                cnmf_hdf5_path = Path(output_path).relative_to(data_path)
                 cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
                 cn_output_path = Path(cn_output_path).relative_to(data_path)
+                pnr_output_path = Path(pnr_output_path).relative_to(data_path)
             else:
-                output_path = Path(output_path)
-                cnmfe_memmap_path = Path(fname_new)
+                cnmf_hdf5_path = output_path
+                cnmfe_memmap_path = fname_new
 
             d = dict()
             d.update(
                 {
-                    "cnmf-hdf5-path": output_path,
+                    "cnmf-hdf5-path": cnmf_hdf5_path,
                     "cnmf-memmap-path": cnmfe_memmap_path,
                     "corr-img-path": cn_output_path,
                     "pnr-image-path": pnr_output_path,
