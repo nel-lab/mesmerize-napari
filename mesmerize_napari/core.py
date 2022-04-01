@@ -449,6 +449,7 @@ class CNMFExtensions:
         """
         return get_full_data_path(self._series['outputs']['cnmf-hdf5-path'])
 
+    #@lru_cache(MESMERIZE_LRU_CACHE)
     @validate('cnmf')
     def get_output(self) -> CNMF:
         """
@@ -457,6 +458,8 @@ class CNMFExtensions:
         CNMF
             Returns the Caiman CNMF object
         """
+        # Need to create a cache object that takes the item's UUID and returns based on that
+        # collective global cache
         return load_CNMF(self.get_output_path())
 
     @validate('cnmf')
