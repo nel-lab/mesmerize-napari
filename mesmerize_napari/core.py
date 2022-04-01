@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from .algorithms import *
-from .utils import make_runfile, IS_WINDOWS, MESMERIZE_LRU_CACHE
+from .utils import make_runfile, IS_WINDOWS, MESMERIZE_LRU_CACHE, validate_path
 import pandas as pd
 import pathlib
 from pathlib import Path
@@ -55,6 +55,7 @@ def set_parent_data_path(path: Union[Path, str]) -> Path:
         Full parent data path
     """
     global PARENT_DATA_PATH
+    path = validate_path(path)
     PARENT_DATA_PATH = Path(path)
     return PARENT_DATA_PATH
 
@@ -85,6 +86,7 @@ def load_batch(batch_file: Union[str, pathlib.Path]) -> pd.DataFrame:
 
     """
     global CURRENT_BATCH_PATH
+    batch_file = validate_path(batch_file)
 
     df = pd.read_pickle(
         pathlib.Path(batch_file)
@@ -119,6 +121,8 @@ def create_batch(path: str = None, remove_existing: bool = False) -> pd.DataFram
         New empty batch DataFrame
 
     """
+    path = validate_path(path)
+
     if pathlib.Path(path).is_file():
         if remove_existing:
             os.remove(path)
@@ -195,6 +199,7 @@ class CaimanDataFrameExtensions:
 
         global PARENT_DATA_PATH
         input_movie_path = Path(input_movie_path)
+        validate_path(input_movie_path)
 
         if PARENT_DATA_PATH is not None:
             input_movie_path = input_movie_path.relative_to(PARENT_DATA_PATH)
@@ -439,6 +444,7 @@ class CNMFExtensions:
             raise TypeError(f"Input movie for CNMF was not a memmap, path to input movie is:\n"
                             f"{movie_path}")
 
+    # TODO: Cache this globally so that a common upper cache limit is valid for ALL batch items
     @validate('cnmf')
     def get_output_path(self) -> Path:
         """
@@ -462,8 +468,9 @@ class CNMFExtensions:
         # collective global cache
         return load_CNMF(self.get_output_path())
 
+    # TODO: Make the ``ixs`` parameter for spatial stuff optional
     @validate('cnmf')
-    def get_spatial_masks(self, ixs: np.ndarray, threshold: float = 0.01) -> np.ndarray:
+    def get_spatial_masks(self, ixs_components: np.ndarray, threshold: float = 0.01) -> np.ndarray:
         """
         Get binary masks of the spatial components at the given `ixs`
 
@@ -471,7 +478,7 @@ class CNMFExtensions:
 
         Parameters
         ----------
-        ixs: np.ndarray
+        ixs_components: np.ndarray
             numpy array containing integer indices for which you want spatial masks
 
         threshold: float
@@ -489,9 +496,9 @@ class CNMFExtensions:
         if dims is None:
             dims = cnmf_obj.estimates.dims
 
-        masks = np.zeros(shape=(dims[0], dims[1], len(ixs)), dtype=bool)
+        masks = np.zeros(shape=(dims[0], dims[1], len(ixs_components)), dtype=bool)
 
-        for n, ix in enumerate(ixs):
+        for n, ix in enumerate(ixs_components):
             s = cnmf_obj.estimates.A[:, ix].toarray().reshape(cnmf_obj.dims)
             s[s >= threshold] = 1
             s[s < threshold] = 0
@@ -500,6 +507,7 @@ class CNMFExtensions:
 
         return masks
 
+    # TODO: Cache this globally so that a common upper cache limit is valid for ALL batch items
     @staticmethod
     @lru_cache(5)
     def _get_spatial_contour_coors(cnmf_obj: CNMF):
@@ -519,20 +527,32 @@ class CNMFExtensions:
         return contours
 
     @validate('cnmf')
-    def get_spatial_contours(self, ixs: np.ndarray) -> List[dict]:
+    def get_spatial_contours(self, ixs_components: np.ndarray) -> List[dict]:
+        """
+        Get the contours for the spatial footprints
+
+        Parameters
+        ----------
+        ixs_components: np.ndarray
+            indices for which to return spatial contours
+
+        Returns
+        -------
+
+        """
         cnmf_obj = self.get_output()
         contours = self._get_spatial_contour_coors(cnmf_obj)
 
         contours_selection = list()
         for i in range(len(contours)):
-            if i in ixs:
+            if i in ixs_components:
                 contours_selection.append(contours[i])
 
         return contours_selection
 
     @validate('cnmf')
-    def get_spatial_contour_coors(self, ixs: np.ndarray) -> List[np.ndarray]:
-        contours = self.get_spatial_contours(ixs)
+    def get_spatial_contour_coors(self, ixs_components: np.ndarray) -> List[np.ndarray]:
+        contours = self.get_spatial_contours(ixs_components)
 
         coordinates = []
         for contour in contours:
@@ -540,6 +560,67 @@ class CNMFExtensions:
             coordinates.append(coors[~np.isnan(coors).any(axis=1)])
 
         return coordinates
+
+    @validate('cnmf')
+    def get_temporal_components(self, ixs_components: np.ndarray = None, add_background: bool = True) -> np.ndarray:
+        """
+        Get the temporal components for this CNMF item
+
+        Parameters
+        ----------
+        ixs_components: np.ndarray
+            indices for which to return temporal components, ``cnmf.estimates.C``
+
+        add_background: bool
+            if ``True``, add the temporal background, basically ``cnmf.estimates.C + cnmf.estimates.f``
+
+        Returns
+        -------
+
+        """
+        cnmf_obj = self.get_output()
+
+        if ixs_components is None:
+            ixs_components = np.arange(0, cnmf_obj.estimates.C.shape[0])
+
+        C = cnmf_obj.estimates.C[ixs_components]
+        f = cnmf_obj.estimates.f[ixs_components]
+
+        if add_background:
+            return C + f
+        else:
+            return C
+
+    # TODO: Cache this globally so that a common upper cache limit is valid for ALL batch items
+    @validate('cnmf')
+    def get_reconstructed_movie(self, ixs_frames: Tuple[int, int] = None, add_background: bool = True) -> np.ndarray:
+        """
+        Return the reconstructed movie, (A * C) + (b * f)
+
+        Parameters
+        ----------
+        ixs_frames: Tuple[int, int]
+            (start_frame, stop_frame), return frames in this range including the ``start_frame``, upto and not
+            including the ``stop_frame``
+
+        add_background: bool
+            if ``True``, add the spatial & temporal background, b * f
+
+        Returns
+        -------
+        np.ndarray
+            shape is [n_frames, x_pixels, y_pixels]
+        """
+        cnmf_obj = self.get_output()
+
+        if ixs_frames is None:
+            ixs_frames = (0, cnmf_obj.estimates.C.shape[1])
+
+        dn = (cnmf_obj.estimates.A.dot(cnmf_obj.estimates.C[:, ixs_frames[0]:ixs_frames[1]]))
+
+        if add_background:
+            dn += (cnmf_obj.estimates.b.dot(cnmf_obj.estimates.f[:, ixs_frames[0]:ixs_frames[1]]))
+        return dn.reshape(cnmf_obj.dims, order='F').transpose([0, 1])
 
 
 @pd.api.extensions.register_series_accessor("mcorr")
@@ -552,10 +633,26 @@ class MCorrExtensions:
 
     @validate('mcorr')
     def get_output_path(self) -> Path:
+        """
+        Get the path to the motion corrected output memmap file
+
+        Returns
+        -------
+        Path
+            path to the motion correction output memmap file
+        """
         return get_full_data_path(self._series['outputs']['mcorr-output-path'])
 
     @validate('mcorr')
     def get_output(self) -> np.ndarray:
+        """
+        Get the motion corrected output as a memmaped numpy array, allows fast random-access scrolling.
+
+        Returns
+        -------
+        np.ndarray
+            memmap numpy array of the motion corrected movie
+        """
         path = self.get_output_path()
         Yr, dims, T = load_memmap(str(path))
         mc_movie = np.reshape(Yr.T, [T] + list(dims), order='F')
