@@ -18,6 +18,7 @@ import numpy as np
 import psutil
 from .napari1d_manager import CNMFViewer
 from .evaluate_components import EvalComponentsWidgets
+from .config import CONFIG
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -84,6 +85,16 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.qprocess: QtCore.QProcess = None
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
+
+        if CONFIG.recent_parent_paths is not None:
+            self.ui.comboBoxRecentParentDataPaths.addItems(
+                [str(p) for p in CONFIG.recent_parent_paths]
+            )
+
+        if CONFIG.recent_batch_paths is not None:
+            self.ui.comboBoxRecentBatches.addItems(
+                [str(p) for p in CONFIG.recent_batch_paths]
+            )
 
         # self.evaluate_components_window = EvalComponentsWidgets(parent=self)
         # self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
