@@ -91,10 +91,18 @@ class MainOfflineGUI(QtWidgets.QWidget):
                 [str(p) for p in CONFIG.recent_parent_paths]
             )
 
+        self.ui.comboBoxRecentParentDataPaths.currentTextChanged.connect(
+            lambda text: self.ui.lineEditParentDataPath.setText(text)
+        )
+
         if CONFIG.recent_batch_paths is not None:
             self.ui.comboBoxRecentBatches.addItems(
                 [str(p) for p in CONFIG.recent_batch_paths]
             )
+
+        self.ui.comboBoxRecentBatches.currentTextChanged.connect(
+            lambda text: self.open_batch(path=text, qdialog=False)
+        )
 
         # self.evaluate_components_window = EvalComponentsWidgets(parent=self)
         # self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
