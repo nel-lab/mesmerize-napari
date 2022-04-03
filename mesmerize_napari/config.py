@@ -11,14 +11,14 @@ class _Config:
     recent_batch_paths: List[Path] = None
 
     def __init__(self):
-        self._config_keys = [k[0] for k in getmembers(self) if not k[0].startswith('_')]
-
         config_dir = Path(os.environ[HOME], '.mesmerize-napari')
 
         if not config_dir.is_dir():
             os.makedirs(config_dir, exist_ok=True)
 
         self._config_path = config_dir.joinpath('config.json')
+        
+        self._config_keys = [k[0] for k in getmembers(self) if not k[0].startswith('_')]
 
         if not self._config_path.is_file():
             self._write()
@@ -38,7 +38,8 @@ class _Config:
 
     def __setattr__(self, key, value):
         super(_Config, self).__setattr__(key, value)
-        self._write()
+        if not key.startswith('_'):
+            self._write()
 
 
 CONFIG = _Config()
