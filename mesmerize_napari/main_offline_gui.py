@@ -87,18 +87,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
         if CONFIG.recent_parent_paths is not None:
-            self.ui.comboBoxRecentParentDataPaths.addItems(
-                [str(p) for p in CONFIG.recent_parent_paths]
-            )
+            self.ui.comboBoxRecentParentDataPaths.addItems(CONFIG.recent_parent_paths)
 
         self.ui.comboBoxRecentParentDataPaths.currentTextChanged.connect(
             lambda text: self.ui.lineEditParentDataPath.setText(text)
         )
 
         if CONFIG.recent_batch_paths is not None:
-            self.ui.comboBoxRecentBatches.addItems(
-                [str(p) for p in CONFIG.recent_batch_paths]
-            )
+            self.ui.comboBoxRecentBatches.addItems(CONFIG.recent_batch_paths)
 
         self.ui.comboBoxRecentBatches.currentTextChanged.connect(
             lambda text: self.open_batch(path=text, qdialog=False)
@@ -167,12 +163,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self._config_add_recent_paths()
 
     def _config_add_recent_paths(self):
-        CONFIG.recent_batch_paths += Path(self.dataframe_file_path)
+        CONFIG.recent_batch_paths += [str(self.dataframe_file_path)]
         CONFIG.recent_batch_paths = sorted(
             set(CONFIG.recent_batch_paths), key=CONFIG.recent_batch_paths.index
         )
 
-        CONFIG.recent_parent_paths += Path(get_parent_data_path())
+        CONFIG.recent_parent_paths += [str(get_parent_data_path())]
         CONFIG.recent_parent_paths = sorted(
             set(CONFIG.recent_parent_paths), key=CONFIG.recent_parent_paths.index
         )

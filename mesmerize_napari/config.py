@@ -7,8 +7,8 @@ from .utils import HOME
 
 
 class _Config:
-    recent_parent_paths: List[Path] = list()
-    recent_batch_paths: List[Path] = list()
+    recent_parent_paths: List[str] = list()
+    recent_batch_paths: List[str] = list()
 
     def __init__(self):
         config_dir = Path(os.environ[HOME], '.mesmerize-napari')
