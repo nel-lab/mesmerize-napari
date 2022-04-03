@@ -156,6 +156,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
 
+        self._config_add_recent_paths()
+
+    def _config_add_recent_paths(self):
         CONFIG.recent_batch_paths += Path(self.dataframe_file_path)
         CONFIG.recent_batch_paths = sorted(
             set(CONFIG.recent_batch_paths), key=CONFIG.recent_batch_paths.index
@@ -185,6 +188,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             item.setData(3, uuid)
 
             self.set_list_widget_item_color(i)
+
+        self._config_add_recent_paths()
 
     def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
         if self.dataframe is None:
