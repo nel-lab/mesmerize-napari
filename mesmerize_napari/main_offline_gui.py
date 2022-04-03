@@ -267,18 +267,23 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.qprocess = None
 
     def set_params_text(self, ix):
-        p = self.dataframe.iloc[ix]['params']
-        print(p)
-        u = self.dataframe.iloc[ix]['uuid']
-        s = pprint.pformat(p)
-        s = f"{u}\n\n{s}"
+        u = self._selected_uuid()
+        s = self.selected_series()
 
-        if self.dataframe.iloc[ix]['outputs'] is not None:
-            if self.dataframe.iloc[ix]['outputs']['traceback'] is not None:
-                tb = self.dataframe.iloc[ix]['outputs']['traceback']
-                s += f"\n\n{tb}"
+        params = s['params']
+        params_str = pprint.pformat(params)
+        input_movie_path = s['input_movie_path']
 
-        self.ui.textBrowserParams.setText(s)
+        output_str = f"uuid:\n{u}\n" \
+                     f"input_movie_path:\n{input_movie_path}\n\n" \
+                     f"params:\n{params_str}"
+
+        if s['outputs'] is not None:
+            if s['outputs']['traceback'] is not None:
+                tb = s['outputs']['traceback']
+                output_str += f"\n\ntraceback:{tb}"
+
+        self.ui.textBrowserParams.setText(output_str)
 
     def set_list_widget_item_color(self, ix: int, color: str = None):
         if color is not None:
