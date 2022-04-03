@@ -156,6 +156,16 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
 
+        CONFIG.recent_batch_paths += Path(self.dataframe_file_path)
+        CONFIG.recent_batch_paths = sorted(
+            set(CONFIG.recent_batch_paths), key=CONFIG.recent_batch_paths.index
+        )
+
+        CONFIG.recent_parent_paths += Path(get_parent_data_path())
+        CONFIG.recent_parent_paths = sorted(
+            set(CONFIG.recent_parent_paths), key=CONFIG.recent_parent_paths.index
+        )
+
     @use_open_file_dialog('Choose batch', '', ['*.pickle'])
     def open_batch(self, path: str, *args, **kwargs):
         self.dataframe = load_batch(path)
