@@ -51,9 +51,10 @@ class CNMFViewer:
         if movie_path.endswith('mmap'):
             Yr, dims, T = load_memmap(movie_path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')
-            self.viewer.add_image(images, name="Movie", colormap='gnuplot2')
+            self.viewer.add_image(images, name="Movie",colormap='gray')
         else:
-            self.viewer.open(movie_path, colormap='gnuplot2')
+            #, colormap='gnuplot2'
+            self.viewer.open(movie_path, colormap='gray')
 
         self.cnmf_obj = batch_item.cnmf.get_output()
         self.roi_type = roi_type
@@ -137,7 +138,7 @@ class CNMFViewer:
 
         print("good traces", np.shape(good_traces))
         print("bad traces", np.shape(bad_traces))
-        self.viewer1d = napari_plot.Viewer()
+        self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
         self.viewer1d.axis.y_label = "Intensity"
         self.viewer1d.axis.x_label = "Time"
