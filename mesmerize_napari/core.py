@@ -620,7 +620,7 @@ class CNMFExtensions:
 
         if add_background:
             dn += (cnmf_obj.estimates.b.dot(cnmf_obj.estimates.f[:, ixs_frames[0]:ixs_frames[1]]))
-        return dn.reshape(cnmf_obj.dims, order='F').transpose([0, 1])
+        return dn.reshape(cnmf_obj.dims + (-1,), order='F').transpose([2, 0, 1])
 
 
 @pd.api.extensions.register_series_accessor("mcorr")
