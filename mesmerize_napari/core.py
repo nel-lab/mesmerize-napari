@@ -584,7 +584,7 @@ class CNMFExtensions:
             ixs_components = np.arange(0, cnmf_obj.estimates.C.shape[0])
 
         C = cnmf_obj.estimates.C[ixs_components]
-        f = cnmf_obj.estimates.f[ixs_components]
+        f = cnmf_obj.estimates.f
 
         if add_background:
             return C + f
