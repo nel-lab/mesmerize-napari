@@ -45,10 +45,8 @@ class CNMFViewer:
     def __init__(self, batch_item: pd.Series, roi_type: str):
         self.batch_item = batch_item
         self.viewer = napari.Viewer(title="CNMF Visualization")
-        self.eval_gui = EvalComponentsWidgets(cnmf_viewer=self)
-        self.eval_gui.show()
 
-        self.viz_gui = VizWidget(cnmf_viewer=self.viewer, batch_item=batch_item)
+        self.viz_gui = VizWidget(cnmf_viewer=self, batch_item=batch_item)
         self.viewer.window.add_dock_widget(self.viz_gui, area='bottom', add_vertical_stretch=False,name="Visualization")
         #self.viz_gui.show()
 
@@ -98,7 +96,7 @@ class CNMFViewer:
 
             edge_colors, face_colors = self.get_colors(alpha_edge=0.0, alpha_face=0.5)
             for i in range(len(masks_good)):
-                self.viewer.add_labels(data=masks_good[:, :, i])#, color=colors_good[i])
+                self.viewer.add_labels(data=masks_good[:, :, i], opacity=0.5)#, color=colors_good[i])
 
             # for i in range(len(masks_bad)):
             #     viewer.add_labels(data=masks_bad[:, :, i], color=masks_bad[i])

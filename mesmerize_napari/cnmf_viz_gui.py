@@ -1,8 +1,10 @@
 from PyQt5 import QtWidgets
 from .viz_pytemplate import Ui_VizualizationWidget
+from .evaluate_components import EvalComponentsWidgets
 from .utils import *
 from .core import *
 import caiman as cm
+
 
 
 class VizWidget(QtWidgets.QDockWidget):
@@ -12,10 +14,12 @@ class VizWidget(QtWidgets.QDockWidget):
         self.ui.setupUi(self)
         self.batch_item = batch_item
         self.cnmf_viewer = cnmf_viewer
+        self.eval_gui = EvalComponentsWidgets(cnmf_viewer=cnmf_viewer)
 
         self.ui.pushButtonInputMovie.clicked.connect(self.view_input)
         self.ui.pushButtonCnImage.clicked.connect(self.load_correlation_image)
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
+        self.ui.pushButtonEvalGui.clicked.connect(self.show_eval_gui)
     def _open_movie(self, path: Union[Path, str]):
         file_ext = pathlib.Path(path).suffix
         if file_ext == '.mmap':
@@ -37,3 +41,6 @@ class VizWidget(QtWidgets.QDockWidget):
         proj_type = self.ui.comboBoxProjection.currentText()
         projection = self.batch_item.caiman.get_projection(proj_type=proj_type)
         self.cnmf_viewer.add_image(projection, name=f'{proj_type} projection: {self.batch_item["name"]}', colormap='gray')
+
+    def show_eval_gui(self):
+        self.eval_gui.show()
