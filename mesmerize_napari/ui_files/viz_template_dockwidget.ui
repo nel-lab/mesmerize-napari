@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VizualizationWidget</class>
+ <widget class="QDockWidget" name="VizualizationWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>221</width>
+    <height>157</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Vizualization Widget</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <widget class="QPushButton" name="pushButtonEvalGui">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>201</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Evaluation GUI</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBoxProjection">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>81</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>mean</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>std</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>max</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="pushButtonViewProjection">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>10</y>
+      <width>111</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>View Projection</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonCnImage">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>40</y>
+      <width>111</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Correlation Image</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonInputMovie">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>81</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Input Movie</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonCnmfMovie">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>201</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reconstructed post-CNMF Movie</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

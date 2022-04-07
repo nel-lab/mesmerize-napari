@@ -349,7 +349,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
         s = self.selected_series()
         projection = s.caiman.get_projection(proj_type=proj_type)
-        self.viewer.add_image(projection, name=f'{proj_type} projection {s["name"]}', colormap='gnuplot2')
+        self.viewer.add_image(projection, name=f'{proj_type}: projection {s["name"]}', colormap='gnuplot2')
 
     def downsample_mcorr(self):
         # s = self.selected_series()

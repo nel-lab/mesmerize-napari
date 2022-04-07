@@ -15,6 +15,7 @@ import pandas as pd
 import pyqtgraph as pg
 from napari._qt.widgets.qt_viewer_dock_widget import QtViewerDockWidget
 from .core import CaimanSeriesExtensions, CNMFExtensions
+from .cnmf_viz_gui import VizWidget
 from tqdm import tqdm
 from PyQt5 import QtWidgets, QtCore
 from .evaluate_components import EvalComponentsWidgets
@@ -47,14 +48,22 @@ class CNMFViewer:
         self.eval_gui = EvalComponentsWidgets(cnmf_viewer=self)
         self.eval_gui.show()
 
-        movie_path = str(batch_item.caiman.get_input_movie_path())
-        if movie_path.endswith('mmap'):
-            Yr, dims, T = load_memmap(movie_path)
-            images = np.reshape(Yr.T, [T] + list(dims), order='F')
-            self.viewer.add_image(images, name="Movie",colormap='gray')
-        else:
-            #, colormap='gnuplot2'
-            self.viewer.open(movie_path, colormap='gray')
+        self.viz_gui = VizWidget(cnmf_viewer=self.viewer, batch_item=batch_item)
+        self.viewer.window.add_dock_widget(self.viz_gui, area='bottom', add_vertical_stretch=False,name="Visualization")
+        #self.viz_gui.show()
+
+        # Load correlation map first
+        corr_img = batch_item.caiman.get_correlation_image()
+
+        self.viewer.add_image(corr_img, name=f'corr: {batch_item["name"]}', colormap='gray')
+        # movie_path = str(batch_item.caiman.get_input_movie_path())
+        # if movie_path.endswith('mmap'):
+        #     Yr, dims, T = load_memmap(movie_path)
+        #     images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        #     self.viewer.add_image(images, name="Movie",colormap='gray')
+        # else:
+        #     #, colormap='gnuplot2'
+        #     self.viewer.open(movie_path, colormap='gray')
 
         self.cnmf_obj = batch_item.cnmf.get_output()
         self.roi_type = roi_type
@@ -87,17 +96,18 @@ class CNMFViewer:
             masks_good = self.batch_item.cnmf.get_spatial_masks(self.cnmf_obj.estimates.idx_components)
             masks_bad = self.batch_item.cnmf.get_spatial_masks(self.cnmf_obj.estimates.idx_components_bad)
 
+            edge_colors, face_colors = self.get_colors(alpha_edge=0.0, alpha_face=0.5)
             for i in range(len(masks_good)):
                 self.viewer.add_labels(data=masks_good[:, :, i])#, color=colors_good[i])
 
             # for i in range(len(masks_bad)):
             #     viewer.add_labels(data=masks_bad[:, :, i], color=masks_bad[i])
 
-            # viewer.add_labels(
+            # self.viewer.add_labels(
             #     data=masks_good,
-            #     # color=colors_good
+            #     color=face_colors
             # )
-            #
+
             # viewer.add_labels(
             #     data=masks_bad,
             #     # color=colors_bad
@@ -108,12 +118,13 @@ class CNMFViewer:
         self.spatial_layer.edge_color = edge_colors
         self.temporal_layer.color = edge_colors
 
-    def get_colors(self):
+    def get_colors(self, alpha_edge=0.7, alpha_face=0.0):
         n_components = self.cnmf_obj.estimates.A.shape[1]
         colors = np.vstack(auto_colormap(
             n_colors=n_components,
             cmap='hsv',
-            output='mpl'
+            output='mpl',
+            alpha=alpha_edge
         ))
 
         colors[self.cnmf_obj.estimates.idx_components, -1] = 0.8
@@ -123,7 +134,7 @@ class CNMFViewer:
             n_colors=n_components,
             cmap='hsv',
             output='mpl',
-            alpha=0.0
+            alpha=alpha_face
         ))
 
         return colors, face_colors
