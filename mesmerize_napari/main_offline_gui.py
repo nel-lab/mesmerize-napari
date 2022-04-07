@@ -17,6 +17,7 @@ import caiman as cm
 import numpy as np
 import psutil
 from .napari1d_manager import CNMFViewer
+import matplotlib.pyplot as plt
 from .evaluate_components import EvalComponentsWidgets
 
 if not IS_WINDOWS:
@@ -329,6 +330,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
         if algo == 'mcorr':
             output_path = s.mcorr.get_output_path()
             self._open_movie(output_path, name=f'mcorr: {s["name"]}')
+            if s['params']['mcorr_kwargs']['pw_rigid'] == False:
+                shifts = s.caiman.get_shifts()
+                plt.plot(shifts)
+            else:
+                shifts = s.caiman.get_shifts()
+                x_shifts = shifts[0]
+                y_shifts = shifts[1]
+
 
         elif algo in ['cnmf', 'cnmfe']:
             if self.ui.radioButtonROIMask.isChecked():

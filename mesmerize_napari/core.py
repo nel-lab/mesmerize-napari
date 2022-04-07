@@ -377,6 +377,10 @@ class CaimanSeriesExtensions:
 
         return get_full_data_path(self._series['input_movie_path'])
 
+    def get_shifts(self) -> Path:
+        path = get_full_data_path(self._series['outputs']['shifts'])
+        return np.load(str(path))
+
     @validate()
     def get_correlation_image(self) -> np.ndarray:
         """
@@ -387,6 +391,7 @@ class CaimanSeriesExtensions:
         """
         path = get_full_data_path(self._series['outputs']['corr-img-path'])
         return np.load(str(path))
+    @validate()
     def get_pnr_image(self) -> np.ndarray:
         """
         Returns

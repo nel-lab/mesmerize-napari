@@ -47,21 +47,13 @@ class CNMFViewer:
         self.viewer = napari.Viewer(title="CNMF Visualization")
 
         self.viz_gui = VizWidget(cnmf_viewer=self, batch_item=batch_item)
-        self.viewer.window.add_dock_widget(self.viz_gui, area='bottom', add_vertical_stretch=False,name="Visualization")
+        self.viewer.window.add_dock_widget(self.viz_gui, area='bottom', name="Visualization")
         #self.viz_gui.show()
 
         # Load correlation map first
         corr_img = batch_item.caiman.get_correlation_image()
 
         self.viewer.add_image(corr_img, name=f'corr: {batch_item["name"]}', colormap='gray')
-        # movie_path = str(batch_item.caiman.get_input_movie_path())
-        # if movie_path.endswith('mmap'):
-        #     Yr, dims, T = load_memmap(movie_path)
-        #     images = np.reshape(Yr.T, [T] + list(dims), order='F')
-        #     self.viewer.add_image(images, name="Movie",colormap='gray')
-        # else:
-        #     #, colormap='gnuplot2'
-        #     self.viewer.open(movie_path, colormap='gray')
 
         self.cnmf_obj = batch_item.cnmf.get_output()
         self.roi_type = roi_type
