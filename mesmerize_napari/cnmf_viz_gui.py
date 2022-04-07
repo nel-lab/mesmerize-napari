@@ -25,9 +25,9 @@ class VizWidget(QtWidgets.QDockWidget):
         if file_ext == '.mmap':
             Yr, dims, T = cm.load_memmap(path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')
-            self.cnmf_viewer.add_image(images, colormap='gray')
+            self.cnmf_viewer.viewer.add_image(images, colormap='gray')
         else:
-            self.cnmf_viewer.open(path, colormap='gray')
+            self.cnmf_viewer.viewer.open(path, colormap='gray')
 
     def view_input(self):
         path = self.batch_item.caiman.get_input_movie_path()
@@ -36,11 +36,11 @@ class VizWidget(QtWidgets.QDockWidget):
 
     def load_correlation_image(self):
         corr_img = self.batch_item.caiman.get_correlation_image()
-        self. cnmf_viewer.add_image(corr_img, name=f'corr: {self.batch_item["name"]}', colormap='gray')
+        self. cnmf_viewer.viewer.add_image(corr_img, name=f'corr: {self.batch_item["name"]}', colormap='gray')
     def view_projections(self):
         proj_type = self.ui.comboBoxProjection.currentText()
         projection = self.batch_item.caiman.get_projection(proj_type=proj_type)
-        self.cnmf_viewer.add_image(projection, name=f'{proj_type} projection: {self.batch_item["name"]}', colormap='gray')
+        self.cnmf_viewer.viewer.add_image(projection, name=f'{proj_type} projection: {self.batch_item["name"]}', colormap='gray')
 
     def show_eval_gui(self):
         self.eval_gui.show()
