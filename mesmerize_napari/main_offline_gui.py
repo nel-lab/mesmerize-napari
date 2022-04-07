@@ -85,6 +85,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
+        self.mcorr_params_gui = None
+        self.cnmf_params_gui = None
+        self.cnmfe_params_gui = None
+
+
         # self.evaluate_components_window = EvalComponentsWidgets(parent=self)
         # self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
 
@@ -302,16 +307,22 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
 
     def show_cnmf_params_gui(self):
-        self.cnmf_gui = CNMFWidget(parent=self)
-        self.cnmf_gui.show()
+        if self.cnmf_params_gui is None:
+            self.cnmf_params_gui = CNMFWidget(parent=self)
+
+        self.cnmf_params_gui.show()
 
     def show_mcorr_params_gui(self):
-        self.mcorr_gui = MCORRWidget(parent=self)
-        self.mcorr_gui.show()
+        if self.mcorr_params_gui is None:
+            self.mcorr_params_gui = MCORRWidget(parent=self)
+
+        self.mcorr_params_gui.show()
 
     def show_cnmfe_params_gui(self):
-        self.cnmfe_gui = CNMFEWidget(parent=self)
-        self.cnmfe_gui.show()
+        if self.cnmfe_params_gui is None:
+            self.cnmfe_params_gui = CNMFEWidget(parent=self)
+
+        self.cnmfe_params_gui.show()
 
     def _selected_uuid(self) -> str:
         # Find uuid for selected item
