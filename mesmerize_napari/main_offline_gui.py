@@ -16,7 +16,7 @@ from . import algorithms
 import caiman as cm
 import numpy as np
 import psutil
-from .napari1d_manager import CNMFViewer
+from .napari1d_manager import CNMFViewer, MCORRViewer
 import matplotlib.pyplot as plt
 from .evaluate_components import EvalComponentsWidgets
 
@@ -328,16 +328,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         s = self.selected_series()  # pandas series corresponding to the item
         algo = s['algo']
         if algo == 'mcorr':
-            output_path = s.mcorr.get_output_path()
-            self._open_movie(output_path, name=f'mcorr: {s["name"]}')
-            if s['params']['mcorr_kwargs']['pw_rigid'] == False:
-                shifts = s.caiman.get_shifts()
-                plt.plot(shifts)
-            else:
-                shifts = s.caiman.get_shifts()
-                x_shifts = shifts[0]
-                y_shifts = shifts[1]
-
+            MCORRViewer(self.selected_series())
 
         elif algo in ['cnmf', 'cnmfe']:
             if self.ui.radioButtonROIMask.isChecked():

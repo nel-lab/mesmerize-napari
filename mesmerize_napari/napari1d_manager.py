@@ -175,3 +175,74 @@ class CNMFViewer:
         time = self.viewer.dims.current_step[0]
         print(time)
         self.infline_layer.move(index=0, pos=[time])
+
+class MCORRViewer:
+    def __init__(self, batch_item: pd.Series):
+        self.batch_item = batch_item
+        self.viewer = napari.Viewer(title="MCORR Visualization")
+
+        # Load correlation map first
+        corr_img = batch_item.caiman.get_correlation_image()
+
+        #self.viewer.add_image(corr_img, name=f'corr: {batch_item["name"]}', colormap='gray')
+
+        self.mcorr_obj = batch_item.mcorr.get_output()
+        self.viewer.add_image(self.mcorr_obj, name = f'MC Movie: {batch_item["name"]}', colormap='gray')
+
+        # plot shifts
+        if batch_item['params']['mcorr_kwargs']['pw_rigid'] == False:
+            self.plot_rig_shifts()
+        else:
+            self.plot_els_shifts()
+
+    def plot_rig_shifts(self):
+        shifts = self.batch_item.caiman.get_shifts()
+
+        self.viewer1d = napari_plot.Viewer(show=False)
+        qt_viewer = QtViewer(self.viewer1d)
+        self.viewer1d.axis.y_label = "Pixels"
+        self.viewer1d.axis.x_label = "Time"
+        self.viewer1d.text_overlay.visible = True
+        self.viewer1d.text_overlay.position = "top_right"
+        self.viewer1d.text_overlay.font_size = 15
+
+        n_pts = shifts.shape[0]
+        n_lines = shifts.shape[1]
+        xs = [np.linspace(0, n_pts, n_pts)]
+        ys = []
+
+        for i in range(n_lines):
+            ys.append(shifts[:,i])
+
+        self.temporal_layer = self.viewer1d.add_multi_line(
+            data=dict(xs=xs, ys=ys),
+            color=self.get_colors(n_components=n_lines),
+            name='temporal'
+        )
+
+        self.viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
+
+        # Create layer for infinite line
+        self.infline_layer = self.viewer1d.add_inf_line(
+            data=[1], orientation="vertical", color="red", width=3, name="slider"
+        )
+        self.infline_layer.move(index=0, pos=[1000])
+        self.viewer1d.add_layer(layer=self.infline_layer)
+        self.viewer.dims.events.current_step.connect(self.update_slider)
+
+    def plot_els_shifts(self):
+        x_shifts, y_shifts = self.batch_item.caiman.get_shifts()
+
+    def get_colors(self, n_components):
+        colors = np.vstack(auto_colormap(
+            n_colors=n_components,
+            cmap='hsv',
+            output='mpl',
+            alpha=1
+        ))
+        return colors
+
+    def update_slider(self, event):
+        time = self.viewer.dims.current_step[0]
+        print(time)
+        self.infline_layer.move(index=0, pos=[time])
