@@ -470,6 +470,7 @@ class CNMFExtensions:
         """
         return get_full_data_path(self._series['outputs']['cnmf-hdf5-path'])
 
+    #@lru_cache(MESMERIZE_LRU_CACHE)
     @validate('cnmf')
     def get_output(self) -> CNMF:
         """
@@ -478,6 +479,8 @@ class CNMFExtensions:
         CNMF
             Returns the Caiman CNMF object
         """
+        # Need to create a cache object that takes the item's UUID and returns based on that
+        # collective global cache
         return load_CNMF(self.get_output_path())
 
     # TODO: Make the ``ixs`` parameter for spatial stuff optional
@@ -596,7 +599,7 @@ class CNMFExtensions:
             ixs_components = np.arange(0, cnmf_obj.estimates.C.shape[0])
 
         C = cnmf_obj.estimates.C[ixs_components]
-        f = cnmf_obj.estimates.f[ixs_components]
+        f = cnmf_obj.estimates.f
 
         if add_background:
             return C + f
@@ -632,7 +635,7 @@ class CNMFExtensions:
 
         if add_background:
             dn += (cnmf_obj.estimates.b.dot(cnmf_obj.estimates.f[:, ixs_frames[0]:ixs_frames[1]]))
-        return dn.reshape(cnmf_obj.dims, order='F').transpose([0, 1])
+        return dn.reshape(cnmf_obj.dims + (-1,), order='F').transpose([2, 0, 1])
 
 
 @pd.api.extensions.register_series_accessor("mcorr")
