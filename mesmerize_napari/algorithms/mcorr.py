@@ -1,6 +1,5 @@
 import traceback
 import click
-import numpy as np
 import caiman as cm
 from caiman.source_extraction.cnmf.params import CNMFParams
 from caiman.motion_correction import MotionCorrect
@@ -9,6 +8,8 @@ import psutil
 import pandas as pd
 import os
 from pathlib import Path
+import numpy as np
+
 
 # prevent circular import
 if __name__ == '__main__':
@@ -63,6 +64,17 @@ def main(batch_path, uuid, data_path: str = None):
 
         print("mc finished successfully!")
 
+        print("computing projections")
+        Yr, dims, T = cm.load_memmap(get_full_data_path(output_path))
+        images = np.reshape(Yr.T, [T] + list(dims), order='F')
+
+        paths=[]
+        for proj_type in ['mean', 'std', 'max']:
+            p_img = getattr(np, f"nan{proj_type}")(images, axis=0)
+            np.save(str(Path(input_movie_path).parent.joinpath(f"{uuid}_{proj_type}.npy")), p_img)
+            paths.append(str(Path(input_movie_path).parent.joinpath(f"{uuid}_{proj_type}.npy")))
+
+
         print("Computing correlation image")
         Cns = local_correlations_movie_offline([mc.mmap_file[0]],
                                                remove_baseline=True, window=1000, stride=1000,
@@ -78,11 +90,27 @@ def main(batch_path, uuid, data_path: str = None):
 
         print("finished computing correlation image")
 
+        # Compute shifts
+        if params['mcorr_kwargs']['pw_rigid'] == True:
+            x_shifts = mc.x_shifts_els
+            y_shifts = mc.y_shifts_els
+            shifts = [x_shifts, y_shifts]
+            shift_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_shifts.npy"))
+            np.save(shift_path, shifts)
+        else:
+            shifts = mc.shifts_rig
+            shift_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_shifts.npy"))
+            np.save(shift_path, shifts)
+
         d = dict()
         d.update(
             {
                 "mcorr-output-path": output_path,
                 "corr-img-path": cn_path,
+                "mean-projection-path": paths[0],
+                "std-projection-path": paths[1],
+                "max-projection-path": paths[2],
+                "shifts": shift_path,
                 "success": True,
                 "traceback": None
             }

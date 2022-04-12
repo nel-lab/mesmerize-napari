@@ -58,6 +58,13 @@ def main(batch_path, uuid, data_path: str = None):
 
         Yr, dims, T = cm.load_memmap(fname_new)
         images = np.reshape(Yr.T, [T] + list(dims), order='F')
+
+        mean_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_mean_projection.npy'))
+        std_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_std_projection.npy'))
+        max_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_max_projection.npy'))
+        np.save(mean_projection_path, np.mean(images, axis=0))
+        np.save(std_projection_path, np.std(images, axis=0))
+        np.save(max_projection_path, np.max(images, axis=0))
         # in fname new load in memmap order C
 
         cm.stop_server(dview=dview)
@@ -108,6 +115,9 @@ def main(batch_path, uuid, data_path: str = None):
                 "cnmf-hdf5-path": cnmf_hdf5_path,
                 "cnmf-memmap-path": cnmf_memmap_path,
                 "corr-img-path": corr_img_path,
+                "mean-projection-path": mean_projection_path,
+                "std-projection-path": std_projection_path,
+                "max-projection-path": max_projection_path,
                 "success": True,
                 "traceback": None
             }

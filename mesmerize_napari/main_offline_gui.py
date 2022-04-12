@@ -16,7 +16,8 @@ from . import algorithms
 import caiman as cm
 import numpy as np
 import psutil
-from .napari1d_manager import CNMFViewer
+from .napari1d_manager import CNMFViewer, MCORRViewer
+import matplotlib.pyplot as plt
 from .evaluate_components import EvalComponentsWidgets
 
 if not IS_WINDOWS:
@@ -85,10 +86,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
+        self.ui.pushButtonVizDownsampledMCorrrMovie.clicked.connect(self.downsample_mcorr)
+
         self.mcorr_params_gui = None
         self.cnmf_params_gui = None
         self.cnmfe_params_gui = None
-
 
         # self.evaluate_components_window = EvalComponentsWidgets(parent=self)
         # self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
@@ -342,8 +344,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         s = self.selected_series()  # pandas series corresponding to the item
         algo = s['algo']
         if algo == 'mcorr':
-            output_path = s.mcorr.get_output_path()
-            self._open_movie(output_path, name=f'mcorr: {s["name"]}')
+            MCORRViewer(self.selected_series())
 
         elif algo in ['cnmf', 'cnmfe']:
             if self.ui.radioButtonROIMask.isChecked():
@@ -355,18 +356,27 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def load_correlation_image(self):
         s = self.selected_series()
         corr_img = s.caiman.get_correlation_image()
+        if s['algo'] == 'cnmfe':
+            pnr_img = s.caiman.get_pnr_image()
+            self.viewer.add_image(pnr_img, name=f'pnr: {s["name"]}', colormap='gnuplot2')
         self.viewer.add_image(corr_img, name=f'corr: {s["name"]}', colormap='gnuplot2')
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
-        item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
-        uuid = item_gui.data(3)
-        # Algorithm name for selected item
-        algo = self.dataframe.loc[self.dataframe['uuid'] == uuid, 'algo'].item()
-        r = self.dataframe.loc[self.dataframe['uuid'] == uuid]  # pandas Series corresponding to this item
-        getattr(algorithms, algo).load_projection(self.viewer, r, proj_type)
+        s = self.selected_series()
+        projection = s.caiman.get_projection(proj_type=proj_type)
+        self.viewer.add_image(projection, name=f'{proj_type}: projection {s["name"]}', colormap='gnuplot2')
 
-
+    def downsample_mcorr(self):
+        # s = self.selected_series()
+        # algo = s['algo']
+        # if algo == 'mcorr':
+        #     output_path = s.mcorr.get_output_path()
+        #     self._open_movie(output_path, name=f'mcorr: {s["name"]}')
+        #     Yr, dims, T = cm.load_memmap(self.input_movie_path)
+        #     images = np.reshape(Yr.T, [T] + list(dims), order='F')
+        #     self.viewer.add_image(images, name=name, colormap='gnuplot2')
+        pass
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return MainOfflineGUI

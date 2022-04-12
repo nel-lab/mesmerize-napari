@@ -9,7 +9,10 @@ import pandas as pd
 import pickle
 import traceback
 from napari.viewer import Viewer
+from pathlib import Path
 
+if __name__ == '__main__':
+    from mesmerize_napari.core import set_parent_data_path, get_full_data_path
 
 @click.command()
 @click.option('--batch-path', type=str)
@@ -20,6 +23,9 @@ def main(batch_path, uuid, data_path: str = None):
     item = df[df['uuid'] == uuid].squeeze()
 
     input_movie_path = item['input_movie_path']
+    set_parent_data_path(data_path)
+    input_movie_path = str(get_full_data_path(input_movie_path))
+
     params = item['params']
     print("cnmfe params:", params)
 
@@ -35,7 +41,7 @@ def main(batch_path, uuid, data_path: str = None):
     try:
         fname_new = cm.save_memmap(
             [input_movie_path],
-            base_name='memmap_',
+            base_name=f'{uuid}_cnmf-memmap_',
             order='C',
             dview=dview
         )
@@ -45,6 +51,14 @@ def main(batch_path, uuid, data_path: str = None):
 
         Yr, dims, T = cm.load_memmap(fname_new)
         images = np.reshape(Yr.T, [T] + list(dims), order='F')
+
+        mean_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_mean_projection.npy'))
+        std_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_std_projection.npy'))
+        max_projection_path = str(Path(input_movie_path).parent.joinpath(f'{uuid}_max_projection.npy'))
+        np.save(mean_projection_path, np.mean(images, axis=0))
+        np.save(std_projection_path, np.std(images, axis=0))
+        np.save(max_projection_path, np.max(images, axis=0))
+
         downsample_ratio = params['downsample_ratio']
         # in fname new load in memmap order C
 
@@ -53,25 +67,28 @@ def main(batch_path, uuid, data_path: str = None):
         )
 
         if not params['do_cnmfe']:
-             pnr_output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}_pnr.pikl").resolve())
-             cn_output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}_cn_filter.pikl").resolve())
+             pnr_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
+             cn_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
 
-             pickle.dump(cn_filter, open(pnr_output_path, 'wb'), protocol=4)
-             pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
+             np.save(str(cn_output_path), cn_filter, allow_pickle=False)
+             np.save(str(pnr_output_path), pnr, allow_pickle=False)
 
-             output_file_list = \
-                 {
-                     'cn': cn_output_path,
-                     'pnr': pnr_output_path,
-                 }
-
-             print(output_file_list)
+             if data_path is not None:
+                 pnr_output_path = Path(pnr_output_path).relative_to(data_path)
+                 cn_output_path = Path(cn_output_path).relative_to(data_path)
+                 cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
+             else:
+                 cnmfe_memmap_path = fname_new
 
              d = dict()
              d.update(
                  {
-                     "cnmfe_outputs": output_file_list,
-                     "cnmfe_memmap": fname_new,
+                     "cnmf-memmap-path": cnmfe_memmap_path,
+                     "corr-img-path": cn_output_path,
+                     "pnr-img-path": pnr_output_path,
+                     "mean-projection-path": mean_projection_path,
+                     "std-projection-path": std_projection_path,
+                     "max-projection-path": max_projection_path,
                      "success": True,
                      "traceback": None
                  }
@@ -79,6 +96,13 @@ def main(batch_path, uuid, data_path: str = None):
              print('dict for non-cnmfe:', d)
 
         else:
+            cn_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
+            pnr_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
+
+            np.save(str(cn_output_path), cn_filter, allow_pickle=False)
+            np.save(str(pnr_output_path), pnr, allow_pickle=False)
+            #pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
+
             cnmfe_params_dict = \
                 {
                     "method_init": 'corr_pnr',
@@ -99,14 +123,28 @@ def main(batch_path, uuid, data_path: str = None):
             print("evaluating components")
             cnm.estimates.evaluate_components(images, cnm.params, dview=dview)
 
-            output_path = str(pathlib.Path(batch_path).parent.joinpath(f"{uuid}.hdf5").resolve())
+            output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}.hdf5").resolve())
             cnm.save(output_path)
+
+            if data_path is not None:
+                cnmf_hdf5_path = Path(output_path).relative_to(data_path)
+                cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
+                cn_output_path = Path(cn_output_path).relative_to(data_path)
+                pnr_output_path = Path(pnr_output_path).relative_to(data_path)
+            else:
+                cnmf_hdf5_path = output_path
+                cnmfe_memmap_path = fname_new
 
             d = dict()
             d.update(
                 {
-                    "cnmfe_outputs": output_path,
-                    "cnmfe_memmap": fname_new,
+                    "cnmf-hdf5-path": cnmf_hdf5_path,
+                    "cnmf-memmap-path": cnmfe_memmap_path,
+                    "corr-img-path": cn_output_path,
+                    "pnr-image-path": pnr_output_path,
+                    "mean-projection-path": mean_projection_path,
+                    "std-projection-path": std_projection_path,
+                    "max-projection-path": max_projection_path,
                     "success": True,
                     "traceback": None
                 }
@@ -119,33 +157,6 @@ def main(batch_path, uuid, data_path: str = None):
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # save dataframe to disc
     df.to_pickle(batch_path)
-
-
-def load_projection(viewer, batch_item: pd.Series, proj_type):
-    """
-    Load correlation map from cnmf memmap file
-
-    Parameters
-    ----------
-    viewer: Viewer
-        Viewer instance to load the projection in
-
-    batch_item: pd.Series
-
-    proj_type: None
-        Not used
-
-    """
-    # Get cnmf memmap
-    fname_new = batch_item["outputs"].item()["cnmfe_memmap"]
-    # Get order f images
-    Yr, dims, T = cm.load_memmap(fname_new)
-    images = np.reshape(Yr.T, [T] + list(dims), order='F')
-    # Get correlation map
-    Cn = cm.local_correlations(images.transpose(1, 2, 0))
-    Cn[np.isnan(Cn)] = 0
-    # Add correlation map to napari viewer
-    viewer.add_image(Cn, name="Correlation Map (1P)")
 
 
 if __name__ == "__main__":
