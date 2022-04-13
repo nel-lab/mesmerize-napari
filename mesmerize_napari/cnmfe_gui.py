@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets
 from .cnmfe_pytemplate import Ui_CNMFEDockWidget
-from .utils import *
-from .core import *
+from mesmerize_napari.core.utils import *
 
 
 class CNMFEWidget(QtWidgets.QDockWidget):

@@ -7,18 +7,17 @@ from PyQt5 import QtWidgets
 from qtpy import QtWidgets
 from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
-from .utils import *
+from .core.utils import *
 from .core import *
 import pandas as pd
 from functools import partial
 import pprint
-from . import algorithms
 import caiman as cm
 import numpy as np
 import psutil
 from .napari1d_manager import CNMFViewer, MCORRViewer
-import matplotlib.pyplot as plt
-from .evaluate_components import EvalComponentsWidgets
+from pathlib import Path
+from PyQt5 import QtCore
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -117,7 +116,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def _open_movie(self, path: Union[Path, str], name: str = None):
         self.input_movie_path = str(path)
-        file_ext = pathlib.Path(self.input_movie_path).suffix
+        file_ext = Path(self.input_movie_path).suffix
         if file_ext == '.mmap':
             Yr, dims, T = cm.load_memmap(self.input_movie_path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')
@@ -222,7 +221,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         std_out = self._print_qprocess_std_out
 
         self.qprocess = self.dataframe.iloc[index].caiman.run(
-            backend=QPROCESS_BACKEND,
+            batch_path=self.dataframe.paths.get_batch_path(),
+            backend=COMPUTE_BACKEND_QPROCESS,
             callbacks_finished=callbacks,
             callback_std_out=std_out
         )

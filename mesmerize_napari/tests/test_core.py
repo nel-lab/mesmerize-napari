@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from ..core import create_batch, load_batch, CaimanDataFrameExtensions, CaimanSeriesExtensions,\
     set_parent_data_path, get_parent_data_path, get_full_data_path
-from ..core import DATAFRAME_COLUMNS, SUBPROCESS_BACKEND
+from ..core.batch_utils import DATAFRAME_COLUMNS, COMPUTE_BACKEND_SUBPROCESS
 from uuid import uuid4
 from typing import *
 import pytest
@@ -123,7 +123,8 @@ def test_mcorr():
                   vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
 
     process = df.iloc[-1].caiman.run(
-        backend=SUBPROCESS_BACKEND,
+        batch_path=df.paths.get_batch_path(),
+        backend=COMPUTE_BACKEND_SUBPROCESS,
         callbacks_finished=None)
     process.wait()
 
@@ -172,7 +173,8 @@ def test_cnmf():
            vid_dir.joinpath(f'{algo}.tif')
 
     process = df.iloc[-1].caiman.run(
-        backend=SUBPROCESS_BACKEND,
+        batch_path=df.paths.get_batch_path(),
+        backend=COMPUTE_BACKEND_SUBPROCESS,
         callbacks_finished=None)
     process.wait()
 
@@ -211,7 +213,8 @@ def test_cnmf():
     assert vid_dir.joinpath(df.iloc[-1]['input_movie_path']) == input_movie_path
 
     process = df.iloc[-1].caiman.run(
-        backend=SUBPROCESS_BACKEND,
+        batch_path=df.paths.get_batch_path(),
+        backend=COMPUTE_BACKEND_SUBPROCESS,
         callbacks_finished=None)
     process.wait()
 
@@ -261,7 +264,8 @@ def test_cnmfe():
            vid_dir.joinpath(f'{algo}.tif')
 
     process = df.iloc[-1].caiman.run(
-        backend=SUBPROCESS_BACKEND,
+        batch_path=df.paths.get_batch_path(),
+        backend=COMPUTE_BACKEND_SUBPROCESS,
         callbacks_finished=None)
     process.wait()
 
@@ -270,12 +274,12 @@ def test_cnmfe():
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
     assert vid_dir.joinpath(
-                'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
-           get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
-    assert tmp_dir.joinpath(f'{df.iloc[-1]["uuid"]}_pnr.pikl') == \
-           get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['pnr'])
-    assert tmp_dir.joinpath(f'{df.iloc[-1]["uuid"]}_cn_filter.pikl') == \
-           get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs']['cn'])
+        f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
+           get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path'])
+    assert vid_dir.joinpath(f'{df.iloc[-1]["uuid"]}_pn.npy') == \
+           get_full_data_path(df.iloc[-1]['outputs']['pnr-image-path'])
+    assert vid_dir.joinpath(f'{df.iloc[-1]["uuid"]}_cn.npy') == \
+           get_full_data_path(df.iloc[-1]['outputs']['corr-img-path'])
 
     # Test if running full cnmfe works
     algo = 'cnmfe'
@@ -302,7 +306,8 @@ def test_cnmfe():
            vid_dir.joinpath(f'{algo}.tif')
 
     process = df.iloc[-1].caiman.run(
-        backend=SUBPROCESS_BACKEND,
+        batch_path=df.paths.get_batch_path(),
+        backend=COMPUTE_BACKEND_SUBPROCESS,
         callbacks_finished=None)
     process.wait()
 
@@ -311,10 +316,10 @@ def test_cnmfe():
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
     assert vid_dir.joinpath(
-                'memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
-        get_full_data_path(df.iloc[-1]['outputs']['cnmfe_memmap'])
-    assert tmp_dir.joinpath(f'{df.iloc[-1]["uuid"]}.hdf5') == \
-        get_full_data_path(df.iloc[-1]['outputs']['cnmfe_outputs'])
+        f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_128_d2_128_d3_1_order_C_frames_1000_.mmap') == \
+        get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path'])
+    assert vid_dir.joinpath(f'{df.iloc[-1]["uuid"]}.hdf5') == \
+        get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path'])
 
 
 def test_remove_item():

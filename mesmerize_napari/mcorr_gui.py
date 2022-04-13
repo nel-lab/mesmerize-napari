@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 from .mcorr_pytemplate import Ui_MCORRWidget
 from .core import *
+from typing import *
 
 
 class MCORRWidget(QtWidgets.QDockWidget):
