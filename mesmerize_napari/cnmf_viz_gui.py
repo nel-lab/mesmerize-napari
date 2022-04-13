@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 from .viz_pytemplate import Ui_VizualizationWidget
 from .evaluate_components import EvalComponentsWidgets
-from .utils import *
+from mesmerize_napari.core.utils import *
 from .core import *
 import caiman as cm
 

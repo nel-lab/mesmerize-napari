@@ -1,24 +1,12 @@
 """Create simple callback that modifies the line visual."""
-from skimage import data
-from skimage import measure
-import numpy as np
 import napari
-from napari import Viewer
 from napari.layers import Shapes
 import napari_plot
 from napari_plot._qt.qt_viewer import QtViewer
-from qtpy.QtWidgets import QVBoxLayout
-from caiman import load_memmap
-from mesmerize_napari.utils import *
-import caiman as cm
+from mesmerize_napari.core.utils import *
 import pandas as pd
 import pyqtgraph as pg
-from napari._qt.widgets.qt_viewer_dock_widget import QtViewerDockWidget
-from .core import CaimanSeriesExtensions, CNMFExtensions
 from .cnmf_viz_gui import VizWidget
-from tqdm import tqdm
-from PyQt5 import QtWidgets, QtCore
-from .evaluate_components import EvalComponentsWidgets
 
 
 def _get_roi_colormap(self, n_colors) -> Tuple[List[np.ndarray], List[np.ndarray]]:

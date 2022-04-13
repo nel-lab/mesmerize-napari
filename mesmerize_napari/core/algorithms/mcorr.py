@@ -13,7 +13,7 @@ import numpy as np
 
 # prevent circular import
 if __name__ == '__main__':
-    from mesmerize_napari.core import set_parent_data_path, get_full_data_path
+    from mesmerize_napari.core.batch_utils import set_parent_data_path, get_full_data_path
 
 
 @click.command()
@@ -65,7 +65,7 @@ def main(batch_path, uuid, data_path: str = None):
         print("mc finished successfully!")
 
         print("computing projections")
-        Yr, dims, T = cm.load_memmap(get_full_data_path(output_path))
+        Yr, dims, T = cm.load_memmap(str(get_full_data_path(output_path)))
         images = np.reshape(Yr.T, [T] + list(dims), order='F')
 
         paths=[]

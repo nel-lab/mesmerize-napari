@@ -66,43 +66,15 @@ def main(batch_path, uuid, data_path: str = None):
             images[::downsample_ratio], swap_dim=False, gSig=gSig
         )
 
-        if not params['do_cnmfe']:
-             pnr_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
-             cn_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
+        pnr_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
+        cn_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
 
-             np.save(str(cn_output_path), cn_filter, allow_pickle=False)
-             np.save(str(pnr_output_path), pnr, allow_pickle=False)
+        np.save(str(cn_output_path), cn_filter, allow_pickle=False)
+        np.save(str(pnr_output_path), pnr, allow_pickle=False)
 
-             if data_path is not None:
-                 pnr_output_path = Path(pnr_output_path).relative_to(data_path)
-                 cn_output_path = Path(cn_output_path).relative_to(data_path)
-                 cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
-             else:
-                 cnmfe_memmap_path = fname_new
+        d = dict()  # for output
 
-             d = dict()
-             d.update(
-                 {
-                     "cnmf-memmap-path": cnmfe_memmap_path,
-                     "corr-img-path": cn_output_path,
-                     "pnr-img-path": pnr_output_path,
-                     "mean-projection-path": mean_projection_path,
-                     "std-projection-path": std_projection_path,
-                     "max-projection-path": max_projection_path,
-                     "success": True,
-                     "traceback": None
-                 }
-             )
-             print('dict for non-cnmfe:', d)
-
-        else:
-            cn_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_cn.npy").resolve())
-            pnr_output_path = str(Path(input_movie_path).parent.joinpath(f"{uuid}_pn.npy").resolve())
-
-            np.save(str(cn_output_path), cn_filter, allow_pickle=False)
-            np.save(str(pnr_output_path), pnr, allow_pickle=False)
-            #pickle.dump(pnr, open(cn_output_path, 'wb'), protocol=4)
-
+        if params['do_cnmfe']:
             cnmfe_params_dict = \
                 {
                     "method_init": 'corr_pnr',
@@ -128,31 +100,40 @@ def main(batch_path, uuid, data_path: str = None):
 
             if data_path is not None:
                 cnmf_hdf5_path = Path(output_path).relative_to(data_path)
-                cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
-                cn_output_path = Path(cn_output_path).relative_to(data_path)
-                pnr_output_path = Path(pnr_output_path).relative_to(data_path)
             else:
                 cnmf_hdf5_path = output_path
-                cnmfe_memmap_path = fname_new
 
-            d = dict()
             d.update(
                 {
                     "cnmf-hdf5-path": cnmf_hdf5_path,
-                    "cnmf-memmap-path": cnmfe_memmap_path,
-                    "corr-img-path": cn_output_path,
-                    "pnr-image-path": pnr_output_path,
-                    "mean-projection-path": mean_projection_path,
-                    "std-projection-path": std_projection_path,
-                    "max-projection-path": max_projection_path,
-                    "success": True,
-                    "traceback": None
                 }
             )
-            print(d)
+
+        if data_path is not None:
+            cnmfe_memmap_path = Path(fname_new).relative_to(data_path)
+            cn_output_path = Path(cn_output_path).relative_to(data_path)
+            pnr_output_path = Path(pnr_output_path).relative_to(data_path)
+        else:
+            cnmfe_memmap_path = fname_new
+
+        d.update(
+            {
+                "cnmf-memmap-path": cnmfe_memmap_path,
+                "corr-img-path": cn_output_path,
+                "pnr-image-path": pnr_output_path,
+                "mean-projection-path": mean_projection_path,
+                "std-projection-path": std_projection_path,
+                "max-projection-path": max_projection_path,
+                "success": True,
+                "traceback": None
+            }
+        )
+
+        print(d)
 
     except:
         d = {"success": False, "traceback": traceback.format_exc()}
+
     # Add dictionary to output column of series
     df.loc[df['uuid'] == uuid, 'outputs'] = [d]
     # save dataframe to disc
