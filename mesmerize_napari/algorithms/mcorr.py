@@ -19,7 +19,7 @@ if __name__ == '__main__':
 @click.command()
 @click.option('--batch-path', type=str)
 @click.option('--uuid', type=str)
-@click.option('--data-path',)
+@click.option('--data-path', type=str)
 def main(batch_path, uuid, data_path: str = None):
     df = pd.read_pickle(batch_path)
     item = df[df['uuid'] == uuid].squeeze()

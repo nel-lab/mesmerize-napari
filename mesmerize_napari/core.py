@@ -57,6 +57,7 @@ def set_parent_data_path(path: Union[Path, str]) -> Path:
     global PARENT_DATA_PATH
     path = validate_path(path)
     PARENT_DATA_PATH = Path(path)
+
     return PARENT_DATA_PATH
 
 
