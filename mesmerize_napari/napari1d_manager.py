@@ -1,12 +1,13 @@
 """Create simple callback that modifies the line visual."""
+import numpy as np
 import napari
 from napari.layers import Shapes
 import napari_plot
 from napari_plot._qt.qt_viewer import QtViewer
-from mesmerize_napari.core.utils import *
+from mesmerize_core.utils import *
 import pandas as pd
-import pyqtgraph as pg
 from .cnmf_viz_gui import VizWidget
+from typing import *
 
 
 def _get_roi_colormap(self, n_colors) -> Tuple[List[np.ndarray], List[np.ndarray]]:
@@ -163,6 +164,7 @@ class CNMFViewer:
         time = self.viewer.dims.current_step[0]
         print(time)
         self.infline_layer.move(index=0, pos=[time])
+
 
 class MCORRViewer:
     def __init__(self, batch_item: pd.Series):

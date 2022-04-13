@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets
 from .cnmf_pytemplate import Ui_CNMFDockWidget
-from mesmerize_napari.core.utils import *
-from .core import *
+from mesmerize_core.utils import *
 
 
 class CNMFWidget(QtWidgets.QDockWidget):
@@ -83,7 +82,6 @@ class CNMFWidget(QtWidgets.QDockWidget):
                 'refit': self.ui.checkBoxRefit.isChecked()
             }
         )
-
 
         # Group the kwargs of the two parts seperately
         if group_params:

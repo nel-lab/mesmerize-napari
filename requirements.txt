@@ -1,0 +1,10 @@
+setuptools
+wheel
+PyQt5
+pandas
+numpy
+psutil
+QtPy
+napari
+pyqtgraph
+napari-plot

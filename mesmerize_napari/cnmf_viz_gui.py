@@ -1,10 +1,9 @@
 from PyQt5 import QtWidgets
 from .viz_pytemplate import Ui_VizualizationWidget
 from .evaluate_components import EvalComponentsWidgets
-from mesmerize_napari.core.utils import *
-from .core import *
+from mesmerize_core.utils import *
+from mesmerize_core import *
 import caiman as cm
-
 
 
 class VizWidget(QtWidgets.QDockWidget):
@@ -20,8 +19,9 @@ class VizWidget(QtWidgets.QDockWidget):
         self.ui.pushButtonCnImage.clicked.connect(self.load_correlation_image)
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
         self.ui.pushButtonEvalGui.clicked.connect(self.show_eval_gui)
+
     def _open_movie(self, path: Union[Path, str]):
-        file_ext = pathlib.Path(path).suffix
+        file_ext = Path(path).suffix
         if file_ext == '.mmap':
             Yr, dims, T = cm.load_memmap(path)
             images = np.reshape(Yr.T, [T] + list(dims), order='F')
@@ -37,6 +37,7 @@ class VizWidget(QtWidgets.QDockWidget):
     def load_correlation_image(self):
         corr_img = self.batch_item.caiman.get_correlation_image()
         self. cnmf_viewer.viewer.add_image(corr_img, name=f'corr: {self.batch_item["name"]}', colormap='gray')
+
     def view_projections(self):
         proj_type = self.ui.comboBoxProjection.currentText()
         projection = self.batch_item.caiman.get_projection(proj_type=proj_type)

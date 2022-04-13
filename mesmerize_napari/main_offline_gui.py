@@ -7,8 +7,8 @@ from PyQt5 import QtWidgets
 from qtpy import QtWidgets
 from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
-from .core.utils import *
-from .core import *
+from mesmerize_core.utils import *
+from mesmerize_core import *
 import pandas as pd
 from functools import partial
 import pprint
@@ -377,6 +377,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         #     images = np.reshape(Yr.T, [T] + list(dims), order='F')
         #     self.viewer.add_image(images, name=name, colormap='gnuplot2')
         pass
+
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return MainOfflineGUI
