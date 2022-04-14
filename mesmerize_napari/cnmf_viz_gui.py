@@ -4,6 +4,7 @@ from .evaluate_components import EvalComponentsWidgets
 from mesmerize_napari.core.utils import *
 from .core import *
 import caiman as cm
+import pathlib
 
 
 
