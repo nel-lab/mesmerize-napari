@@ -85,7 +85,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
-        self.ui.pushButtonVizDownsampledMCorrrMovie.clicked.connect(self.downsample_mcorr)
+        self.ui.pushButtonVizDownsampledMCorrrMovie.clicked.connect(self.view_downsample_mcorr)
 
         self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
 
@@ -369,16 +369,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
         projection = s.caiman.get_projection(proj_type=proj_type)
         self.viewer.add_image(projection, name=f'{proj_type}: projection {s["name"]}', colormap='gnuplot2')
 
-    def downsample_mcorr(self):
-        # s = self.selected_series()
-        # algo = s['algo']
-        # if algo == 'mcorr':
-        #     output_path = s.mcorr.get_output_path()
-        #     self._open_movie(output_path, name=f'mcorr: {s["name"]}')
-        #     Yr, dims, T = cm.load_memmap(self.input_movie_path)
-        #     images = np.reshape(Yr.T, [T] + list(dims), order='F')
-        #     self.viewer.add_image(images, name=name, colormap='gnuplot2')
-        pass
+    def view_downsample_mcorr(self):
+        s = self.selected_series()
+        downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
+        images = s.mcorr.get_output()[::downsample_ratio,:,:]
+        self.viewer.add_image(images)
+        # Set input movie path to mcorr output path so cnmf can automatically use vid
+        self.input_movie_path = str(s.mcorr.get_output_path())
 
     def view_shifts(self):
         s = self.selected_series()
