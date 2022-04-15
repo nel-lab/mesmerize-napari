@@ -186,7 +186,7 @@ class MCORRViewer:
             self.plot_els_shifts()
 
     def plot_rig_shifts(self):
-        shifts = self.batch_item.caiman.get_shifts()
+        xs, ys = self.batch_item.mcorr.get_shifts_array(pw_rigid=False)
 
         self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
@@ -196,13 +196,8 @@ class MCORRViewer:
         self.viewer1d.text_overlay.position = "top_right"
         self.viewer1d.text_overlay.font_size = 15
 
-        n_pts = shifts.shape[0]
-        n_lines = shifts.shape[1]
-        xs = [np.linspace(0, n_pts, n_pts)]
-        ys = []
+        n_lines = np.shape(ys)[0]
 
-        for i in range(n_lines):
-            ys.append(shifts[:,i])
 
         self.temporal_layer = self.viewer1d.add_multi_line(
             data=dict(xs=xs, ys=ys),
@@ -221,7 +216,7 @@ class MCORRViewer:
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def plot_els_shifts(self):
-        x_shifts, y_shifts = self.batch_item.caiman.get_shifts()
+        x_shifts, y_shifts = self.batch_item.mcorr.get_shifts_array(pw_rigid=True)
 
     def get_colors(self, n_components):
         colors = np.vstack(auto_colormap(

@@ -45,7 +45,7 @@
      </widget>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_compute">
        <attribute name="title">
@@ -62,8 +62,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>323</width>
-             <height>472</height>
+             <width>315</width>
+             <height>477</height>
             </rect>
            </property>
            <attribute name="label">
@@ -232,8 +232,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>323</width>
-             <height>472</height>
+             <width>98</width>
+             <height>88</height>
             </rect>
            </property>
            <attribute name="label">
@@ -250,8 +250,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>323</width>
-             <height>472</height>
+             <width>98</width>
+             <height>88</height>
             </rect>
            </property>
            <attribute name="label">
@@ -271,14 +271,28 @@
        <attribute name="title">
         <string>Visualize</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
-           <string>Projections</string>
+           <string>General</string>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButtonViewProjection">
+             <property name="text">
+              <string>View Projection</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QPushButton" name="pushButtonVizCorrelationImage">
+             <property name="text">
+              <string>Correlation Image</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
             <widget class="QComboBox" name="comboBoxProjectionOpts">
              <item>
               <property name="text">
@@ -297,55 +311,99 @@
              </item>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonViewProjection">
-             <property name="text">
-              <string>View Projection</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButtonVizCorrelationImage">
-          <property name="text">
-           <string>Correlation Image</string>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-         </widget>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>131</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButtonVizDownsampledMCorrrMovie">
-          <property name="text">
-           <string>Downsampled MCorr movie</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButtonVizReconstructedMovie">
-          <property name="text">
-           <string>Reconstructed post-CNMF movie</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QRadioButton" name="radioButtonROIMask">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Mask ROIS</string>
+             <string>MCorr</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QRadioButton" name="radioButtonROIOutline">
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButtonVizDownsampledMCorrrMovie">
             <property name="text">
-             <string>Outline ROIs</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
+             <string>Downsample MCorr Movie:</string>
             </property>
            </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinBox"/>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QPushButton" name="pushButtonViewMCShifts">
+            <property name="text">
+             <string>View MC Shifts</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>131</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>CNMF</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButtonVizReconstructedMovie">
+            <property name="text">
+             <string>Reconstructed post-CNMF movie</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QRadioButton" name="radioButtonROIMask">
+              <property name="text">
+               <string>Mask ROIS</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButtonROIOutline">
+              <property name="text">
+               <string>Outline ROIs</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -379,10 +437,8 @@
   <tabstop>comboBoxProjectionOpts</tabstop>
   <tabstop>pushButtonViewProjection</tabstop>
   <tabstop>pushButtonVizCorrelationImage</tabstop>
-  <tabstop>pushButtonVizDownsampledMCorrrMovie</tabstop>
   <tabstop>pushButtonVizReconstructedMovie</tabstop>
   <tabstop>radioButtonROIMask</tabstop>
-  <tabstop>radioButtonROIOutline</tabstop>
  </tabstops>
  <resources/>
  <connections/>

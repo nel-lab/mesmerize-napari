@@ -87,6 +87,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizDownsampledMCorrrMovie.clicked.connect(self.downsample_mcorr)
 
+        self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
+
         self.mcorr_params_gui = None
         self.cnmf_params_gui = None
         self.cnmfe_params_gui = None
@@ -378,6 +380,16 @@ class MainOfflineGUI(QtWidgets.QWidget):
         #     self.viewer.add_image(images, name=name, colormap='gnuplot2')
         pass
 
+    def view_shifts(self):
+        s = self.selected_series()
+        if s['params']['mcorr_kwargs']['pw_rigid']:
+            x_shifts, y_shifts = s.mcorr.get_shifts()
+            self.viewer.add_image(x_shifts, name=f'{s["name"]}: X shifts')
+            self.viewer.add_image(y_shifts, name=f'{s["name"]}: Y shifts')
+
+        else:
+            shifts = s.mcorr.get_shifts()
+            self.viewer.add_image(shifts, name=f'{s["name"]}: shifts')
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return MainOfflineGUI
