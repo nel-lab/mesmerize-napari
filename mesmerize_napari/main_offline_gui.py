@@ -18,6 +18,7 @@ import psutil
 from .napari1d_manager import CNMFViewer, MCORRViewer
 from pathlib import Path
 from PyQt5 import QtCore
+import matplotlib.pyplot as plt
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -386,7 +387,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         else:
             shifts = s.mcorr.get_shifts()
-            self.viewer.add_image(shifts, name=f'{s["name"]}: shifts')
+            x = np.linspace(0,np.shape(shifts)[0],np.shape(shifts)[0])
+            print(np.shape(shifts))
+            plt.plot(x,shifts[:,0], x, shifts[:,1])
+            plt.title('Rigid MC Shifts')
+            plt.legend(['x-shifts', 'y-shifts'])
+            plt.xlabel('Time')
+            plt.ylabel('Pixels')
+            #self.viewer.add_image(shifts, name=f'{s["name"]}: shifts')
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return MainOfflineGUI
