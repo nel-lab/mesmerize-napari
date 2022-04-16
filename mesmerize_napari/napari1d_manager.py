@@ -186,7 +186,7 @@ class MCORRViewer:
             self.plot_els_shifts()
 
     def plot_rig_shifts(self):
-        xs, ys = self.batch_item.mcorr.get_shifts_array(pw_rigid=False)
+        xs, ys = self.batch_item.mcorr.get_shifts(output='napari-1d', pw_rigid=False)
 
         self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
@@ -216,7 +216,7 @@ class MCORRViewer:
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def plot_els_shifts(self):
-        x_shifts, y_shifts = self.batch_item.mcorr.get_shifts_array(pw_rigid=True)
+        x_shifts, y_shifts = self.batch_item.mcorr.get_shifts(output='napari-1d', pw_rigid=True)
 
     def get_colors(self, n_components):
         colors = np.vstack(auto_colormap(
