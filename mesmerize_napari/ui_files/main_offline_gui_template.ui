@@ -45,7 +45,7 @@
      </widget>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_compute">
        <attribute name="title">
@@ -232,8 +232,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>88</height>
+             <width>315</width>
+             <height>477</height>
             </rect>
            </property>
            <attribute name="label">
@@ -250,8 +250,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>88</height>
+             <width>315</width>
+             <height>477</height>
             </rect>
            </property>
            <attribute name="label">
@@ -337,14 +337,21 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="pushButtonVizDownsampledMCorrrMovie">
+           <widget class="QPushButton" name="pushButtonViewDownsampledMCorrrMovie">
             <property name="text">
              <string>Downsample MCorr Movie:</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBoxDownsampleRatio"/>
+           <widget class="QSpinBox" name="spinBoxDownsampleRatio">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>4</number>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0" colspan="2">
            <widget class="QPushButton" name="pushButtonViewMCShifts">

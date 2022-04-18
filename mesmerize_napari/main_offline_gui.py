@@ -86,7 +86,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
-        self.ui.pushButtonVizDownsampledMCorrrMovie.clicked.connect(self.view_downsample_mcorr)
+        self.ui.pushButtonViewDownsampledMCorrrMovie.clicked.connect(self.view_downsample_mcorr)
 
         self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
 
