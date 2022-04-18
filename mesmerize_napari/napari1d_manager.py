@@ -174,7 +174,7 @@ class CNMFViewer:
         self.infline_layer = self.viewer1d.add_inf_line(
             data=[1], orientation="vertical", color="red", width=3, name="slider"
         )
-        self.infline_layer.move(index=0, pos=[1000])
+        self.infline_layer.move(index=0, pos=[1])
         self.viewer1d.add_layer(layer=self.infline_layer)
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
@@ -214,7 +214,7 @@ class MCORRViewer:
         #self.viewer.add_image(corr_img, name=f'corr: {batch_item["name"]}', colormap='gray')
 
         self.mcorr_obj = batch_item.mcorr.get_output()
-        self.viewer.add_image(self.mcorr_obj, name = f'MC Movie: {batch_item["name"]}', colormap='gray')
+        self.viewer.add_image(self.mcorr_obj, name=f'MC Movie: {batch_item["name"]}', colormap='gray')
 
         # plot shifts
         if batch_item['params']['mcorr_kwargs']['pw_rigid'] == False:
@@ -223,7 +223,7 @@ class MCORRViewer:
             self.plot_els_shifts()
 
     def plot_rig_shifts(self):
-        xs, ys = self.batch_item.mcorr.get_shifts(output='napari-1d', pw_rigid=False)
+        xs, ys = self.batch_item.mcorr.get_shifts(output_type='napari-1d', pw_rigid=False)
 
         self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
@@ -248,7 +248,7 @@ class MCORRViewer:
         self.infline_layer = self.viewer1d.add_inf_line(
             data=[1], orientation="vertical", color="red", width=3, name="slider"
         )
-        self.infline_layer.move(index=0, pos=[1000])
+        self.infline_layer.move(index=0, pos=[1])
         self.viewer1d.add_layer(layer=self.infline_layer)
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
