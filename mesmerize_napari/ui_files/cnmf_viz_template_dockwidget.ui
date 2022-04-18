@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>221</width>
-    <height>157</height>
+    <width>255</width>
+    <height>185</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>100</y>
-      <width>201</width>
+      <width>231</width>
       <height>25</height>
      </rect>
     </property>
@@ -32,7 +32,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>81</width>
+      <width>91</width>
       <height>25</height>
      </rect>
     </property>
@@ -55,9 +55,9 @@
    <widget class="QPushButton" name="pushButtonViewProjection">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>10</y>
-      <width>111</width>
+      <width>131</width>
       <height>25</height>
      </rect>
     </property>
@@ -68,9 +68,9 @@
    <widget class="QPushButton" name="pushButtonCnImage">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>40</y>
-      <width>111</width>
+      <width>131</width>
       <height>25</height>
      </rect>
     </property>
@@ -83,7 +83,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>81</width>
+      <width>91</width>
       <height>25</height>
      </rect>
     </property>
@@ -96,12 +96,44 @@
      <rect>
       <x>10</x>
       <y>70</y>
-      <width>201</width>
+      <width>231</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
      <string>Reconstructed post-CNMF Movie</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBoxBoxSize">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>130</y>
+      <width>81</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>200</number>
+    </property>
+    <property name="singleStep">
+     <number>5</number>
+    </property>
+    <property name="value">
+     <number>10</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonUpdateBoxSize">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>130</y>
+      <width>131</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Update Box Size</string>
     </property>
    </widget>
   </widget>

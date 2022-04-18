@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'viz_template_dockwidget.ui'
+# Form implementation generated from reading ui file 'cnmf_viz_template_dockwidget.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,30 +14,39 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VizualizationWidget(object):
     def setupUi(self, VizualizationWidget):
         VizualizationWidget.setObjectName("VizualizationWidget")
-        VizualizationWidget.resize(221, 157)
+        VizualizationWidget.resize(255, 185)
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
         self.pushButtonEvalGui = QtWidgets.QPushButton(self.dockWidgetContents)
-        self.pushButtonEvalGui.setGeometry(QtCore.QRect(10, 100, 201, 25))
+        self.pushButtonEvalGui.setGeometry(QtCore.QRect(10, 100, 231, 25))
         self.pushButtonEvalGui.setObjectName("pushButtonEvalGui")
         self.comboBoxProjection = QtWidgets.QComboBox(self.dockWidgetContents)
-        self.comboBoxProjection.setGeometry(QtCore.QRect(10, 10, 81, 25))
+        self.comboBoxProjection.setGeometry(QtCore.QRect(10, 10, 91, 25))
         self.comboBoxProjection.setObjectName("comboBoxProjection")
         self.comboBoxProjection.addItem("")
         self.comboBoxProjection.addItem("")
         self.comboBoxProjection.addItem("")
         self.pushButtonViewProjection = QtWidgets.QPushButton(self.dockWidgetContents)
-        self.pushButtonViewProjection.setGeometry(QtCore.QRect(100, 10, 111, 25))
+        self.pushButtonViewProjection.setGeometry(QtCore.QRect(110, 10, 131, 25))
         self.pushButtonViewProjection.setObjectName("pushButtonViewProjection")
         self.pushButtonCnImage = QtWidgets.QPushButton(self.dockWidgetContents)
-        self.pushButtonCnImage.setGeometry(QtCore.QRect(100, 40, 111, 25))
+        self.pushButtonCnImage.setGeometry(QtCore.QRect(110, 40, 131, 25))
         self.pushButtonCnImage.setObjectName("pushButtonCnImage")
         self.pushButtonInputMovie = QtWidgets.QPushButton(self.dockWidgetContents)
-        self.pushButtonInputMovie.setGeometry(QtCore.QRect(10, 40, 81, 25))
+        self.pushButtonInputMovie.setGeometry(QtCore.QRect(10, 40, 91, 25))
         self.pushButtonInputMovie.setObjectName("pushButtonInputMovie")
         self.pushButtonCnmfMovie = QtWidgets.QPushButton(self.dockWidgetContents)
-        self.pushButtonCnmfMovie.setGeometry(QtCore.QRect(10, 70, 201, 25))
+        self.pushButtonCnmfMovie.setGeometry(QtCore.QRect(10, 70, 231, 25))
         self.pushButtonCnmfMovie.setObjectName("pushButtonCnmfMovie")
+        self.spinBoxBoxSize = QtWidgets.QSpinBox(self.dockWidgetContents)
+        self.spinBoxBoxSize.setGeometry(QtCore.QRect(10, 130, 81, 26))
+        self.spinBoxBoxSize.setMaximum(200)
+        self.spinBoxBoxSize.setSingleStep(5)
+        self.spinBoxBoxSize.setProperty("value", 10)
+        self.spinBoxBoxSize.setObjectName("spinBoxBoxSize")
+        self.pushButtonUpdateBoxSize = QtWidgets.QPushButton(self.dockWidgetContents)
+        self.pushButtonUpdateBoxSize.setGeometry(QtCore.QRect(110, 130, 131, 25))
+        self.pushButtonUpdateBoxSize.setObjectName("pushButtonUpdateBoxSize")
         VizualizationWidget.setWidget(self.dockWidgetContents)
 
         self.retranslateUi(VizualizationWidget)
@@ -54,6 +63,7 @@ class Ui_VizualizationWidget(object):
         self.pushButtonCnImage.setText(_translate("VizualizationWidget", "Correlation Image"))
         self.pushButtonInputMovie.setText(_translate("VizualizationWidget", "Input Movie"))
         self.pushButtonCnmfMovie.setText(_translate("VizualizationWidget", "Reconstructed post-CNMF Movie"))
+        self.pushButtonUpdateBoxSize.setText(_translate("VizualizationWidget", "Update Box Size"))
 
 
 if __name__ == "__main__":
