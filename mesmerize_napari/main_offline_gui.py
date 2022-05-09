@@ -371,6 +371,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.viewer.add_image(projection, name=f'{proj_type}: projection {s["name"]}', colormap='gnuplot2')
 
     def view_downsample_mcorr(self):
+        # TODO: average set of x frames, not skip
         s = self.selected_series()
         downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
         images = s.mcorr.get_output()[::downsample_ratio,:,:]

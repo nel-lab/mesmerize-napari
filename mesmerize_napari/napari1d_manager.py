@@ -76,6 +76,7 @@ class CNMFViewer:
             @self.spatial_layer.mouse_drag_callbacks.append
             def callback(layer, event):
                 self.select_contours()
+                print(f"global coor position: {self.viewer.cursor.position}")
 
         elif self.roi_type == 'mask':
             masks_good = self.batch_item.cnmf.get_spatial_masks(self.cnmf_obj.estimates.idx_components)
@@ -193,6 +194,8 @@ class CNMFViewer:
         else:
             self.box_size = box_size
 
+        # Check if local cursor position matches global postiion
+        # TODO: flip axes to match global coor system
         sel_comps = [ind for (ind, x) in enumerate(com) if (
                 x[0] > self.viewer.cursor.position[0] - self.box_size) and
                      (x[0] < self.viewer.cursor.position[0] + self.box_size) and
@@ -208,6 +211,7 @@ class MCORRViewer:
         self.batch_item = batch_item
         self.viewer = napari.Viewer(title="MCORR Visualization")
 
+        # Load input movie optional: Create checkbox
         # Load correlation map first
         corr_img = batch_item.caiman.get_correlation_image()
 
