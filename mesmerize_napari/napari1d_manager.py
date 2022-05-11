@@ -184,23 +184,26 @@ class CNMFViewer:
         print(time)
         self.infline_layer.move(index=0, pos=[time])
 
+
     def select_contours(self, box_size = None):
         com = self.batch_item.cnmf.get_spatial_contour_coors(
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[1]
 
+        print("CoM Coordinates:", com)
         if box_size is None:
             pass
         else:
             self.box_size = box_size
 
+
         # Check if local cursor position matches global postiion
         # TODO: flip axes to match global coor system
         sel_comps = [ind for (ind, x) in enumerate(com) if (
-                x[0] > self.viewer.cursor.position[0] - self.box_size) and
-                     (x[0] < self.viewer.cursor.position[0] + self.box_size) and
-                     (x[1] > self.viewer.cursor.position[1] - self.box_size) and
-                     (x[1] < self.viewer.cursor.position[1] + self.box_size)]
+                x[1] > self.viewer.cursor.position[1] - self.box_size) and
+                     (x[1] < self.viewer.cursor.position[1] + self.box_size) and
+                     (x[0] > self.viewer.cursor.position[0] - self.box_size) and
+                     (x[0] < self.viewer.cursor.position[0] + self.box_size)]
 
         self.update_colors(sel_comps=sel_comps)
         self.temporal_layer.color = self.colors
