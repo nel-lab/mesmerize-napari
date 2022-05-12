@@ -72,6 +72,7 @@ class CNMFViewer:
                 opacity=0.7,
                 name='good components',
             )
+            print("spatial layer", len(np.shape(self.spatial_layer)))
 
             @self.spatial_layer.mouse_drag_callbacks.append
             def callback(layer, event):
@@ -132,6 +133,7 @@ class CNMFViewer:
             pass
         else:
             self.colors[sel_comps, -1] = 0.8
+            self.colors[self.cnmf_obj.estimates.idx_components_bad, -1] = 0.0
 
     def show_bad_components(self, b: bool):
         pass
@@ -190,7 +192,6 @@ class CNMFViewer:
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[1]
 
-        print("CoM Coordinates:", com)
         if box_size is None:
             pass
         else:
@@ -204,6 +205,7 @@ class CNMFViewer:
                      (x[1] < self.viewer.cursor.position[1] + self.box_size) and
                      (x[0] > self.viewer.cursor.position[0] - self.box_size) and
                      (x[0] < self.viewer.cursor.position[0] + self.box_size)]
+
 
         self.update_colors(sel_comps=sel_comps)
         self.temporal_layer.color = self.colors
