@@ -55,6 +55,8 @@ class CNMFViewer:
         self.plot_temporal()
 
 
+
+
     def plot_spatial(self):
         if self.roi_type == 'outline':
             coors = self.batch_item.cnmf.get_spatial_contour_coors(
@@ -72,7 +74,6 @@ class CNMFViewer:
                 opacity=0.7,
                 name='good components',
             )
-            print("spatial layer", len(np.shape(self.spatial_layer)))
 
             @self.spatial_layer.mouse_drag_callbacks.append
             def callback(layer, event):
@@ -192,6 +193,11 @@ class CNMFViewer:
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[1]
 
+        coors = self.batch_item.cnmf.get_spatial_contour_coors(
+            np.arange(0, self.cnmf_obj.estimates.A.shape[1])
+        )[0]
+
+
         if box_size is None:
             pass
         else:
@@ -204,12 +210,25 @@ class CNMFViewer:
                 x[1] > self.viewer.cursor.position[1] - self.box_size) and
                      (x[1] < self.viewer.cursor.position[1] + self.box_size) and
                      (x[0] > self.viewer.cursor.position[0] - self.box_size) and
-                     (x[0] < self.viewer.cursor.position[0] + self.box_size)]
+                     (x[0] < self.viewer.cursor.position[0] + self.box_size) and
+                     ind not in self.cnmf_obj.estimates.idx_components_bad]
 
+        sel_coors = [coors[i] for i in sel_comps]
+        face_color = [self.face_colors[i] for i in sel_comps]
 
         self.update_colors(sel_comps=sel_comps)
         self.temporal_layer.color = self.colors
 
+        if len(sel_coors) > 0:
+            self.viewer.add_shapes(
+                data=sel_coors,
+                shape_type='polygon',
+                edge_width=0.8,
+                edge_color="white",
+                face_color=face_color,
+                opacity=0.7,
+                name='Selected Components',
+            )
 
 class MCORRViewer:
     def __init__(self, batch_item: pd.Series):
