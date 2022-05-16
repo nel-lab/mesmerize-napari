@@ -55,8 +55,6 @@ class CNMFViewer:
         self.plot_temporal()
 
 
-
-
     def plot_spatial(self):
         if self.roi_type == 'outline':
             coors = self.batch_item.cnmf.get_spatial_contour_coors(
@@ -79,6 +77,7 @@ class CNMFViewer:
             def callback(layer, event):
                 self.select_contours()
                 print(f"global coor position: {self.viewer.cursor.position}")
+
 
         elif self.roi_type == 'mask':
             masks_good = self.batch_item.cnmf.get_spatial_masks(self.cnmf_obj.estimates.idx_components)
@@ -189,6 +188,7 @@ class CNMFViewer:
 
 
     def select_contours(self, box_size = None):
+
         com = self.batch_item.cnmf.get_spatial_contour_coors(
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[1]
@@ -197,15 +197,11 @@ class CNMFViewer:
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[0]
 
-
         if box_size is None:
             pass
         else:
             self.box_size = box_size
-
-
-        # Check if local cursor position matches global postiion
-        # TODO: flip axes to match global coor system
+            
         sel_comps = [ind for (ind, x) in enumerate(com) if (
                 x[1] > self.viewer.cursor.position[1] - self.box_size) and
                      (x[1] < self.viewer.cursor.position[1] + self.box_size) and
@@ -220,7 +216,7 @@ class CNMFViewer:
         self.temporal_layer.color = self.colors
 
         if len(sel_coors) > 0:
-            self.viewer.add_shapes(
+            self.white_layer: Shapes = self.viewer.add_shapes(
                 data=sel_coors,
                 shape_type='polygon',
                 edge_width=0.8,
@@ -229,6 +225,12 @@ class CNMFViewer:
                 opacity=0.7,
                 name='Selected Components',
             )
+
+            @self.white_layer.mouse_drag_callbacks.append
+            def callback(layer, event):
+                    self.viewer.layers.remove(self.white_layer)
+                    self.select_contours()
+
 
 class MCORRViewer:
     def __init__(self, batch_item: pd.Series):
