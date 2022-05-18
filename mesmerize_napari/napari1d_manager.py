@@ -215,6 +215,7 @@ class CNMFViewer:
         self.update_colors(sel_comps=sel_comps)
         self.temporal_layer.color = self.colors
 
+
         if len(sel_coors) > 0:
             self.white_layer: Shapes = self.viewer.add_shapes(
                 data=sel_coors,
