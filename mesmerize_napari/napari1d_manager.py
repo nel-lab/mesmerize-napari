@@ -54,6 +54,7 @@ class CNMFViewer:
         self.plot_spatial()
         self.plot_temporal()
 
+        self.cursor_position = []
 
     def plot_spatial(self):
         if self.roi_type == 'outline':
@@ -75,8 +76,9 @@ class CNMFViewer:
 
             @self.spatial_layer.mouse_drag_callbacks.append
             def callback(layer, event):
+                self.cursor_position = self.viewer.cursor.position
+                print(f"global coor position: {self.cursor_position}")
                 self.select_contours()
-                print(f"global coor position: {self.viewer.cursor.position}")
 
 
         elif self.roi_type == 'mask':
@@ -187,8 +189,9 @@ class CNMFViewer:
         self.infline_layer.move(index=0, pos=[time])
 
 
-    def select_contours(self, box_size = None):
-
+    def select_contours(self, box_size = None, box_update = False):
+        if box_update:
+            self.viewer.layers.remove(self.white_layer)
         com = self.batch_item.cnmf.get_spatial_contour_coors(
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[1]
@@ -203,10 +206,10 @@ class CNMFViewer:
             self.box_size = box_size
             
         sel_comps = [ind for (ind, x) in enumerate(com) if (
-                x[1] > self.viewer.cursor.position[1] - self.box_size) and
-                     (x[1] < self.viewer.cursor.position[1] + self.box_size) and
-                     (x[0] > self.viewer.cursor.position[0] - self.box_size) and
-                     (x[0] < self.viewer.cursor.position[0] + self.box_size) and
+                x[1] > self.cursor_position[1] - self.box_size) and
+                     (x[1] < self.cursor_position[1] + self.box_size) and
+                     (x[0] > self.cursor_position[0] - self.box_size) and
+                     (x[0] < self.cursor_position[0] + self.box_size) and
                      ind not in self.cnmf_obj.estimates.idx_components_bad]
 
         sel_coors = [coors[i] for i in sel_comps]
@@ -229,6 +232,7 @@ class CNMFViewer:
 
             @self.white_layer.mouse_drag_callbacks.append
             def callback(layer, event):
+                    self.cursor_position = self.viewer.cursor.position
                     self.viewer.layers.remove(self.white_layer)
                     self.select_contours()
 
