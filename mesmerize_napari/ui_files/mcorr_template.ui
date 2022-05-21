@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MCORRWidget</class>
- <widget class="QDockWidget" name="MCORRWidget">
+ <widget class="QMainWindow" name="MCORRWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>267</width>
-    <height>858</height>
+    <width>249</width>
+    <height>783</height>
    </rect>
   </property>
-  <property name="floating">
-   <bool>true</bool>
-  </property>
-  <property name="features">
-   <set>QDockWidget::AllDockWidgetFeatures</set>
-  </property>
   <property name="windowTitle">
-   <string>Motion Correction</string>
+   <string>mcorr params</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
+  <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QGroupBox" name="groupBox_motion_correction_kwargs">
@@ -50,9 +44,6 @@ Use single quotes for strings, do not use double quotes.</string>
        </item>
       </layout>
      </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_21"/>
     </item>
     <item>
      <widget class="QCheckBox" name="checkBoxRigidMC">
@@ -302,124 +293,116 @@ Use single quotes for strings, do not use double quotes.</string>
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_5">
+     <layout class="QHBoxLayout" name="horizontalLayout_17">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_17">
-        <item>
-         <widget class="QLabel" name="label_18">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>strides (pixels): </string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinboxStrides">
-          <property name="maximum">
-           <number>500</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_6">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+       <widget class="QLabel" name="label_18">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>strides (pixels): </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QSlider" name="sliderStrides">
-        <property name="minimum">
-         <number>1</number>
-        </property>
+       <widget class="QSpinBox" name="spinboxStrides">
         <property name="maximum">
          <number>500</number>
         </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_6">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_6">
+     <widget class="QSlider" name="sliderStrides">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_18">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_18">
-        <item>
-         <widget class="QLabel" name="label_19">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>overlaps (pixels): </string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinboxOverlaps">
-          <property name="maximum">
-           <number>500</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_5">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QSlider" name="sliderOverlaps">
-        <property name="minimum">
-         <number>1</number>
+       <widget class="QLabel" name="label_19">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="maximum">
-         <number>500</number>
+        <property name="text">
+         <string>overlaps (pixels): </string>
         </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QSpinBox" name="spinboxOverlaps">
+        <property name="maximum">
+         <number>500</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QSlider" name="sliderOverlaps">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QPushButton" name="btnShowQuilt">
@@ -503,13 +486,6 @@ Use single quotes for strings, do not use double quotes.</string>
      </layout>
     </item>
     <item>
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -525,112 +501,20 @@ Use single quotes for strings, do not use double quotes.</string>
       </property>
      </spacer>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-    </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>249</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <tabstops>
-  <tabstop>groupBox_motion_correction_kwargs</tabstop>
-  <tabstop>plainTextEdit_mc_kwargs</tabstop>
-  <tabstop>checkBoxRigidMC</tabstop>
-  <tabstop>spinBoxGSig_filt</tabstop>
-  <tabstop>spinboxX</tabstop>
-  <tabstop>spinboxY</tabstop>
-  <tabstop>spinboxIterRigid</tabstop>
-  <tabstop>spinboxMaxDev</tabstop>
-  <tabstop>spinboxStrides</tabstop>
-  <tabstop>sliderStrides</tabstop>
-  <tabstop>spinboxOverlaps</tabstop>
-  <tabstop>sliderOverlaps</tabstop>
-  <tabstop>btnShowQuilt</tabstop>
-  <tabstop>spinboxUpsample</tabstop>
-  <tabstop>checkBoxKeepMemmap</tabstop>
-  <tabstop>lineEditNameElastic</tabstop>
-  <tabstop>btnAddToBatchElastic</tabstop>
- </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>sliderOverlaps</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinboxOverlaps</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>140</x>
-     <y>393</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>158</x>
-     <y>371</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sliderStrides</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinboxStrides</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>122</x>
-     <y>336</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>148</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinboxOverlaps</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>sliderOverlaps</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>158</x>
-     <y>371</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>193</x>
-     <y>393</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinboxStrides</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>sliderStrides</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>148</x>
-     <y>314</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>92</x>
-     <y>336</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEditNameElastic</sender>
-   <signal>returnPressed()</signal>
-   <receiver>btnAddToBatchElastic</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>116</x>
-     <y>484</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>170</x>
-     <y>489</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
