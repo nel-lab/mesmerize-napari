@@ -52,5 +52,5 @@ class VizWidget(QtWidgets.QDockWidget):
 
     def select_contours(self):
         box_size = self.ui.spinBoxBoxSize.value()
-        self.cnmf_viewer.select_contours(box_size=box_size, box_update=True)
+        self.cnmf_viewer.select_contours(box_size=box_size, update_box=True)
 
