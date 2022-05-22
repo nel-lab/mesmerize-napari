@@ -253,7 +253,7 @@ class MCORRViewer:
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def plot_els_shifts(self):
-        x_shifts, y_shifts = self.batch_item.mcorr.get_shifts(output='napari-1d', pw_rigid=True)
+        x_shifts, y_shifts = self.batch_item.mcorr.get_shifts(output_type='napari-1d', pw_rigid=True)
 
     def get_colors(self, n_components):
         colors = np.vstack(auto_colormap(
