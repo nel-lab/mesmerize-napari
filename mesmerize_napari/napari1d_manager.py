@@ -58,14 +58,14 @@ class CNMFViewer:
 
     def plot_spatial(self):
         if self.roi_type == 'outline':
-            contours_coors, contours_com = self.batch_item.cnmf.get_spatial_contours()
+            self.contours_coors, self.contours_com = self.batch_item.cnmf.get_spatial_contours()
 
             edge_colors, face_colors = self.get_colors()
             print("edge colors:", edge_colors)
             print("face_colors:", face_colors)
 
             self.spatial_layer: Shapes = self.viewer.add_shapes(
-                data=contours_coors,
+                data=self.contours_coors,
                 shape_type='polygon',
                 edge_width=0.5,
                 edge_color=edge_colors,
@@ -111,7 +111,7 @@ class CNMFViewer:
         self.spatial_layer.edge_color = edge_colors
         self.temporal_layer.color = edge_colors
 
-    def get_colors(self, alpha_edge=0.9, alpha_face=0.0):
+    def get_colors(self, alpha_edge=0.8, alpha_face=0.0):
         n_components = len(self.cnmf_obj.estimates.idx_components)
 
         self.edge_colors = np.vstack(auto_colormap(
@@ -187,20 +187,18 @@ class CNMFViewer:
     def select_contours(self, box_size = None, update_box = False):
         if update_box:
             self.viewer.layers.remove(self.white_layer)
-        contours_coors, contours_com = self.batch_item.cnmf.get_spatial_contours()
-
         if box_size is None:
             pass
         else:
             self.box_size = box_size
             
-        sel_comps = [ind for (ind, x) in enumerate(contours_com) if (
+        sel_comps = [ind for (ind, x) in enumerate(self.contours_com) if (
                 x[1] > self.cursor_position[1] - self.box_size) and
                      (x[1] < self.cursor_position[1] + self.box_size) and
                      (x[0] > self.cursor_position[0] - self.box_size) and
                      (x[0] < self.cursor_position[0] + self.box_size)]
 
-        sel_coors = [contours_coors[i] for i in sel_comps]
+        sel_coors = [self.contours_coors[i] for i in sel_comps]
         print("selected coordinates:", sel_coors)
         face_color = [self.face_colors[i] for i in sel_comps]
 
