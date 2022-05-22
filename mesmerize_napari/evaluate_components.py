@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 from .eval_components_template import Ui_MainWindow
 
-from .core import CNMFExtensions
+from mesmerize_core import CNMFExtensions
 from caiman.source_extraction.cnmf.cnmf import CNMFParams, CNMF
 
 

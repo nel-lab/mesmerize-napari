@@ -1,5 +1,5 @@
 from caiman.utils.visualization import get_contours as caiman_get_contours
-from mesmerize_napari.core.utils import *
+from mesmerize_core.utils import *
 
 
 def show_results(cnmf_obj, viewer):

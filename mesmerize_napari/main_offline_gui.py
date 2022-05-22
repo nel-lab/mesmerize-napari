@@ -7,8 +7,8 @@ from PyQt5 import QtWidgets
 from qtpy import QtWidgets
 from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
-from .core.utils import *
-from .core import *
+from mesmerize_core.utils import *
+from mesmerize_core import *
 import pandas as pd
 from functools import partial
 import pprint
@@ -18,6 +18,7 @@ import psutil
 from .napari1d_manager import CNMFViewer, MCORRViewer
 from pathlib import Path
 from PyQt5 import QtCore
+import matplotlib.pyplot as plt
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -85,7 +86,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
 
-        self.ui.pushButtonVizDownsampledMCorrrMovie.clicked.connect(self.downsample_mcorr)
+        self.ui.pushButtonViewDownsampledMCorrrMovie.clicked.connect(self.view_downsample_mcorr)
+
+        self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
 
         self.mcorr_params_gui = None
         self.cnmf_params_gui = None
@@ -367,16 +370,32 @@ class MainOfflineGUI(QtWidgets.QWidget):
         projection = s.caiman.get_projection(proj_type=proj_type)
         self.viewer.add_image(projection, name=f'{proj_type}: projection {s["name"]}', colormap='gnuplot2')
 
-    def downsample_mcorr(self):
-        # s = self.selected_series()
-        # algo = s['algo']
-        # if algo == 'mcorr':
-        #     output_path = s.mcorr.get_output_path()
-        #     self._open_movie(output_path, name=f'mcorr: {s["name"]}')
-        #     Yr, dims, T = cm.load_memmap(self.input_movie_path)
-        #     images = np.reshape(Yr.T, [T] + list(dims), order='F')
-        #     self.viewer.add_image(images, name=name, colormap='gnuplot2')
-        pass
+    def view_downsample_mcorr(self):
+        # TODO: average set of x frames, not skip
+        s = self.selected_series()
+        downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
+        images = s.mcorr.get_output()[::downsample_ratio,:,:]
+        self.viewer.add_image(images)
+        # Set input movie path to mcorr output path so cnmf can automatically use vid
+        self.input_movie_path = str(s.mcorr.get_output_path())
+
+    def view_shifts(self):
+        s = self.selected_series()
+        if s['params']['mcorr_kwargs']['pw_rigid']:
+            x_shifts, y_shifts = s.mcorr.get_shifts(output_type='napari-1d')
+            self.viewer.add_image(x_shifts, name=f'{s["name"]}: X shifts')
+            self.viewer.add_image(y_shifts, name=f'{s["name"]}: Y shifts')
+
+        else:
+            shifts = s.mcorr.get_shifts(output_type='matplotlib')
+            x = np.linspace(0,np.shape(shifts)[0],np.shape(shifts)[0])
+            print(np.shape(shifts))
+            plt.plot(x,shifts[:,0], x, shifts[:,1])
+            plt.title('Rigid MC Shifts')
+            plt.legend(['x-shifts', 'y-shifts'])
+            plt.xlabel('Time')
+            plt.ylabel('Pixels')
+            #self.viewer.add_image(shifts, name=f'{s["name"]}: shifts')
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return MainOfflineGUI
