@@ -249,7 +249,7 @@ class MCORRViewer:
     def plot_rig_shifts(self):
         shifts = self.batch_item.mcorr.get_shifts()
         xs, ys = self.batch_item.mcorr.shifts_handler(
-            shifts=shifts, output_type='napari-1d', pw_rigid=False
+            shifts=shifts, pw_rigid=False
         )
 
         self.viewer1d = napari_plot.Viewer(show=False)
@@ -281,7 +281,7 @@ class MCORRViewer:
     def plot_els_shifts(self):
         shifts = self.batch_item.mcorr.get_shifts()
         xs, ys = self.batch_item.mcorr.shifts_handler(
-            shifts=shifts, output_type='napari-1d', pw_rigid=True
+            shifts=shifts, pw_rigid=True
         )
 
         self.viewer1d = napari_plot.Viewer(show=False)
