@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './mcorr_template_dockwidget.ui'
+# Form implementation generated from reading ui file './mcorr_template.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,16 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MCORRWidget(object):
     def setupUi(self, MCORRWidget):
         MCORRWidget.setObjectName("MCORRWidget")
-        MCORRWidget.resize(267, 858)
-        MCORRWidget.setFloating(True)
-        MCORRWidget.setFeatures(QtWidgets.QDockWidget.AllDockWidgetFeatures)
-        self.dockWidgetContents = QtWidgets.QWidget()
-        self.dockWidgetContents.setObjectName("dockWidgetContents")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.dockWidgetContents)
+        MCORRWidget.resize(249, 783)
+        self.centralwidget = QtWidgets.QWidget(MCORRWidget)
+        self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.groupBox_motion_correction_kwargs = QtWidgets.QGroupBox(
-            self.dockWidgetContents
-        )
+        self.groupBox_motion_correction_kwargs = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_motion_correction_kwargs.setStatusTip("")
         self.groupBox_motion_correction_kwargs.setCheckable(True)
         self.groupBox_motion_correction_kwargs.setChecked(False)
@@ -40,15 +36,12 @@ class Ui_MCORRWidget(object):
         self.plainTextEdit_mc_kwargs.setObjectName("plainTextEdit_mc_kwargs")
         self.verticalLayout_3.addWidget(self.plainTextEdit_mc_kwargs)
         self.verticalLayout.addWidget(self.groupBox_motion_correction_kwargs)
-        self.horizontalLayout_21 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_21.setObjectName("horizontalLayout_21")
-        self.verticalLayout.addLayout(self.horizontalLayout_21)
-        self.checkBoxRigidMC = QtWidgets.QCheckBox(self.dockWidgetContents)
+        self.checkBoxRigidMC = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBoxRigidMC.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.checkBoxRigidMC.setChecked(True)
         self.checkBoxRigidMC.setObjectName("checkBoxRigidMC")
         self.verticalLayout.addWidget(self.checkBoxRigidMC)
-        self.label_16 = QtWidgets.QLabel(self.dockWidgetContents)
+        self.label_16 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
@@ -58,10 +51,10 @@ class Ui_MCORRWidget(object):
         self.verticalLayout.addWidget(self.label_16)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label = QtWidgets.QLabel(self.dockWidgetContents)
+        self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
-        self.spinBoxGSig_filt = QtWidgets.QSpinBox(self.dockWidgetContents)
+        self.spinBoxGSig_filt = QtWidgets.QSpinBox(self.centralwidget)
         self.spinBoxGSig_filt.setObjectName("spinBoxGSig_filt")
         self.horizontalLayout.addWidget(self.spinBoxGSig_filt)
         spacerItem = QtWidgets.QSpacerItem(
@@ -71,17 +64,15 @@ class Ui_MCORRWidget(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
-        self.label_9 = QtWidgets.QLabel(self.dockWidgetContents)
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
         self.label_9.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_9.setAlignment(
             QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
         )
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_12.addWidget(self.label_9)
-        self.spinboxX = QtWidgets.QSpinBox(self.dockWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed
-        )
+        self.spinboxX = QtWidgets.QSpinBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.spinboxX.sizePolicy().hasHeightForWidth())
@@ -96,16 +87,12 @@ class Ui_MCORRWidget(object):
         self.verticalLayout.addLayout(self.horizontalLayout_12)
         self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.label_13 = QtWidgets.QLabel(self.dockWidgetContents)
-        self.label_13.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
-        )
+        self.label_13 = QtWidgets.QLabel(self.centralwidget)
+        self.label_13.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_13.setObjectName("label_13")
         self.horizontalLayout_13.addWidget(self.label_13)
-        self.spinboxY = QtWidgets.QSpinBox(self.dockWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed
-        )
+        self.spinboxY = QtWidgets.QSpinBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.spinboxY.sizePolicy().hasHeightForWidth())
@@ -120,10 +107,8 @@ class Ui_MCORRWidget(object):
         self.verticalLayout.addLayout(self.horizontalLayout_13)
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
-        self.label_6 = QtWidgets.QLabel(self.dockWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
-        )
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
@@ -133,10 +118,8 @@ class Ui_MCORRWidget(object):
         )
         self.label_6.setObjectName("label_6")
         self.horizontalLayout_14.addWidget(self.label_6)
-        self.spinboxIterRigid = QtWidgets.QSpinBox(self.dockWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        self.spinboxIterRigid = QtWidgets.QSpinBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -152,7 +135,7 @@ class Ui_MCORRWidget(object):
         )
         self.horizontalLayout_14.addItem(spacerItem3)
         self.verticalLayout.addLayout(self.horizontalLayout_14)
-        self.label_17 = QtWidgets.QLabel(self.dockWidgetContents)
+        self.label_17 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
@@ -162,11 +145,11 @@ class Ui_MCORRWidget(object):
         self.verticalLayout.addWidget(self.label_17)
         self.horizontalLayout_16 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_16.setObjectName("horizontalLayout_16")
-        self.label_15 = QtWidgets.QLabel(self.dockWidgetContents)
+        self.label_15 = QtWidgets.QLabel(self.centralwidget)
         self.label_15.setAlignment(QtCore.Qt.AlignCenter)
         self.label_15.setObjectName("label_15")
         self.horizontalLayout_16.addWidget(self.label_15)
-        self.spinboxMaxDev = QtWidgets.QSpinBox(self.dockWidgetContents)
+        self.spinboxMaxDev = QtWidgets.QSpinBox(self.centralwidget)
         self.spinboxMaxDev.setMaximum(999)
         self.spinboxMaxDev.setProperty("value", 3)
         self.spinboxMaxDev.setObjectName("spinboxMaxDev")
@@ -176,14 +159,10 @@ class Ui_MCORRWidget(object):
         )
         self.horizontalLayout_16.addItem(spacerItem4)
         self.verticalLayout.addLayout(self.horizontalLayout_16)
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.horizontalLayout_17 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_17.setObjectName("horizontalLayout_17")
-        self.label_18 = QtWidgets.QLabel(self.dockWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
-        )
+        self.label_18 = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_18.sizePolicy().hasHeightForWidth())
@@ -193,7 +172,7 @@ class Ui_MCORRWidget(object):
         )
         self.label_18.setObjectName("label_18")
         self.horizontalLayout_17.addWidget(self.label_18)
-        self.spinboxStrides = QtWidgets.QSpinBox(self.dockWidgetContents)
+        self.spinboxStrides = QtWidgets.QSpinBox(self.centralwidget)
         self.spinboxStrides.setMaximum(500)
         self.spinboxStrides.setProperty("value", 0)
         self.spinboxStrides.setObjectName("spinboxStrides")
@@ -202,22 +181,17 @@ class Ui_MCORRWidget(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
         self.horizontalLayout_17.addItem(spacerItem5)
-        self.verticalLayout_5.addLayout(self.horizontalLayout_17)
-        self.sliderStrides = QtWidgets.QSlider(self.dockWidgetContents)
+        self.verticalLayout.addLayout(self.horizontalLayout_17)
+        self.sliderStrides = QtWidgets.QSlider(self.centralwidget)
         self.sliderStrides.setMinimum(1)
         self.sliderStrides.setMaximum(500)
         self.sliderStrides.setOrientation(QtCore.Qt.Horizontal)
         self.sliderStrides.setObjectName("sliderStrides")
-        self.verticalLayout_5.addWidget(self.sliderStrides)
-        self.verticalLayout.addLayout(self.verticalLayout_5)
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.verticalLayout.addWidget(self.sliderStrides)
         self.horizontalLayout_18 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_18.setObjectName("horizontalLayout_18")
-        self.label_19 = QtWidgets.QLabel(self.dockWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
-        )
+        self.label_19 = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_19.sizePolicy().hasHeightForWidth())
@@ -227,7 +201,7 @@ class Ui_MCORRWidget(object):
         )
         self.label_19.setObjectName("label_19")
         self.horizontalLayout_18.addWidget(self.label_19)
-        self.spinboxOverlaps = QtWidgets.QSpinBox(self.dockWidgetContents)
+        self.spinboxOverlaps = QtWidgets.QSpinBox(self.centralwidget)
         self.spinboxOverlaps.setMaximum(500)
         self.spinboxOverlaps.setProperty("value", 0)
         self.spinboxOverlaps.setObjectName("spinboxOverlaps")
@@ -236,26 +210,25 @@ class Ui_MCORRWidget(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
         self.horizontalLayout_18.addItem(spacerItem6)
-        self.verticalLayout_6.addLayout(self.horizontalLayout_18)
-        self.sliderOverlaps = QtWidgets.QSlider(self.dockWidgetContents)
+        self.verticalLayout.addLayout(self.horizontalLayout_18)
+        self.sliderOverlaps = QtWidgets.QSlider(self.centralwidget)
         self.sliderOverlaps.setMinimum(1)
         self.sliderOverlaps.setMaximum(500)
         self.sliderOverlaps.setOrientation(QtCore.Qt.Horizontal)
         self.sliderOverlaps.setObjectName("sliderOverlaps")
-        self.verticalLayout_6.addWidget(self.sliderOverlaps)
-        self.verticalLayout.addLayout(self.verticalLayout_6)
-        self.btnShowQuilt = QtWidgets.QPushButton(self.dockWidgetContents)
+        self.verticalLayout.addWidget(self.sliderOverlaps)
+        self.btnShowQuilt = QtWidgets.QPushButton(self.centralwidget)
         self.btnShowQuilt.setMaximumSize(QtCore.QSize(100, 16777215))
         self.btnShowQuilt.setCheckable(True)
         self.btnShowQuilt.setObjectName("btnShowQuilt")
         self.verticalLayout.addWidget(self.btnShowQuilt)
         self.horizontalLayout_19 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_19.setObjectName("horizontalLayout_19")
-        self.label_10 = QtWidgets.QLabel(self.dockWidgetContents)
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
         self.label_10.setAlignment(QtCore.Qt.AlignCenter)
         self.label_10.setObjectName("label_10")
         self.horizontalLayout_19.addWidget(self.label_10)
-        self.spinboxUpsample = QtWidgets.QSpinBox(self.dockWidgetContents)
+        self.spinboxUpsample = QtWidgets.QSpinBox(self.centralwidget)
         self.spinboxUpsample.setMinimum(1)
         self.spinboxUpsample.setMaximum(10)
         self.spinboxUpsample.setProperty("value", 4)
@@ -266,78 +239,40 @@ class Ui_MCORRWidget(object):
         )
         self.horizontalLayout_19.addItem(spacerItem7)
         self.verticalLayout.addLayout(self.horizontalLayout_19)
-        self.checkBoxKeepMemmap = QtWidgets.QCheckBox(self.dockWidgetContents)
+        self.checkBoxKeepMemmap = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBoxKeepMemmap.setObjectName("checkBoxKeepMemmap")
         self.verticalLayout.addWidget(self.checkBoxKeepMemmap)
         self.horizontalLayout_20 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_20.setObjectName("horizontalLayout_20")
-        self.lineEditNameElastic = QtWidgets.QLineEdit(self.dockWidgetContents)
+        self.lineEditNameElastic = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditNameElastic.setObjectName("lineEditNameElastic")
         self.horizontalLayout_20.addWidget(self.lineEditNameElastic)
-        self.btnAddToBatchElastic = QtWidgets.QPushButton(self.dockWidgetContents)
+        self.btnAddToBatchElastic = QtWidgets.QPushButton(self.centralwidget)
         self.btnAddToBatchElastic.setObjectName("btnAddToBatchElastic")
         self.horizontalLayout_20.addWidget(self.btnAddToBatchElastic)
         self.verticalLayout.addLayout(self.horizontalLayout_20)
-        self.line = QtWidgets.QFrame(self.dockWidgetContents)
-        self.line.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
-        self.verticalLayout.addWidget(self.line)
-        spacerItem8 = QtWidgets.QSpacerItem(
-            10, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem8 = QtWidgets.QSpacerItem(10, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.verticalLayout.addItem(spacerItem8)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        MCORRWidget.setWidget(self.dockWidgetContents)
+        MCORRWidget.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MCORRWidget)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 249, 30))
+        self.menubar.setObjectName("menubar")
+        MCORRWidget.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MCORRWidget)
+        self.statusbar.setObjectName("statusbar")
+        MCORRWidget.setStatusBar(self.statusbar)
 
         self.retranslateUi(MCORRWidget)
-        self.sliderOverlaps.valueChanged["int"].connect(self.spinboxOverlaps.setValue)  # type: ignore
-        self.sliderStrides.valueChanged["int"].connect(self.spinboxStrides.setValue)  # type: ignore
-        self.spinboxOverlaps.valueChanged["int"].connect(self.sliderOverlaps.setValue)  # type: ignore
-        self.spinboxStrides.valueChanged["int"].connect(self.sliderStrides.setValue)  # type: ignore
-        self.lineEditNameElastic.returnPressed.connect(self.btnAddToBatchElastic.click)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MCORRWidget)
-        MCORRWidget.setTabOrder(
-            self.groupBox_motion_correction_kwargs, self.plainTextEdit_mc_kwargs
-        )
-        MCORRWidget.setTabOrder(self.plainTextEdit_mc_kwargs, self.checkBoxRigidMC)
-        MCORRWidget.setTabOrder(self.checkBoxRigidMC, self.spinBoxGSig_filt)
-        MCORRWidget.setTabOrder(self.spinBoxGSig_filt, self.spinboxX)
-        MCORRWidget.setTabOrder(self.spinboxX, self.spinboxY)
-        MCORRWidget.setTabOrder(self.spinboxY, self.spinboxIterRigid)
-        MCORRWidget.setTabOrder(self.spinboxIterRigid, self.spinboxMaxDev)
-        MCORRWidget.setTabOrder(self.spinboxMaxDev, self.spinboxStrides)
-        MCORRWidget.setTabOrder(self.spinboxStrides, self.sliderStrides)
-        MCORRWidget.setTabOrder(self.sliderStrides, self.spinboxOverlaps)
-        MCORRWidget.setTabOrder(self.spinboxOverlaps, self.sliderOverlaps)
-        MCORRWidget.setTabOrder(self.sliderOverlaps, self.btnShowQuilt)
-        MCORRWidget.setTabOrder(self.btnShowQuilt, self.spinboxUpsample)
-        MCORRWidget.setTabOrder(self.spinboxUpsample, self.checkBoxKeepMemmap)
-        MCORRWidget.setTabOrder(self.checkBoxKeepMemmap, self.lineEditNameElastic)
-        MCORRWidget.setTabOrder(self.lineEditNameElastic, self.btnAddToBatchElastic)
 
     def retranslateUi(self, MCORRWidget):
         _translate = QtCore.QCoreApplication.translate
-        MCORRWidget.setWindowTitle(_translate("MCORRWidget", "Motion Correction"))
-        self.groupBox_motion_correction_kwargs.setToolTip(
-            _translate(
-                "MCORRWidget",
-                "You can enter additional kwargs to pass for MotionCorrect() instantiation.\n"
-                "Use single quotes for strings, do not use double quotes.",
-            )
-        )
-        self.groupBox_motion_correction_kwargs.setTitle(
-            _translate("MCORRWidget", "Use &motion correction kwargs")
-        )
-        self.plainTextEdit_mc_kwargs.setToolTip(
-            _translate(
-                "MCORRWidget",
-                "You can enter additional kwargs to pass for CNMF instantiation.\n"
-                "Use single quotes for strings, do not use double quotes.",
-            )
-        )
+        MCORRWidget.setWindowTitle(_translate("MCORRWidget", "mcorr params"))
+        self.groupBox_motion_correction_kwargs.setToolTip(_translate("MCORRWidget", "You can enter additional kwargs to pass for MotionCorrect() instantiation.\n"
+"Use single quotes for strings, do not use double quotes."))
+        self.groupBox_motion_correction_kwargs.setTitle(_translate("MCORRWidget", "Use &motion correction kwargs"))
+        self.plainTextEdit_mc_kwargs.setToolTip(_translate("MCORRWidget", "You can enter additional kwargs to pass for CNMF instantiation.\n"
+"Use single quotes for strings, do not use double quotes."))
         self.checkBoxRigidMC.setText(_translate("MCORRWidget", "Piecewise Rigid MC"))
         self.label_16.setToolTip(
             _translate(

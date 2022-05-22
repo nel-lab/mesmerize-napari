@@ -1,12 +1,12 @@
 from PyQt5 import QtWidgets
-from .cnmfe_pytemplate import Ui_CNMFEDockWidget
+from .cnmfe_pytemplate import Ui_CNMFEParamsWindow
 from mesmerize_core.utils import *
 
 
-class CNMFEWidget(QtWidgets.QDockWidget):
+class CNMFEWidget(QtWidgets.QMainWindow):
     def __init__(self, parent):
-        QtWidgets.QDockWidget.__init__(self, parent=parent)
-        self.ui = Ui_CNMFEDockWidget()
+        QtWidgets.QMainWindow.__init__(self, parent=parent)
+        self.ui = Ui_CNMFEParamsWindow()
         self.ui.setupUi(self)
         self.ui.btnAddToBatchCorrPNR.clicked.connect(self._add_item_corr_pnr)
         self.ui.btnAddToBatchCNMFE.clicked.connect(self._add_item_cnmfe)
@@ -32,7 +32,6 @@ class CNMFEWidget(QtWidgets.QDockWidget):
     @present_exceptions()
     def _add_item_cnmfe(self, *args, group_params: bool = True):
         low_rank_background = self.ui.checkBox_low_rank_background.isChecked()
-        keep_memmap = self.ui.checkBoxKeepMemmap.isChecked()
         # CNMF kwargs
         gSig = self.ui.spinBoxGSig.value()
         kval = self.ui.spinBoxK.value()
@@ -86,15 +85,13 @@ class CNMFEWidget(QtWidgets.QDockWidget):
         if group_params:
             d.update(
                 {
-                    "cnmfe_kwargs": cnmfe_kwargs,
-                    "keep_memmap": keep_memmap,
+                    'cnmfe_kwargs': cnmfe_kwargs,
                 }
             )
         else:
             d.update(
                 {
                     **cnmfe_kwargs,
-                    **keep_memmap,
                 }
             )
         name = self.ui.lineEdName.text()

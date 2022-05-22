@@ -3,9 +3,9 @@ from .mcorr_pytemplate import Ui_MCORRWidget
 from typing import *
 
 
-class MCORRWidget(QtWidgets.QDockWidget):
+class MCORRWidget(QtWidgets.QMainWindow):
     def __init__(self, parent):
-        QtWidgets.QDockWidget.__init__(self, parent=parent)
+        QtWidgets.QMainWindow.__init__(self, parent=parent)
         self.ui = Ui_MCORRWidget()
         self.ui.setupUi(self)
         self.ui.btnAddToBatchElastic.clicked.connect(self.add_item)

@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CNMFEDockWidget</class>
- <widget class="QDockWidget" name="CNMFEDockWidget">
-  <property name="windowModality">
-   <enum>Qt::NonModal</enum>
-  </property>
+ <class>CNMFEParamsWindow</class>
+ <widget class="QMainWindow" name="CNMFEParamsWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>701</width>
-    <height>720</height>
+    <width>657</width>
+    <height>713</height>
    </rect>
   </property>
-  <property name="floating">
-   <bool>true</bool>
-  </property>
   <property name="windowTitle">
-   <string>CNMF-E Params</string>
+   <string>params cnmfe</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QFormLayout" name="formLayout">
-    <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_8">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="label_5">
         <property name="font">
@@ -43,9 +37,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>gaussian width of a 2D gaussian kernel, which approximates 
- a neuron 3 times less than the average diameters
- of a neuron (pixels)</string>
+         <string>width of a 2D gaussian kernel</string>
         </property>
        </widget>
       </item>
@@ -71,13 +63,6 @@
           </property>
           <property name="value">
            <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinBoxDownsample">
-          <property name="value">
-           <number>1</number>
           </property>
          </widget>
         </item>
@@ -128,13 +113,6 @@
        </layout>
       </item>
       <item>
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="label_20">
         <property name="font">
          <font>
@@ -147,20 +125,6 @@
          <string>CNMF-E</string>
         </property>
        </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Ain:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEditAin"/>
-        </item>
-       </layout>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_12">
@@ -280,13 +244,6 @@
          </spacer>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string>Adaptive way to set threshold on the transient size</string>
-        </property>
-       </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_24">
@@ -498,8 +455,8 @@
       </item>
      </layout>
     </item>
-    <item row="0" column="1">
-     <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_23">
         <item>
@@ -713,20 +670,35 @@ Use single quotes for strings, do not use double quotes.</string>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_8"/>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_9"/>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_10"/>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBoxKeepMemmap">
-        <property name="text">
-         <string>Keep memmap</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>downsample:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBoxDownsample">
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_16">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>37</width>
+            <height>29</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -763,50 +735,18 @@ Use single quotes for strings, do not use double quotes.</string>
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>657</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <tabstops>
-  <tabstop>spinBoxGSig</tabstop>
-  <tabstop>spinBoxDownsample</tabstop>
-  <tabstop>lineEdCorrPNRName</tabstop>
-  <tabstop>btnAddToBatchCorrPNR</tabstop>
-  <tabstop>lineEditAin</tabstop>
-  <tabstop>spinBox_p</tabstop>
-  <tabstop>doubleSpinBoxMinCorr</tabstop>
-  <tabstop>spinBoxMinPNR</tabstop>
-  <tabstop>spinBoxRf</tabstop>
-  <tabstop>spinBoxOverlap</tabstop>
-  <tabstop>spinBoxGnb</tabstop>
-  <tabstop>spinBoxNb_patch</tabstop>
-  <tabstop>spinBoxK</tabstop>
-  <tabstop>spinBox_ssub</tabstop>
-  <tabstop>spinBox_tsub</tabstop>
-  <tabstop>checkBox_low_rank_background</tabstop>
-  <tabstop>doubleSpinBox_ring_size_factor</tabstop>
-  <tabstop>comboBoxDeconv</tabstop>
-  <tabstop>doubleSpinBoxMergeThresh</tabstop>
-  <tabstop>groupBox_cnmf_kwargs</tabstop>
-  <tabstop>plainTextEdit_cnmf_kwargs</tabstop>
-  <tabstop>checkBoxKeepMemmap</tabstop>
-  <tabstop>lineEdName</tabstop>
-  <tabstop>btnAddToBatchCNMFE</tabstop>
- </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>lineEdName</sender>
-   <signal>returnPressed()</signal>
-   <receiver>btnAddToBatchCNMFE</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>195</x>
-     <y>881</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>284</x>
-     <y>872</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
