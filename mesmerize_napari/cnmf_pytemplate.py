@@ -38,7 +38,9 @@ class Ui_CNMFDockWidget(object):
         self.spinBoxP.setProperty("value", 2)
         self.spinBoxP.setObjectName("spinBoxP")
         self.horizontalLayout.addWidget(self.spinBoxP)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.label_28 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -54,7 +56,9 @@ class Ui_CNMFDockWidget(object):
         self.spinBoxnb.setProperty("value", 1)
         self.spinBoxnb.setObjectName("spinBoxnb")
         self.horizontalLayout_19.addWidget(self.spinBoxnb)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_19.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout_19)
         self.label_11 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -65,13 +69,17 @@ class Ui_CNMFDockWidget(object):
         self.label_10 = QtWidgets.QLabel(self.dockWidgetContents)
         self.label_10.setObjectName("label_10")
         self.horizontalLayout_7.addWidget(self.label_10)
-        self.doubleSpinBoxMergeThresh = QtWidgets.QDoubleSpinBox(self.dockWidgetContents)
+        self.doubleSpinBoxMergeThresh = QtWidgets.QDoubleSpinBox(
+            self.dockWidgetContents
+        )
         self.doubleSpinBoxMergeThresh.setMaximum(1.0)
         self.doubleSpinBoxMergeThresh.setSingleStep(0.05)
         self.doubleSpinBoxMergeThresh.setProperty("value", 0.7)
         self.doubleSpinBoxMergeThresh.setObjectName("doubleSpinBoxMergeThresh")
         self.horizontalLayout_7.addWidget(self.doubleSpinBoxMergeThresh)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_7.addItem(spacerItem2)
         self.verticalLayout.addLayout(self.horizontalLayout_7)
         self.label_24 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -90,7 +98,9 @@ class Ui_CNMFDockWidget(object):
         self.checkBoxRfNone = QtWidgets.QCheckBox(self.dockWidgetContents)
         self.checkBoxRfNone.setObjectName("checkBoxRfNone")
         self.horizontalLayout_13.addWidget(self.checkBoxRfNone)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_13.addItem(spacerItem3)
         self.verticalLayout.addLayout(self.horizontalLayout_13)
         self.label_13 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -106,7 +116,9 @@ class Ui_CNMFDockWidget(object):
         self.spinBoxStrideCNMF.setProperty("value", 30)
         self.spinBoxStrideCNMF.setObjectName("spinBoxStrideCNMF")
         self.horizontalLayout_8.addWidget(self.spinBoxStrideCNMF)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_8.addItem(spacerItem4)
         self.verticalLayout.addLayout(self.horizontalLayout_8)
         self.label_32 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -122,7 +134,9 @@ class Ui_CNMFDockWidget(object):
         self.spinBoxK.setProperty("value", 10)
         self.spinBoxK.setObjectName("spinBoxK")
         self.horizontalLayout_21.addWidget(self.spinBoxK)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_21.addItem(spacerItem5)
         self.verticalLayout.addLayout(self.horizontalLayout_21)
         self.label_33 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -143,9 +157,13 @@ class Ui_CNMFDockWidget(object):
         self.spinBox_gSig_y.setProperty("value", 5)
         self.spinBox_gSig_y.setObjectName("spinBox_gSig_y")
         self.horizontalLayout_22.addWidget(self.spinBox_gSig_y)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem6 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_22.addItem(spacerItem6)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_22.addItem(spacerItem7)
         self.verticalLayout.addLayout(self.horizontalLayout_22)
         self.horizontalLayout_23 = QtWidgets.QHBoxLayout()
@@ -172,7 +190,9 @@ class Ui_CNMFDockWidget(object):
         self.spinBox_tsub.setProperty("value", 1)
         self.spinBox_tsub.setObjectName("spinBox_tsub")
         self.horizontalLayout_23.addWidget(self.spinBox_tsub)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem8 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_23.addItem(spacerItem8)
         self.verticalLayout.addLayout(self.horizontalLayout_23)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
@@ -185,16 +205,22 @@ class Ui_CNMFDockWidget(object):
         self.comboBox_method_init.addItem("")
         self.comboBox_method_init.addItem("")
         self.horizontalLayout_4.addWidget(self.comboBox_method_init)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem9 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_4.addItem(spacerItem9)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.groupBox_seed_components = QtWidgets.QGroupBox(self.dockWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_seed_components.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.groupBox_seed_components.sizePolicy().hasHeightForWidth()
+        )
         self.groupBox_seed_components.setSizePolicy(sizePolicy)
         self.groupBox_seed_components.setMinimumSize(QtCore.QSize(0, 80))
         self.groupBox_seed_components.setFlat(False)
@@ -203,8 +229,12 @@ class Ui_CNMFDockWidget(object):
         self.groupBox_seed_components.setObjectName("groupBox_seed_components")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_seed_components)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.lineEdit_seed_components_path = QtWidgets.QLineEdit(self.groupBox_seed_components)
-        self.lineEdit_seed_components_path.setObjectName("lineEdit_seed_components_path")
+        self.lineEdit_seed_components_path = QtWidgets.QLineEdit(
+            self.groupBox_seed_components
+        )
+        self.lineEdit_seed_components_path.setObjectName(
+            "lineEdit_seed_components_path"
+        )
         self.verticalLayout_4.addWidget(self.lineEdit_seed_components_path)
         self.horizontalLayout_5.addWidget(self.groupBox_seed_components)
         self.verticalLayout.addLayout(self.horizontalLayout_5)
@@ -218,7 +248,9 @@ class Ui_CNMFDockWidget(object):
         self.groupBox_cnmf_kwargs.setObjectName("groupBox_cnmf_kwargs")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_cnmf_kwargs)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.plainTextEdit_cnmf_kwargs = QtWidgets.QPlainTextEdit(self.groupBox_cnmf_kwargs)
+        self.plainTextEdit_cnmf_kwargs = QtWidgets.QPlainTextEdit(
+            self.groupBox_cnmf_kwargs
+        )
         self.plainTextEdit_cnmf_kwargs.setObjectName("plainTextEdit_cnmf_kwargs")
         self.verticalLayout_3.addWidget(self.plainTextEdit_cnmf_kwargs)
         self.verticalLayout_2.addWidget(self.groupBox_cnmf_kwargs)
@@ -236,7 +268,9 @@ class Ui_CNMFDockWidget(object):
         self.doubleSpinBoxMinSNR.setProperty("value", 2.5)
         self.doubleSpinBoxMinSNR.setObjectName("doubleSpinBoxMinSNR")
         self.horizontalLayout_14.addWidget(self.doubleSpinBoxMinSNR)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem10 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_14.addItem(spacerItem10)
         self.verticalLayout_2.addLayout(self.horizontalLayout_14)
         self.label_14 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -253,7 +287,9 @@ class Ui_CNMFDockWidget(object):
         self.doubleSpinBoxRvalThr.setProperty("value", 0.8)
         self.doubleSpinBoxRvalThr.setObjectName("doubleSpinBoxRvalThr")
         self.horizontalLayout_9.addWidget(self.doubleSpinBoxRvalThr)
-        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem11 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_9.addItem(spacerItem11)
         self.verticalLayout_2.addLayout(self.horizontalLayout_9)
         self.label_25 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -282,13 +318,17 @@ class Ui_CNMFDockWidget(object):
         self.label_3 = QtWidgets.QLabel(self.dockWidgetContents)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_15.addWidget(self.label_3)
-        self.doubleSpinBox_cnn_lowest = QtWidgets.QDoubleSpinBox(self.dockWidgetContents)
+        self.doubleSpinBox_cnn_lowest = QtWidgets.QDoubleSpinBox(
+            self.dockWidgetContents
+        )
         self.doubleSpinBox_cnn_lowest.setMaximum(1.0)
         self.doubleSpinBox_cnn_lowest.setSingleStep(0.05)
         self.doubleSpinBox_cnn_lowest.setProperty("value", 0.1)
         self.doubleSpinBox_cnn_lowest.setObjectName("doubleSpinBox_cnn_lowest")
         self.horizontalLayout_15.addWidget(self.doubleSpinBox_cnn_lowest)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem12 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_15.addItem(spacerItem12)
         self.verticalLayout_2.addLayout(self.horizontalLayout_15)
         self.label_17 = QtWidgets.QLabel(self.dockWidgetContents)
@@ -304,7 +344,9 @@ class Ui_CNMFDockWidget(object):
         self.spinBoxDecayTime.setProperty("value", 1.0)
         self.spinBoxDecayTime.setObjectName("spinBoxDecayTime")
         self.horizontalLayout_10.addWidget(self.spinBoxDecayTime)
-        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem13 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_10.addItem(spacerItem13)
         self.verticalLayout_2.addLayout(self.horizontalLayout_10)
         self.groupBox_eval_kwargs = QtWidgets.QGroupBox(self.dockWidgetContents)
@@ -313,7 +355,9 @@ class Ui_CNMFDockWidget(object):
         self.groupBox_eval_kwargs.setObjectName("groupBox_eval_kwargs")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_eval_kwargs)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.plainTextEdit_eval_kwargs = QtWidgets.QPlainTextEdit(self.groupBox_eval_kwargs)
+        self.plainTextEdit_eval_kwargs = QtWidgets.QPlainTextEdit(
+            self.groupBox_eval_kwargs
+        )
         self.plainTextEdit_eval_kwargs.setObjectName("plainTextEdit_eval_kwargs")
         self.verticalLayout_5.addWidget(self.plainTextEdit_eval_kwargs)
         self.verticalLayout_2.addWidget(self.groupBox_eval_kwargs)
@@ -327,7 +371,9 @@ class Ui_CNMFDockWidget(object):
         self.checkBoxRefit.setChecked(True)
         self.checkBoxRefit.setObjectName("checkBoxRefit")
         self.horizontalLayout_2.addWidget(self.checkBoxRefit)
-        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem14 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem14)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.checkBoxKeepMemmap = QtWidgets.QCheckBox(self.dockWidgetContents)
@@ -351,50 +397,120 @@ class Ui_CNMFDockWidget(object):
     def retranslateUi(self, CNMFDockWidget):
         _translate = QtCore.QCoreApplication.translate
         CNMFDockWidget.setWindowTitle(_translate("CNMFDockWidget", "CNMF Params"))
-        self.label_22.setText(_translate("CNMFDockWidget", "Order of the autoregressive system"))
+        self.label_22.setText(
+            _translate("CNMFDockWidget", "Order of the autoregressive system")
+        )
         self.label.setText(_translate("CNMFDockWidget", "p:"))
-        self.label_28.setText(_translate("CNMFDockWidget", "Global number of background components"))
+        self.label_28.setText(
+            _translate("CNMFDockWidget", "Global number of background components")
+        )
         self.label_27.setText(_translate("CNMFDockWidget", "nb:"))
-        self.label_11.setText(_translate("CNMFDockWidget", "Merging threshold, max correlation allowed"))
+        self.label_11.setText(
+            _translate("CNMFDockWidget", "Merging threshold, max correlation allowed")
+        )
         self.label_10.setText(_translate("CNMFDockWidget", "merge_thresh:"))
-        self.label_24.setText(_translate("CNMFDockWidget", "Half size of patch in pixels"))
+        self.label_24.setText(
+            _translate("CNMFDockWidget", "Half size of patch in pixels")
+        )
         self.label_21.setText(_translate("CNMFDockWidget", "rf:"))
-        self.checkBoxRfNone.setToolTip(_translate("CNMFDockWidget", "Set `rf` as `None`"))
+        self.checkBoxRfNone.setToolTip(
+            _translate("CNMFDockWidget", "Set `rf` as `None`")
+        )
         self.checkBoxRfNone.setText(_translate("CNMFDockWidget", "None"))
-        self.label_13.setText(_translate("CNMFDockWidget", "amount of overlap between the patches in pixels"))
+        self.label_13.setText(
+            _translate(
+                "CNMFDockWidget", "amount of overlap between the patches in pixels"
+            )
+        )
         self.label_12.setText(_translate("CNMFDockWidget", "stride_cnmf:"))
-        self.label_32.setText(_translate("CNMFDockWidget", "Number of neurons/cell per patch"))
+        self.label_32.setText(
+            _translate("CNMFDockWidget", "Number of neurons/cell per patch")
+        )
         self.label_31.setText(_translate("CNMFDockWidget", "K:"))
-        self.label_33.setText(_translate("CNMFDockWidget", "Expected half size of neurons (x, y)"))
+        self.label_33.setText(
+            _translate("CNMFDockWidget", "Expected half size of neurons (x, y)")
+        )
         self.label_34.setText(_translate("CNMFDockWidget", "gSig:"))
         self.label_35.setText(_translate("CNMFDockWidget", "ssub:"))
         self.label_36.setText(_translate("CNMFDockWidget", "tsub:"))
         self.label_4.setText(_translate("CNMFDockWidget", "method_init"))
-        self.comboBox_method_init.setItemText(0, _translate("CNMFDockWidget", "greedy_roi"))
-        self.comboBox_method_init.setItemText(1, _translate("CNMFDockWidget", "sparse_nmf"))
-        self.groupBox_seed_components.setTitle(_translate("CNMFDockWidget", "Seed components from &masks"))
-        self.lineEdit_seed_components_path.setPlaceholderText(_translate("CNMFDockWidget", "Enter path to masks file"))
-        self.groupBox_cnmf_kwargs.setToolTip(_translate("CNMFDockWidget", "You can enter additional kwargs to pass for CNMF instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
-        self.groupBox_cnmf_kwargs.setTitle(_translate("CNMFDockWidget", "&Use additional CNMF params"))
-        self.plainTextEdit_cnmf_kwargs.setToolTip(_translate("CNMFDockWidget", "You can enter additional kwargs to pass for CNMF instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
-        self.label_20.setText(_translate("CNMFDockWidget", "Signal to noise ratio for accepting a component"))
+        self.comboBox_method_init.setItemText(
+            0, _translate("CNMFDockWidget", "greedy_roi")
+        )
+        self.comboBox_method_init.setItemText(
+            1, _translate("CNMFDockWidget", "sparse_nmf")
+        )
+        self.groupBox_seed_components.setTitle(
+            _translate("CNMFDockWidget", "Seed components from &masks")
+        )
+        self.lineEdit_seed_components_path.setPlaceholderText(
+            _translate("CNMFDockWidget", "Enter path to masks file")
+        )
+        self.groupBox_cnmf_kwargs.setToolTip(
+            _translate(
+                "CNMFDockWidget",
+                "You can enter additional kwargs to pass for CNMF instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
+        self.groupBox_cnmf_kwargs.setTitle(
+            _translate("CNMFDockWidget", "&Use additional CNMF params")
+        )
+        self.plainTextEdit_cnmf_kwargs.setToolTip(
+            _translate(
+                "CNMFDockWidget",
+                "You can enter additional kwargs to pass for CNMF instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
+        self.label_20.setText(
+            _translate(
+                "CNMFDockWidget", "Signal to noise ratio for accepting a component"
+            )
+        )
         self.label_23.setText(_translate("CNMFDockWidget", "min_SNR:"))
-        self.label_14.setText(_translate("CNMFDockWidget", "Space correlation threshold for accepting a component"))
+        self.label_14.setText(
+            _translate(
+                "CNMFDockWidget",
+                "Space correlation threshold for accepting a component",
+            )
+        )
         self.label_15.setText(_translate("CNMFDockWidget", "rval_thr:"))
-        self.label_25.setText(_translate("CNMFDockWidget", "Threshold for CNN based classifier"))
+        self.label_25.setText(
+            _translate("CNMFDockWidget", "Threshold for CNN based classifier")
+        )
         self.checkBoxUseCNN.setText(_translate("CNMFDockWidget", "use_cnn"))
         self.label_26.setText(_translate("CNMFDockWidget", "cnn_thr:"))
         self.label_3.setText(_translate("CNMFDockWidget", "cnn_lowest"))
-        self.label_17.setText(_translate("CNMFDockWidget", "Average decay time of calcium spikes (seconds)"))
+        self.label_17.setText(
+            _translate(
+                "CNMFDockWidget", "Average decay time of calcium spikes (seconds)"
+            )
+        )
         self.label_16.setText(_translate("CNMFDockWidget", "decay_time:"))
-        self.groupBox_eval_kwargs.setToolTip(_translate("CNMFDockWidget", "You can enter additional parameters to use for component evaluation.\n"
-"Use single quotes for strings, do not use double quotes"))
-        self.groupBox_eval_kwargs.setTitle(_translate("CNMFDockWidget", "Use additional &quality (evaluation) params"))
-        self.plainTextEdit_eval_kwargs.setToolTip(_translate("CNMFDockWidget", "You can enter additional parameters to use for component evaluation.\n"
-"Use single quotes for strings, do not use double quotes"))
-        self.label_2.setText(_translate("CNMFDockWidget", "perform second iteration of cnmf by re-fitting the components"))
+        self.groupBox_eval_kwargs.setToolTip(
+            _translate(
+                "CNMFDockWidget",
+                "You can enter additional parameters to use for component evaluation.\n"
+                "Use single quotes for strings, do not use double quotes",
+            )
+        )
+        self.groupBox_eval_kwargs.setTitle(
+            _translate("CNMFDockWidget", "Use additional &quality (evaluation) params")
+        )
+        self.plainTextEdit_eval_kwargs.setToolTip(
+            _translate(
+                "CNMFDockWidget",
+                "You can enter additional parameters to use for component evaluation.\n"
+                "Use single quotes for strings, do not use double quotes",
+            )
+        )
+        self.label_2.setText(
+            _translate(
+                "CNMFDockWidget",
+                "perform second iteration of cnmf by re-fitting the components",
+            )
+        )
         self.checkBoxRefit.setText(_translate("CNMFDockWidget", "refit"))
         self.checkBoxKeepMemmap.setText(_translate("CNMFDockWidget", "Keep memmap"))
         self.lineEdName.setPlaceholderText(_translate("CNMFDockWidget", "Enter name"))
