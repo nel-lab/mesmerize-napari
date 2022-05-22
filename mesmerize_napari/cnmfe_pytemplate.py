@@ -80,7 +80,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBox_p.setProperty("value", 1)
         self.spinBox_p.setObjectName("spinBox_p")
         self.horizontalLayout_12.addWidget(self.spinBox_p)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_12.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout_12)
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
@@ -98,7 +100,9 @@ class Ui_CNMFEParamsWindow(object):
         self.doubleSpinBoxMinCorr.setProperty("value", 0.89)
         self.doubleSpinBoxMinCorr.setObjectName("doubleSpinBoxMinCorr")
         self.horizontalLayout_6.addWidget(self.doubleSpinBoxMinCorr)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_6.addItem(spacerItem2)
         self.verticalLayout.addLayout(self.horizontalLayout_6)
         self.label_11 = QtWidgets.QLabel(self.centralwidget)
@@ -114,7 +118,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBoxMinPNR.setProperty("value", 4)
         self.spinBoxMinPNR.setObjectName("spinBoxMinPNR")
         self.horizontalLayout_7.addWidget(self.spinBoxMinPNR)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_7.addItem(spacerItem3)
         self.verticalLayout.addLayout(self.horizontalLayout_7)
         self.label_24 = QtWidgets.QLabel(self.centralwidget)
@@ -130,7 +136,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBoxRf.setProperty("value", 50)
         self.spinBoxRf.setObjectName("spinBoxRf")
         self.horizontalLayout_13.addWidget(self.spinBoxRf)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_13.addItem(spacerItem4)
         self.verticalLayout.addLayout(self.horizontalLayout_13)
         self.label_25 = QtWidgets.QLabel(self.centralwidget)
@@ -146,7 +154,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBoxOverlap.setProperty("value", 30)
         self.spinBoxOverlap.setObjectName("spinBoxOverlap")
         self.horizontalLayout_18.addWidget(self.spinBoxOverlap)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_18.addItem(spacerItem5)
         self.verticalLayout.addLayout(self.horizontalLayout_18)
         self.label_28 = QtWidgets.QLabel(self.centralwidget)
@@ -163,7 +173,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBoxGnb.setProperty("value", 0)
         self.spinBoxGnb.setObjectName("spinBoxGnb")
         self.horizontalLayout_19.addWidget(self.spinBoxGnb)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem6 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_19.addItem(spacerItem6)
         self.verticalLayout.addLayout(self.horizontalLayout_19)
         self.label_30 = QtWidgets.QLabel(self.centralwidget)
@@ -179,7 +191,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBoxNb_patch.setProperty("value", 0)
         self.spinBoxNb_patch.setObjectName("spinBoxNb_patch")
         self.horizontalLayout_20.addWidget(self.spinBoxNb_patch)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_20.addItem(spacerItem7)
         self.verticalLayout.addLayout(self.horizontalLayout_20)
         self.label_32 = QtWidgets.QLabel(self.centralwidget)
@@ -195,7 +209,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBoxK.setProperty("value", 10)
         self.spinBoxK.setObjectName("spinBoxK")
         self.horizontalLayout_21.addWidget(self.spinBoxK)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem8 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_21.addItem(spacerItem8)
         self.verticalLayout.addLayout(self.horizontalLayout_21)
         self.horizontalLayout_8.addLayout(self.verticalLayout)
@@ -225,7 +241,9 @@ class Ui_CNMFEParamsWindow(object):
         self.spinBox_tsub.setProperty("value", 1)
         self.spinBox_tsub.setObjectName("spinBox_tsub")
         self.horizontalLayout_23.addWidget(self.spinBox_tsub)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem9 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_23.addItem(spacerItem9)
         self.verticalLayout_2.addLayout(self.horizontalLayout_23)
         self.checkBox_low_rank_background = QtWidgets.QCheckBox(self.centralwidget)
@@ -239,9 +257,13 @@ class Ui_CNMFEParamsWindow(object):
         self.doubleSpinBox_ring_size_factor = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBox_ring_size_factor.setSingleStep(0.1)
         self.doubleSpinBox_ring_size_factor.setProperty("value", 1.5)
-        self.doubleSpinBox_ring_size_factor.setObjectName("doubleSpinBox_ring_size_factor")
+        self.doubleSpinBox_ring_size_factor.setObjectName(
+            "doubleSpinBox_ring_size_factor"
+        )
         self.horizontalLayout_4.addWidget(self.doubleSpinBox_ring_size_factor)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem10 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_4.addItem(spacerItem10)
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
@@ -255,7 +277,9 @@ class Ui_CNMFEParamsWindow(object):
         self.comboBoxDeconv.addItem("")
         self.comboBoxDeconv.addItem("")
         self.horizontalLayout_5.addWidget(self.comboBoxDeconv)
-        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem11 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_5.addItem(spacerItem11)
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
@@ -269,7 +293,9 @@ class Ui_CNMFEParamsWindow(object):
         self.doubleSpinBoxMergeThresh.setProperty("value", 0.7)
         self.doubleSpinBoxMergeThresh.setObjectName("doubleSpinBoxMergeThresh")
         self.horizontalLayout_14.addWidget(self.doubleSpinBoxMergeThresh)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem12 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_14.addItem(spacerItem12)
         self.verticalLayout_2.addLayout(self.horizontalLayout_14)
         self.groupBox_cnmf_kwargs = QtWidgets.QGroupBox(self.centralwidget)
@@ -279,7 +305,9 @@ class Ui_CNMFEParamsWindow(object):
         self.groupBox_cnmf_kwargs.setObjectName("groupBox_cnmf_kwargs")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_cnmf_kwargs)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.plainTextEdit_cnmf_kwargs = QtWidgets.QPlainTextEdit(self.groupBox_cnmf_kwargs)
+        self.plainTextEdit_cnmf_kwargs = QtWidgets.QPlainTextEdit(
+            self.groupBox_cnmf_kwargs
+        )
         self.plainTextEdit_cnmf_kwargs.setObjectName("plainTextEdit_cnmf_kwargs")
         self.verticalLayout_3.addWidget(self.plainTextEdit_cnmf_kwargs)
         self.verticalLayout_2.addWidget(self.groupBox_cnmf_kwargs)

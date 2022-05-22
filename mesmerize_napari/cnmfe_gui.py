@@ -15,16 +15,13 @@ class CNMFEWidget(QtWidgets.QMainWindow):
     def _add_item_corr_pnr(self, *args):
         gSig = self.ui.spinBoxGSig.value()
         downsample_ratio = self.ui.spinBoxDownsample.value()
-        cnmfe_kwargs = \
-            {
-                'gSig':  (gSig, gSig)
-            }
+        cnmfe_kwargs = {"gSig": (gSig, gSig)}
         d = dict()
         d.update(
             {
-                'do_cnmfe': False,
-                'cnmfe_kwargs': cnmfe_kwargs,
-                'downsample_ratio': downsample_ratio,
+                "do_cnmfe": False,
+                "cnmfe_kwargs": cnmfe_kwargs,
+                "downsample_ratio": downsample_ratio,
             }
         )
 
@@ -41,32 +38,31 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         if kval == 0:
             kval = None
         deconv = self.ui.comboBoxDeconv.currentText()
-        if deconv == 'SKIP':
+        if deconv == "SKIP":
             method_deconvolution = None
         else:
             method_deconvolution = deconv
         downsample_ratio = self.ui.spinBoxDownsample.value()
-        cnmfe_kwargs = \
-            {
-                'gSig': (gSig, gSig),
-                'gSiz': (4 * gSig + 1, 4 * gSig + 1),
-                'p': self.ui.spinBox_p.value(),
-                'min_corr': self.ui.doubleSpinBoxMinCorr.value(),
-                'min_pnr': self.ui.spinBoxMinPNR.value(),
-                'rf': self.ui.spinBoxRf.value(),
-                'stride': self.ui.spinBoxOverlap.value(),
-                'gnb': self.ui.spinBoxGnb.value(),
-                'nb_patch': self.ui.spinBoxNb_patch.value(),
-                'K': kval,
-                'ssub': self.ui.spinBox_ssub.value(),
-                'tsub': self.ui.spinBox_tsub.value(),
-                'ring_size_factor': self.ui.doubleSpinBox_ring_size_factor.value(),
-                'merge_thresh': self.ui.doubleSpinBoxMergeThresh.value(),
-                'low_rank_background': low_rank_background,
-                'method_deconvolution': method_deconvolution,
-                'update_background_components': True,
-                'del_duplicates': True
-            }
+        cnmfe_kwargs = {
+            "gSig": (gSig, gSig),
+            "gSiz": (4 * gSig + 1, 4 * gSig + 1),
+            "p": self.ui.spinBox_p.value(),
+            "min_corr": self.ui.doubleSpinBoxMinCorr.value(),
+            "min_pnr": self.ui.spinBoxMinPNR.value(),
+            "rf": self.ui.spinBoxRf.value(),
+            "stride": self.ui.spinBoxOverlap.value(),
+            "gnb": self.ui.spinBoxGnb.value(),
+            "nb_patch": self.ui.spinBoxNb_patch.value(),
+            "K": kval,
+            "ssub": self.ui.spinBox_ssub.value(),
+            "tsub": self.ui.spinBox_tsub.value(),
+            "ring_size_factor": self.ui.doubleSpinBox_ring_size_factor.value(),
+            "merge_thresh": self.ui.doubleSpinBoxMergeThresh.value(),
+            "low_rank_background": low_rank_background,
+            "method_deconvolution": method_deconvolution,
+            "update_background_components": True,
+            "del_duplicates": True,
+        }
         # Any additional cnmfe kwargs set in the text entry
         if self.ui.groupBox_cnmf_kwargs.isChecked():
             try:
@@ -80,8 +76,8 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         d = dict()
         d.update(
             {
-                'do_cnmfe': True,
-                'downsample_ratio': downsample_ratio,
+                "do_cnmfe": True,
+                "downsample_ratio": downsample_ratio,
             }
         )
 
@@ -103,5 +99,5 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         self.add_item(item_name=name, params=d)
 
     def add_item(self, item_name: str, params: dict):
-        print('added cnmfe item', params)
-        self.parent().add_item(algo='cnmfe', parameters=params, name=item_name)
+        print("added cnmfe item", params)
+        self.parent().add_item(algo="cnmfe", parameters=params, name=item_name)
