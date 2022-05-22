@@ -411,20 +411,35 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def view_shifts(self):
         s = self.selected_series()
         if s["params"]["mcorr_kwargs"]["pw_rigid"]:
-            x_shifts, y_shifts = s.mcorr.get_shifts(output_type="napari-1d")
-            self.viewer.add_image(x_shifts, name=f'{s["name"]}: X shifts')
-            self.viewer.add_image(y_shifts, name=f'{s["name"]}: Y shifts')
+            shifts = s.mcorr.get_shifts()
+            x = np.linspace(0, shifts.shape[1], shifts.shape[1])
+
+            plt.figure()
+            for i in range(shifts.shape[2]):
+                plt.plot(x, shifts[0,:,i])
+            plt.title("Elastic MC Shifts (x)")
+            plt.xlabel("Time")
+            plt.ylabel("Pixels")
+
+            plt.figure()
+            for i in range(shifts.shape[2]):
+                plt.plot(x, shifts[1,:,i])
+            plt.title("Elastic MC Shifts (y)")
+            plt.xlabel("Time")
+            plt.ylabel("Pixels")
 
         else:
-            shifts = s.mcorr.get_shifts(output_type="matplotlib")
+            shifts = s.mcorr.get_shifts()
             x = np.linspace(0, np.shape(shifts)[0], np.shape(shifts)[0])
-            print(np.shape(shifts))
-            plt.plot(x, shifts[:, 0], x, shifts[:, 1])
+
+            for i in range(shifts.shape[1]):
+                plt.plot(x, shifts[:,i])
+
             plt.title("Rigid MC Shifts")
             plt.legend(["x-shifts", "y-shifts"])
             plt.xlabel("Time")
             plt.ylabel("Pixels")
-            # self.viewer.add_image(shifts, name=f'{s["name"]}: shifts')
+
 
 
 @napari_hook_implementation
