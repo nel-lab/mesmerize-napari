@@ -58,14 +58,14 @@ class CNMFViewer:
 
     def plot_spatial(self):
         if self.roi_type == 'outline':
-            coors = self.batch_item.cnmf.get_spatial_contours(
-                np.arange(0, self.cnmf_obj.estimates.A.shape[1])
-            )[0]
+            contours_coors, contours_com = self.batch_item.cnmf.get_spatial_contours()
 
             edge_colors, face_colors = self.get_colors()
+            print("edge colors:", edge_colors)
+            print("face_colors:", face_colors)
 
             self.spatial_layer: Shapes = self.viewer.add_shapes(
-                data=coors,
+                data=contours_coors,
                 shape_type='polygon',
                 edge_width=0.5,
                 edge_color=edge_colors,
@@ -73,6 +73,9 @@ class CNMFViewer:
                 opacity=0.7,
                 name='good components',
             )
+
+            print("new edge:", self.spatial_layer.edge_color)
+            print("new face:", self.spatial_layer.face_color)
 
             @self.spatial_layer.mouse_drag_callbacks.append
             def callback(layer, event):
@@ -108,8 +111,8 @@ class CNMFViewer:
         self.spatial_layer.edge_color = edge_colors
         self.temporal_layer.color = edge_colors
 
-    def get_colors(self, alpha_edge=0.7, alpha_face=0.0):
-        n_components = self.cnmf_obj.estimates.A.shape[1]
+    def get_colors(self, alpha_edge=0.9, alpha_face=0.0):
+        n_components = len(self.cnmf_obj.estimates.idx_components)
 
         self.edge_colors = np.vstack(auto_colormap(
             n_colors=n_components,
@@ -117,10 +120,6 @@ class CNMFViewer:
             output='mpl',
             alpha=alpha_edge
         ))
-
-        self.edge_colors[self.cnmf_obj.estimates.idx_components, -1] = 0.8
-        self.edge_colors[self.cnmf_obj.estimates.idx_components_bad, -1] = 0.0
-
 
         self.face_colors = np.vstack(auto_colormap(
             n_colors=n_components,
@@ -137,7 +136,6 @@ class CNMFViewer:
             pass
         else:
             edge_colors[sel_comps, -1] = 0.8
-            edge_colors[self.cnmf_obj.estimates.idx_components_bad, -1] = 0.0
 
     def show_bad_components(self, b: bool):
         pass
@@ -145,10 +143,7 @@ class CNMFViewer:
     def plot_temporal(self):
         # Traces
         good_traces = self.cnmf_obj.estimates.C[self.cnmf_obj.estimates.idx_components]
-        bad_traces = self.cnmf_obj.estimates.C[self.cnmf_obj.estimates.idx_components_bad]
 
-        print("good traces", np.shape(good_traces))
-        print("bad traces", np.shape(bad_traces))
         self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
         self.viewer1d.axis.y_label = "Intensity"
@@ -157,17 +152,15 @@ class CNMFViewer:
         self.viewer1d.text_overlay.position = "top_right"
         self.viewer1d.text_overlay.font_size = 15
 
-        traces = self.cnmf_obj.estimates.C
-
         edge_colors, face_colors = self.get_colors()
 
-        n_pts = traces.shape[1]
-        n_lines = traces.shape[0]
+        n_pts = good_traces.shape[1]
+        n_lines = good_traces.shape[0]
         xs = [np.linspace(0, n_pts, n_pts)]
         ys = []
 
         for i in range(n_lines):
-            ys.append(traces[i])
+            ys.append(good_traces[i])
 
         self.temporal_layer = self.viewer1d.add_multi_line(
             data=dict(xs=xs, ys=ys),
@@ -194,27 +187,21 @@ class CNMFViewer:
     def select_contours(self, box_size = None, update_box = False):
         if update_box:
             self.viewer.layers.remove(self.white_layer)
-        com = self.batch_item.cnmf.get_spatial_contours(
-            np.arange(0, self.cnmf_obj.estimates.A.shape[1])
-        )[1]
-
-        coors = self.batch_item.cnmf.get_spatial_contours(
-            np.arange(0, self.cnmf_obj.estimates.A.shape[1])
-        )[0]
+        contours_coors, contours_com = self.batch_item.cnmf.get_spatial_contours()
 
         if box_size is None:
             pass
         else:
             self.box_size = box_size
             
-        sel_comps = [ind for (ind, x) in enumerate(com) if (
+        sel_comps = [ind for (ind, x) in enumerate(contours_com) if (
                 x[1] > self.cursor_position[1] - self.box_size) and
                      (x[1] < self.cursor_position[1] + self.box_size) and
                      (x[0] > self.cursor_position[0] - self.box_size) and
-                     (x[0] < self.cursor_position[0] + self.box_size) and
-                     ind not in self.cnmf_obj.estimates.idx_components_bad]
+                     (x[0] < self.cursor_position[0] + self.box_size)]
 
-        sel_coors = [coors[i] for i in sel_comps]
+        sel_coors = [contours_coors[i] for i in sel_comps]
+        print("selected coordinates:", sel_coors)
         face_color = [self.face_colors[i] for i in sel_comps]
 
         self.update_colors(sel_comps=sel_comps)
