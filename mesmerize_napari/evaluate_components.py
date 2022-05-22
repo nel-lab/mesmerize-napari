@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
-from .eval_components_template import Ui_MainWindow
+from .eval_components_template import Ui_EvalComponents
 
 from mesmerize_core import CNMFExtensions
 from caiman.source_extraction.cnmf.cnmf import CNMFParams, CNMF
@@ -10,7 +10,7 @@ class EvalComponentsWidgets(QtWidgets.QMainWindow):
 
     def __init__(self, cnmf_viewer):
         QtWidgets.QMainWindow.__init__(self, parent=None)
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_EvalComponents()
         self.ui.setupUi(self)
 
         self.cnmf_viewer = cnmf_viewer

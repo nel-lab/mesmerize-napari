@@ -1,12 +1,12 @@
 from PyQt5 import QtWidgets
-from .cnmf_pytemplate import Ui_CNMFDockWidget
+from .cnmf_pytemplate import Ui_CNMFParmsWindow
 from mesmerize_core.utils import *
 
 
-class CNMFWidget(QtWidgets.QDockWidget):
+class CNMFWidget(QtWidgets.QMainWindow):
     def __init__(self, parent):
-        QtWidgets.QDockWidget.__init__(self, parent=parent)
-        self.ui = Ui_CNMFDockWidget()
+        QtWidgets.QMainWindow.__init__(self, parent=parent)
+        self.ui = Ui_CNMFParmsWindow()
         self.ui.setupUi(self)
         self.ui.btnAddToBatchCNMF.clicked.connect(self.add_item)
 
