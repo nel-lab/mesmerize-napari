@@ -58,7 +58,7 @@ class CNMFViewer:
 
     def plot_spatial(self):
         if self.roi_type == 'outline':
-            coors = self.batch_item.cnmf.get_spatial_contour_coors(
+            coors = self.batch_item.cnmf.get_spatial_contours(
                 np.arange(0, self.cnmf_obj.estimates.A.shape[1])
             )[0]
 
@@ -194,11 +194,11 @@ class CNMFViewer:
     def select_contours(self, box_size = None, update_box = False):
         if update_box:
             self.viewer.layers.remove(self.white_layer)
-        com = self.batch_item.cnmf.get_spatial_contour_coors(
+        com = self.batch_item.cnmf.get_spatial_contours(
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[1]
 
-        coors = self.batch_item.cnmf.get_spatial_contour_coors(
+        coors = self.batch_item.cnmf.get_spatial_contours(
             np.arange(0, self.cnmf_obj.estimates.A.shape[1])
         )[0]
 
