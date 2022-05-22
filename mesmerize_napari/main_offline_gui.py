@@ -27,15 +27,14 @@ elif IS_WINDOWS:
     from win32api import TerminateProcess, CloseHandle
 
 
-COLORS_HEX = \
-    {
-        'orange': '#ffb347',
-        'green': '#77dd77',
-        'dark-green': '#009603',
-        'red': '#fe0d00',
-        'blue': '#85e3ff',
-        'yellow': '#ffff00',
-    }
+COLORS_HEX = {
+    "orange": "#ffb347",
+    "green": "#77dd77",
+    "dark-green": "#009603",
+    "red": "#fe0d00",
+    "blue": "#85e3ff",
+    "yellow": "#ffff00",
+}
 
 
 class MainOfflineGUI(QtWidgets.QWidget):
@@ -77,16 +76,20 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.listWidgetItems.doubleClicked.connect(self.load_output)
         # Show MCorr Projections
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
-        
+
         self.ui.pushButtonViewInput.clicked.connect(self.view_input)
 
         self.ui.lineEditParentDataPath.textChanged.connect(self.set_parent_data_path)
 
         self.qprocess: QtCore.QProcess = None
 
-        self.ui.pushButtonVizCorrelationImage.clicked.connect(self.load_correlation_image)
+        self.ui.pushButtonVizCorrelationImage.clicked.connect(
+            self.load_correlation_image
+        )
 
-        self.ui.pushButtonViewDownsampledMCorrrMovie.clicked.connect(self.view_downsample_mcorr)
+        self.ui.pushButtonViewDownsampledMCorrrMovie.clicked.connect(
+            self.view_downsample_mcorr
+        )
 
         self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
 
@@ -100,9 +103,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def set_parent_data_path(self):
         path = Path(self.ui.lineEditParentDataPath.text())
         if not path.is_dir():
-            self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['red']}}}")
+            self.ui.lineEditParentDataPath.setStyleSheet(
+                f"QLineEdit {{background: {COLORS_HEX['red']}}}"
+            )
         else:
-            self.ui.lineEditParentDataPath.setStyleSheet(f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}")
+            self.ui.lineEditParentDataPath.setStyleSheet(
+                f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}"
+            )
             set_parent_data_path(path)
 
     @use_open_dir_dialog("Select Parent Data Directory")
@@ -110,7 +117,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.ui.lineEditParentDataPath.setText(path)
         self.set_parent_data_path()
 
-    @use_open_file_dialog('Choose image file', '', ['*.tiff', '*.tif', '*.btf', '*.mmap'])
+    @use_open_file_dialog(
+        "Choose image file", "", ["*.tiff", "*.tif", "*.btf", "*.mmap"]
+    )
     def open_movie(self, path: str, *args, **kwargs):
         if not self.clear_viewer():
             return
@@ -120,13 +129,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def _open_movie(self, path: Union[Path, str], name: str = None):
         self.input_movie_path = str(path)
         file_ext = Path(self.input_movie_path).suffix
-        if file_ext == '.mmap':
+        if file_ext == ".mmap":
             Yr, dims, T = cm.load_memmap(self.input_movie_path)
-            images = np.reshape(Yr.T, [T] + list(dims), order='F')
-            self.viewer.add_image(images, name=name, colormap='gnuplot2')
+            images = np.reshape(Yr.T, [T] + list(dims), order="F")
+            self.viewer.add_image(images, name=name, colormap="gnuplot2")
         else:
-            self.viewer.open(self.input_movie_path, colormap='gnuplot2')
-            
+            self.viewer.open(self.input_movie_path, colormap="gnuplot2")
+
     def view_input(self):
         path = self.selected_series().caiman.get_input_movie_path()
         self._open_movie(path)
@@ -135,12 +144,16 @@ class MainOfflineGUI(QtWidgets.QWidget):
         if len(self.viewer.layers) == 0:
             return True
 
-        if QtWidgets.QMessageBox.warning(
+        if (
+            QtWidgets.QMessageBox.warning(
                 self,
-                'Clear viewer?',
-                'The viewer must be cleared, do you want to continue?',
-                QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No
-        ) == QtWidgets.QMessageBox.No:
+                "Clear viewer?",
+                "The viewer must be cleared, do you want to continue?",
+                QtWidgets.QMessageBox.Yes,
+                QtWidgets.QMessageBox.No,
+            )
+            == QtWidgets.QMessageBox.No
+        ):
             return False
 
         for layer in self.viewer.layers:
@@ -148,13 +161,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         return True
 
-    @use_save_file_dialog('Choose location to save batch file', '', '.pickle')
+    @use_save_file_dialog("Choose location to save batch file", "", ".pickle")
     def create_new_batch(self, path, *args, **kwargs):
         self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
 
-    @use_open_file_dialog('Choose batch', '', ['*.pickle'])
+    @use_open_file_dialog("Choose batch", "", ["*.pickle"])
     def open_batch(self, path: str, *args, **kwargs):
         self.dataframe = load_batch(path)
         self.dataframe_file_path = path
@@ -164,23 +177,29 @@ class MainOfflineGUI(QtWidgets.QWidget):
         # Iterate through dataframe, add each item to list widget
         ## For now, instead of name I'm adding the uuid
         for i, r in self.dataframe.iterrows():
-            algo = r['algo']
-            name = r['name']
-            uuid = r['uuid']
-            self.ui.listWidgetItems.addItem(f'{algo}: {name}')
+            algo = r["algo"]
+            name = r["name"]
+            uuid = r["uuid"]
+            self.ui.listWidgetItems.addItem(f"{algo}: {name}")
 
             item = self.ui.listWidgetItems.item(i)
             item.setData(3, uuid)
 
             self.set_list_widget_item_color(i)
 
-    def add_item(self, algo: str, parameters: dict, name: str, input_movie_path: str = None):
+    def add_item(
+        self, algo: str, parameters: dict, name: str, input_movie_path: str = None
+    ):
         if self.dataframe is None:
-            QtWidgets.QMessageBox.warning('No Batch', 'You must open or create a batch before adding items.')
+            QtWidgets.QMessageBox.warning(
+                "No Batch", "You must open or create a batch before adding items."
+            )
             return
 
         if self.input_movie_path is None:
-            QtWidgets.QMessageBox.warning('No movie open', 'You must open a movie to add to the batch.')
+            QtWidgets.QMessageBox.warning(
+                "No movie open", "You must open a movie to add to the batch."
+            )
             return
 
         if input_movie_path is None:
@@ -191,9 +210,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
         )
         print(f"Added <{algo}> item to batch!")
 
-        uuid = self.dataframe.iloc[-1]['uuid']
+        uuid = self.dataframe.iloc[-1]["uuid"]
 
-        self.ui.listWidgetItems.addItem(f'{algo}: {name}')
+        self.ui.listWidgetItems.addItem(f"{algo}: {name}")
 
         n = self.ui.listWidgetItems.count()
         item = self.ui.listWidgetItems.item(n - 1)
@@ -203,7 +222,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)
 
-        ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
+        ix = self.dataframe[self.dataframe["uuid"] == uuid].index[0]
         self.dataframe.caiman.remove_item(index=ix)
         self.ui.listWidgetItems.takeItem(ix)
 
@@ -211,7 +230,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         item_gui = QtWidgets.QListWidgetItem = self.ui.listWidgetItems.currentItem()
         uuid = item_gui.data(3)
 
-        ix = self.dataframe[self.dataframe['uuid'] == uuid].index[0]
+        ix = self.dataframe[self.dataframe["uuid"] == uuid].index[0]
 
         # For now, just run given index.
         self._run_index(ix)
@@ -227,12 +246,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
             batch_path=self.dataframe.paths.get_batch_path(),
             backend=COMPUTE_BACKEND_QPROCESS,
             callbacks_finished=callbacks,
-            callback_std_out=std_out
+            callback_std_out=std_out,
         )
-        self.set_list_widget_item_color(index, 'yellow')
+        self.set_list_widget_item_color(index, "yellow")
 
     def _print_qprocess_std_out(self, proc):
-        txt = proc.readAllStandardOutput().data().decode('utf8')
+        txt = proc.readAllStandardOutput().data().decode("utf8")
         self.ui.textBrowserStdOut.append(txt)
 
     def item_finished(self, ix):
@@ -246,7 +265,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self._run_index(ix + 1)
 
         else:
-            QtWidgets.QMessageBox.information(self, 'Batch is done!', 'Yay, your batch has finished processing!')
+            QtWidgets.QMessageBox.information(
+                self, "Batch is done!", "Yay, your batch has finished processing!"
+            )
 
     def abort_run(self):
         if self.qprocess is not None:
@@ -280,17 +301,19 @@ class MainOfflineGUI(QtWidgets.QWidget):
         u = self._selected_uuid()
         s = self.selected_series()
 
-        params = s['params']
+        params = s["params"]
         params_str = pprint.pformat(params)
-        input_movie_path = s['input_movie_path']
+        input_movie_path = s["input_movie_path"]
 
-        output_str = f"uuid:\n{u}\n" \
-                     f"input_movie_path:\n{input_movie_path}\n\n" \
-                     f"params:\n{params_str}"
+        output_str = (
+            f"uuid:\n{u}\n"
+            f"input_movie_path:\n{input_movie_path}\n\n"
+            f"params:\n{params_str}"
+        )
 
-        if s['outputs'] is not None:
-            if s['outputs']['traceback'] is not None:
-                tb = s['outputs']['traceback']
+        if s["outputs"] is not None:
+            if s["outputs"]["traceback"] is not None:
+                tb = s["outputs"]["traceback"]
                 output_str += f"\n\ntraceback:{tb}"
 
         self.ui.textBrowserParams.setText(output_str)
@@ -300,16 +323,18 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self._set_list_widget_item_color(ix, color)
 
         elif color is None:
-            if self.dataframe.iloc[ix]['outputs'] is None:
+            if self.dataframe.iloc[ix]["outputs"] is None:
                 return
-            
-            if self.dataframe.iloc[ix]['outputs']['success']:
-                self._set_list_widget_item_color(ix, 'green')
+
+            if self.dataframe.iloc[ix]["outputs"]["success"]:
+                self._set_list_widget_item_color(ix, "green")
             else:
-                self._set_list_widget_item_color(ix, 'red')
+                self._set_list_widget_item_color(ix, "red")
 
     def _set_list_widget_item_color(self, ix: int, color: str):
-        self.ui.listWidgetItems.item(ix).setBackground(QtGui.QBrush(QtGui.QColor(COLORS_HEX[color])))
+        self.ui.listWidgetItems.item(ix).setBackground(
+            QtGui.QBrush(QtGui.QColor(COLORS_HEX[color]))
+        )
 
     def show_cnmf_params_gui(self):
         if self.cnmf_params_gui is None:
@@ -345,57 +370,63 @@ class MainOfflineGUI(QtWidgets.QWidget):
             return
 
         s = self.selected_series()  # pandas series corresponding to the item
-        algo = s['algo']
-        if algo == 'mcorr':
+        algo = s["algo"]
+        if algo == "mcorr":
             MCORRViewer(self.selected_series())
 
-        elif algo in ['cnmf', 'cnmfe']:
+        elif algo in ["cnmf", "cnmfe"]:
             if self.ui.radioButtonROIMask.isChecked():
-                CNMFViewer(self.selected_series(), 'mask')
+                CNMFViewer(self.selected_series(), "mask")
 
             elif self.ui.radioButtonROIOutline.isChecked():
-                CNMFViewer(self.selected_series(), 'outline')
+                CNMFViewer(self.selected_series(), "outline")
 
     def load_correlation_image(self):
         s = self.selected_series()
         corr_img = s.caiman.get_correlation_image()
-        if s['algo'] == 'cnmfe':
+        if s["algo"] == "cnmfe":
             pnr_img = s.caiman.get_pnr_image()
-            self.viewer.add_image(pnr_img, name=f'pnr: {s["name"]}', colormap='gnuplot2')
-        self.viewer.add_image(corr_img, name=f'corr: {s["name"]}', colormap='gnuplot2')
+            self.viewer.add_image(
+                pnr_img, name=f'pnr: {s["name"]}', colormap="gnuplot2"
+            )
+        self.viewer.add_image(corr_img, name=f'corr: {s["name"]}', colormap="gnuplot2")
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
         s = self.selected_series()
         projection = s.caiman.get_projection(proj_type=proj_type)
-        self.viewer.add_image(projection, name=f'{proj_type}: projection {s["name"]}', colormap='gnuplot2')
+        self.viewer.add_image(
+            projection, name=f'{proj_type}: projection {s["name"]}', colormap="gnuplot2"
+        )
 
     def view_downsample_mcorr(self):
         # TODO: average set of x frames, not skip
         s = self.selected_series()
         downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
-        images = s.mcorr.get_output()[::downsample_ratio,:,:]
+        images = s.mcorr.get_output()[::downsample_ratio, :, :]
         self.viewer.add_image(images)
         # Set input movie path to mcorr output path so cnmf can automatically use vid
         self.input_movie_path = str(s.mcorr.get_output_path())
 
     def view_shifts(self):
         s = self.selected_series()
-        if s['params']['mcorr_kwargs']['pw_rigid']:
-            x_shifts, y_shifts = s.mcorr.get_shifts(output_type='napari-1d')
+        if s["params"]["mcorr_kwargs"]["pw_rigid"]:
+            x_shifts, y_shifts = s.mcorr.get_shifts(output_type="napari-1d")
             self.viewer.add_image(x_shifts, name=f'{s["name"]}: X shifts')
             self.viewer.add_image(y_shifts, name=f'{s["name"]}: Y shifts')
 
         else:
-            shifts = s.mcorr.get_shifts(output_type='matplotlib')
-            x = np.linspace(0,np.shape(shifts)[0],np.shape(shifts)[0])
+            shifts = s.mcorr.get_shifts(output_type="matplotlib")
+            x = np.linspace(0, np.shape(shifts)[0], np.shape(shifts)[0])
             print(np.shape(shifts))
-            plt.plot(x,shifts[:,0], x, shifts[:,1])
-            plt.title('Rigid MC Shifts')
-            plt.legend(['x-shifts', 'y-shifts'])
-            plt.xlabel('Time')
-            plt.ylabel('Pixels')
-            #self.viewer.add_image(shifts, name=f'{s["name"]}: shifts')
+            plt.plot(x, shifts[:, 0], x, shifts[:, 1])
+            plt.title("Rigid MC Shifts")
+            plt.legend(["x-shifts", "y-shifts"])
+            plt.xlabel("Time")
+            plt.ylabel("Pixels")
+            # self.viewer.add_image(shifts, name=f'{s["name"]}: shifts')
+
+
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     return MainOfflineGUI

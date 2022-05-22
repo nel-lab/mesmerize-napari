@@ -128,24 +128,44 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        MainWindow.setTabOrder(self.doubleSpinBox_rval_lowest, self.doubleSpinBox_SNR_lowest)
-        MainWindow.setTabOrder(self.doubleSpinBox_SNR_lowest, self.doubleSpinBox_cnn_lowest)
-        MainWindow.setTabOrder(self.doubleSpinBox_cnn_lowest, self.doubleSpinBox_rval_thr)
+        MainWindow.setTabOrder(
+            self.doubleSpinBox_rval_lowest, self.doubleSpinBox_SNR_lowest
+        )
+        MainWindow.setTabOrder(
+            self.doubleSpinBox_SNR_lowest, self.doubleSpinBox_cnn_lowest
+        )
+        MainWindow.setTabOrder(
+            self.doubleSpinBox_cnn_lowest, self.doubleSpinBox_rval_thr
+        )
         MainWindow.setTabOrder(self.doubleSpinBox_rval_thr, self.doubleSpinBox_min_SNR)
-        MainWindow.setTabOrder(self.doubleSpinBox_min_SNR, self.doubleSpinBox_min_cnn_thr)
-        MainWindow.setTabOrder(self.doubleSpinBox_min_cnn_thr, self.checkBox_update_live)
+        MainWindow.setTabOrder(
+            self.doubleSpinBox_min_SNR, self.doubleSpinBox_min_cnn_thr
+        )
+        MainWindow.setTabOrder(
+            self.doubleSpinBox_min_cnn_thr, self.checkBox_update_live
+        )
         MainWindow.setTabOrder(self.checkBox_update_live, self.pushButton_update)
         MainWindow.setTabOrder(self.pushButton_update, self.pushButton_save_to_item)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label_10.setToolTip(_translate("MainWindow", "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted"))
+        self.label_10.setToolTip(
+            _translate(
+                "MainWindow",
+                "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted",
+            )
+        )
         self.label_10.setText(_translate("MainWindow", "Low Thresholds"))
         self.label_11.setText(_translate("MainWindow", "rval_lowest"))
         self.label_12.setText(_translate("MainWindow", "SNR_lowest"))
         self.label_13.setText(_translate("MainWindow", "cnn_lowest"))
-        self.label_14.setToolTip(_translate("MainWindow", "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted"))
+        self.label_14.setToolTip(
+            _translate(
+                "MainWindow",
+                "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted",
+            )
+        )
         self.label_14.setText(_translate("MainWindow", "High Threshold"))
         self.label_15.setText(_translate("MainWindow", "rval_thr"))
         self.label_16.setText(_translate("MainWindow", "min_SNR"))

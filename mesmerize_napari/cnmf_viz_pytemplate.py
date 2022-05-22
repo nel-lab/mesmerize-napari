@@ -54,20 +54,37 @@ class Ui_VizualizationWidget(object):
 
     def retranslateUi(self, VizualizationWidget):
         _translate = QtCore.QCoreApplication.translate
-        VizualizationWidget.setWindowTitle(_translate("VizualizationWidget", "Vizualization Widget"))
-        self.pushButtonEvalGui.setText(_translate("VizualizationWidget", "Show Evaluation GUI"))
-        self.comboBoxProjection.setItemText(0, _translate("VizualizationWidget", "mean"))
+        VizualizationWidget.setWindowTitle(
+            _translate("VizualizationWidget", "Vizualization Widget")
+        )
+        self.pushButtonEvalGui.setText(
+            _translate("VizualizationWidget", "Show Evaluation GUI")
+        )
+        self.comboBoxProjection.setItemText(
+            0, _translate("VizualizationWidget", "mean")
+        )
         self.comboBoxProjection.setItemText(1, _translate("VizualizationWidget", "std"))
         self.comboBoxProjection.setItemText(2, _translate("VizualizationWidget", "max"))
-        self.pushButtonViewProjection.setText(_translate("VizualizationWidget", "View Projection"))
-        self.pushButtonCnImage.setText(_translate("VizualizationWidget", "Correlation Image"))
-        self.pushButtonInputMovie.setText(_translate("VizualizationWidget", "Input Movie"))
-        self.pushButtonCnmfMovie.setText(_translate("VizualizationWidget", "Reconstructed post-CNMF Movie"))
-        self.pushButtonUpdateBoxSize.setText(_translate("VizualizationWidget", "Update Box Size"))
+        self.pushButtonViewProjection.setText(
+            _translate("VizualizationWidget", "View Projection")
+        )
+        self.pushButtonCnImage.setText(
+            _translate("VizualizationWidget", "Correlation Image")
+        )
+        self.pushButtonInputMovie.setText(
+            _translate("VizualizationWidget", "Input Movie")
+        )
+        self.pushButtonCnmfMovie.setText(
+            _translate("VizualizationWidget", "Reconstructed post-CNMF Movie")
+        )
+        self.pushButtonUpdateBoxSize.setText(
+            _translate("VizualizationWidget", "Update Box Size")
+        )
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     VizualizationWidget = QtWidgets.QDockWidget()
     ui = Ui_VizualizationWidget()
