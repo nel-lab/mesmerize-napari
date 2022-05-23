@@ -412,28 +412,32 @@ class MainOfflineGUI(QtWidgets.QWidget):
         s = self.selected_series()
         if s["params"]["mcorr_kwargs"]["pw_rigid"]:
             shifts = s.mcorr.get_shifts()
-            x = np.linspace(0, shifts.shape[1], shifts.shape[1])
-
+            xs, ys = s.mcorr.shifts_handler(
+                shifts=shifts, pw_rigid=True
+            )
             plt.figure()
-            for i in range(shifts.shape[2]):
-                plt.plot(x, shifts[0,:,i])
+            n_lines = np.shape(ys)[0]
+            print(n_lines)
+            for i in range(n_lines):
+                plt.plot(xs[0], ys[i])
             plt.title("Elastic MC Shifts (x)")
             plt.xlabel("Time")
             plt.ylabel("Pixels")
 
             plt.figure()
-            for i in range(shifts.shape[2]):
-                plt.plot(x, shifts[1,:,i])
+            for i in range(n_lines):
+                plt.plot(xs[0], ys[n_lines+i])
             plt.title("Elastic MC Shifts (y)")
             plt.xlabel("Time")
             plt.ylabel("Pixels")
 
         else:
             shifts = s.mcorr.get_shifts()
-            x = np.linspace(0, np.shape(shifts)[0], np.shape(shifts)[0])
-
-            for i in range(shifts.shape[1]):
-                plt.plot(x, shifts[:,i])
+            xs, ys = s.mcorr.shifts_handler(
+                shifts=shifts, pw_rigid=False
+            )
+            for i in range(np.shape(ys)[0]):
+                plt.plot(xs[0], ys[i])
 
             plt.title("Rigid MC Shifts")
             plt.legend(["x-shifts", "y-shifts"])
