@@ -247,10 +247,7 @@ class MCORRViewer:
             self.plot_els_shifts()
 
     def plot_rig_shifts(self):
-        shifts = self.batch_item.mcorr.get_shifts()
-        xs, ys = self.batch_item.mcorr.shifts_handler(
-            shifts=shifts, pw_rigid=False
-        )
+        xs, ys = self.batch_item.mcorr.get_shifts(pw_rigid=False)
 
         self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
@@ -279,10 +276,7 @@ class MCORRViewer:
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def plot_els_shifts(self):
-        shifts = self.batch_item.mcorr.get_shifts()
-        xs, ys = self.batch_item.mcorr.shifts_handler(
-            shifts=shifts, pw_rigid=True
-        )
+        xs, ys = self.batch_item.mcorr.get_shifts(pw_rigid=True)
 
         self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)

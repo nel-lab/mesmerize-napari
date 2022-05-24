@@ -411,14 +411,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def view_shifts(self):
         s = self.selected_series()
         if s["params"]["mcorr_kwargs"]["pw_rigid"]:
-            shifts = s.mcorr.get_shifts()
-            xs, ys = s.mcorr.shifts_handler(
-                shifts=shifts, pw_rigid=True
-            )
+            xs, ys = s.mcorr.get_shifts(pw_rigid=True)
+
             plt.figure()
-            n_lines = np.shape(ys)[0]
+            n_lines = int(np.shape(ys)[0]/2)
             print(n_lines)
-            for i in range(n_lines):
+            for i in range(int(n_lines)):
                 plt.plot(xs[0], ys[i])
             plt.title("Elastic MC Shifts (x)")
             plt.xlabel("Time")
@@ -432,10 +430,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
             plt.ylabel("Pixels")
 
         else:
-            shifts = s.mcorr.get_shifts()
-            xs, ys = s.mcorr.shifts_handler(
-                shifts=shifts, pw_rigid=False
-            )
+            xs, ys = s.mcorr.get_shifts(pw_rigid=False)
+
+            plt.figure()
             for i in range(np.shape(ys)[0]):
                 plt.plot(xs[0], ys[i])
 
