@@ -62,6 +62,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
             "method_deconvolution": method_deconvolution,
             "update_background_components": True,
             "del_duplicates": True,
+            "fr": self.ui.doubleSpinBoxFrameRate.value(),
         }
         # Any additional cnmfe kwargs set in the text entry
         if self.ui.groupBox_cnmf_kwargs.isChecked():

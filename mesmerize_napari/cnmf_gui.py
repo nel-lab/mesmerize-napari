@@ -38,7 +38,7 @@ class CNMFWidget(QtWidgets.QMainWindow):
             "tsub": self.ui.spinBox_tsub.value(),
             "method_init": self.ui.comboBox_method_init.currentText(),
             # 'border_pix': bord_px,
-            # 'fr': self.vi.viewer.workEnv.imgdata.meta['fps']
+            'fr': self.ui.doubleSpinBoxFrameRate.value(),
         }
 
         # Any additional cnmf kwargs set in the text entry
@@ -58,7 +58,7 @@ class CNMFWidget(QtWidgets.QMainWindow):
             "min_cnn_thr": self.ui.doubleSpinBoxCNNThr.value(),
             "cnn_lowest": self.ui.doubleSpinBox_cnn_lowest.value(),
             "decay_time": self.ui.spinBoxDecayTime.value(),
-            # 'fr': self.vi.viewer.workEnv.imgdata.meta['fps']
+            'fr': self.ui.doubleSpinBoxFrameRate.value(),
         }
 
         # Any additional eval kwargs set in the text entry
