@@ -10,8 +10,8 @@ class CNMFWidget(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.btnAddToBatchCNMF.clicked.connect(self.add_item)
 
-    @present_exceptions()
-    def get_params(self, *args, group_params: bool = True) -> Tuple[str, bool, dict]:
+    # @present_exceptions()
+    def get_params(self, *args, group_params: bool = True) -> Tuple[str, dict]:
         """
         Get a dict of the set parameters.
         If the work environment was loaded from a motion correction batch item it put the bord_px in the dict.
@@ -72,7 +72,7 @@ class CNMFWidget(QtWidgets.QMainWindow):
             raise ValueError("No frame-rate set.")
         else:
             cnmf_kwargs.update({'fr': fr})
-            eval_kwargs.udpate({'fr': fr})
+            eval_kwargs.update({'fr': fr})
 
         # Make the output dict
         d = dict()
@@ -87,7 +87,6 @@ class CNMFWidget(QtWidgets.QMainWindow):
             d.update({**cnmf_kwargs, **eval_kwargs})
 
         name = self.ui.lineEdName.text()
-        refit = self.ui.checkBoxRefit.isChecked()
         print("cnmf_gui get params:", d)
 
         return name, d
