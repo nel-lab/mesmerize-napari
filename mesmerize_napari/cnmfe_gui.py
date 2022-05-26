@@ -11,7 +11,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         self.ui.btnAddToBatchCorrPNR.clicked.connect(self._add_item_corr_pnr)
         self.ui.btnAddToBatchCNMFE.clicked.connect(self._add_item_cnmfe)
 
-    @present_exceptions()
+    # @present_exceptions()
     def _add_item_corr_pnr(self, *args):
         gSig = self.ui.spinBoxGSig.value()
         downsample_ratio = self.ui.spinBoxDownsample.value()
@@ -29,7 +29,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
 
         self.add_item(name, d)
 
-    @present_exceptions()
+    # @present_exceptions()
     def _add_item_cnmfe(self, *args, group_params: bool = True):
         low_rank_background = self.ui.checkBox_low_rank_background.isChecked()
         # CNMF kwargs
