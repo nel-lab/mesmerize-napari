@@ -75,7 +75,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         # Find framerate, update dict with frame rate if it's >0
         fr = self.ui.doubleSpinBoxFrameRate.value()
         if fr <= 0:
-            pass
+            raise ValueError("No frame-rate set.")
         else:
             cnmfe_kwargs.update({'fr': fr})
 
