@@ -247,9 +247,7 @@ class MCORRViewer:
             self.plot_els_shifts()
 
     def plot_rig_shifts(self):
-        xs, ys = self.batch_item.mcorr.get_shifts(
-            output_type="napari-1d", pw_rigid=False
-        )
+        xs, ys = self.batch_item.mcorr.get_shifts(pw_rigid=False)
 
         self.viewer1d = napari_plot.Viewer(show=False)
         qt_viewer = QtViewer(self.viewer1d)
@@ -278,9 +276,33 @@ class MCORRViewer:
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def plot_els_shifts(self):
-        x_shifts, y_shifts = self.batch_item.mcorr.get_shifts(
-            output_type="napari-1d", pw_rigid=True
+        xs, ys = self.batch_item.mcorr.get_shifts(pw_rigid=True)
+
+        self.viewer1d = napari_plot.Viewer(show=False)
+        qt_viewer = QtViewer(self.viewer1d)
+        self.viewer1d.axis.y_label = "Pixels"
+        self.viewer1d.axis.x_label = "Time"
+        self.viewer1d.text_overlay.visible = True
+        self.viewer1d.text_overlay.position = "top_right"
+        self.viewer1d.text_overlay.font_size = 15
+
+        n_lines = np.shape(ys)[0]
+
+        self.temporal_layer = self.viewer1d.add_multi_line(
+            data=dict(xs=xs, ys=ys),
+            color=self.get_colors(n_components=n_lines),
+            name="temporal",
         )
+
+        self.viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
+
+        # Create layer for infinite line
+        self.infline_layer = self.viewer1d.add_inf_line(
+            data=[1], orientation="vertical", color="red", width=3, name="slider"
+        )
+        self.infline_layer.move(index=0, pos=[1])
+        self.viewer1d.add_layer(layer=self.infline_layer)
+        self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def get_colors(self, n_components):
         colors = np.vstack(
