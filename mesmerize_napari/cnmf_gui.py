@@ -20,8 +20,6 @@ class CNMFWidget(QtWidgets.QMainWindow):
         :return: parameters dict
         :rtype: dict
         """
-        # TODO: Figure out how to get framerate & bord_pix
-
         rf = self.ui.spinBoxRf.value()
 
         # CNMF kwargs
@@ -38,7 +36,6 @@ class CNMFWidget(QtWidgets.QMainWindow):
             "tsub": self.ui.spinBox_tsub.value(),
             "method_init": self.ui.comboBox_method_init.currentText(),
             # 'border_pix': bord_px,
-            # 'fr': self.vi.viewer.workEnv.imgdata.meta['fps']
         }
 
         # Any additional cnmf kwargs set in the text entry
@@ -58,7 +55,6 @@ class CNMFWidget(QtWidgets.QMainWindow):
             "min_cnn_thr": self.ui.doubleSpinBoxCNNThr.value(),
             "cnn_lowest": self.ui.doubleSpinBox_cnn_lowest.value(),
             "decay_time": self.ui.spinBoxDecayTime.value(),
-            # 'fr': self.vi.viewer.workEnv.imgdata.meta['fps']
         }
 
         # Any additional eval kwargs set in the text entry
@@ -69,6 +65,14 @@ class CNMFWidget(QtWidgets.QMainWindow):
                 eval_kwargs.update(eval_kwargs_add)
             except:
                 raise ValueError("Evaluation kwargs not formatted properly.")
+
+        # Find framerate, update dict with frame rate if it's >0
+        fr = self.ui.doubleSpinBoxFrameRate.value()
+        if fr <= 0:
+            raise ValueError("No frame-rate set.")
+        else:
+            cnmf_kwargs.update({'fr': fr})
+            eval_kwargs.udpate({'fr': fr})
 
         # Make the output dict
         d = dict()

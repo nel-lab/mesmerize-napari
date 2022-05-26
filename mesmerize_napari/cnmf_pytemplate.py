@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './cnmf_template.ui'
+# Form implementation generated from reading ui file 'cnmf_template.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_CNMFParmsWindow(object):
     def setupUi(self, CNMFParmsWindow):
         CNMFParmsWindow.setObjectName("CNMFParmsWindow")
-        CNMFParmsWindow.resize(699, 726)
+        CNMFParmsWindow.resize(784, 726)
         self.centralwidget = QtWidgets.QWidget(CNMFParmsWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -323,10 +323,14 @@ class Ui_CNMFParmsWindow(object):
         self.label_18 = QtWidgets.QLabel(self.centralwidget)
         self.label_18.setObjectName("label_18")
         self.horizontalLayout_3.addWidget(self.label_18)
-        self.doubleSpinBox = QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.doubleSpinBox.setObjectName("doubleSpinBox")
-        self.horizontalLayout_3.addWidget(self.doubleSpinBox)
-        spacerItem14 = QtWidgets.QSpacerItem(37, 29, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.doubleSpinBoxFrameRate = QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.doubleSpinBoxFrameRate.setMinimum(-1.0)
+        self.doubleSpinBoxFrameRate.setProperty("value", -1.0)
+        self.doubleSpinBoxFrameRate.setObjectName("doubleSpinBoxFrameRate")
+        self.horizontalLayout_3.addWidget(self.doubleSpinBoxFrameRate)
+        spacerItem14 = QtWidgets.QSpacerItem(
+            37, 29, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem14)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
         self.groupBox_eval_kwargs = QtWidgets.QGroupBox(self.centralwidget)
@@ -349,7 +353,9 @@ class Ui_CNMFParmsWindow(object):
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setObjectName("comboBox")
         self.horizontalLayout_5.addWidget(self.comboBox)
-        spacerItem15 = QtWidgets.QSpacerItem(34, 26, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem15 = QtWidgets.QSpacerItem(
+            34, 26, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_5.addItem(spacerItem15)
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
@@ -362,7 +368,9 @@ class Ui_CNMFParmsWindow(object):
         self.checkBoxRefit.setChecked(True)
         self.checkBoxRefit.setObjectName("checkBoxRefit")
         self.horizontalLayout_2.addWidget(self.checkBoxRefit)
-        spacerItem16 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem16 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem16)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout()
@@ -377,7 +385,7 @@ class Ui_CNMFParmsWindow(object):
         self.horizontalLayout_6.addLayout(self.verticalLayout_2)
         CNMFParmsWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(CNMFParmsWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 699, 30))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 784, 22))
         self.menubar.setObjectName("menubar")
         CNMFParmsWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(CNMFParmsWindow)
@@ -397,17 +405,31 @@ class Ui_CNMFParmsWindow(object):
         CNMFParmsWindow.setTabOrder(self.spinBox_gSig_y, self.spinBox_ssub)
         CNMFParmsWindow.setTabOrder(self.spinBox_ssub, self.spinBox_tsub)
         CNMFParmsWindow.setTabOrder(self.spinBox_tsub, self.comboBox_method_init)
-        CNMFParmsWindow.setTabOrder(self.comboBox_method_init, self.groupBox_cnmf_kwargs)
-        CNMFParmsWindow.setTabOrder(self.groupBox_cnmf_kwargs, self.plainTextEdit_cnmf_kwargs)
-        CNMFParmsWindow.setTabOrder(self.plainTextEdit_cnmf_kwargs, self.doubleSpinBoxMinSNR)
+        CNMFParmsWindow.setTabOrder(
+            self.comboBox_method_init, self.groupBox_cnmf_kwargs
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.groupBox_cnmf_kwargs, self.plainTextEdit_cnmf_kwargs
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.plainTextEdit_cnmf_kwargs, self.doubleSpinBoxMinSNR
+        )
         CNMFParmsWindow.setTabOrder(self.doubleSpinBoxMinSNR, self.doubleSpinBoxRvalThr)
         CNMFParmsWindow.setTabOrder(self.doubleSpinBoxRvalThr, self.checkBoxUseCNN)
         CNMFParmsWindow.setTabOrder(self.checkBoxUseCNN, self.doubleSpinBoxCNNThr)
-        CNMFParmsWindow.setTabOrder(self.doubleSpinBoxCNNThr, self.doubleSpinBox_cnn_lowest)
-        CNMFParmsWindow.setTabOrder(self.doubleSpinBox_cnn_lowest, self.spinBoxDecayTime)
-        CNMFParmsWindow.setTabOrder(self.spinBoxDecayTime, self.doubleSpinBox)
-        CNMFParmsWindow.setTabOrder(self.doubleSpinBox, self.groupBox_eval_kwargs)
-        CNMFParmsWindow.setTabOrder(self.groupBox_eval_kwargs, self.plainTextEdit_eval_kwargs)
+        CNMFParmsWindow.setTabOrder(
+            self.doubleSpinBoxCNNThr, self.doubleSpinBox_cnn_lowest
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.doubleSpinBox_cnn_lowest, self.spinBoxDecayTime
+        )
+        CNMFParmsWindow.setTabOrder(self.spinBoxDecayTime, self.doubleSpinBoxFrameRate)
+        CNMFParmsWindow.setTabOrder(
+            self.doubleSpinBoxFrameRate, self.groupBox_eval_kwargs
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.groupBox_eval_kwargs, self.plainTextEdit_eval_kwargs
+        )
         CNMFParmsWindow.setTabOrder(self.plainTextEdit_eval_kwargs, self.comboBox)
         CNMFParmsWindow.setTabOrder(self.comboBox, self.checkBoxRefit)
         CNMFParmsWindow.setTabOrder(self.checkBoxRefit, self.lineEdName)
@@ -416,51 +438,128 @@ class Ui_CNMFParmsWindow(object):
     def retranslateUi(self, CNMFParmsWindow):
         _translate = QtCore.QCoreApplication.translate
         CNMFParmsWindow.setWindowTitle(_translate("CNMFParmsWindow", "cnmf params"))
-        self.label_22.setText(_translate("CNMFParmsWindow", "Order of the autoregressive system"))
+        self.label_22.setText(
+            _translate("CNMFParmsWindow", "Order of the autoregressive system")
+        )
         self.label.setText(_translate("CNMFParmsWindow", "p:"))
-        self.label_28.setText(_translate("CNMFParmsWindow", "Global number of background components"))
+        self.label_28.setText(
+            _translate("CNMFParmsWindow", "Global number of background components")
+        )
         self.label_27.setText(_translate("CNMFParmsWindow", "nb:"))
-        self.label_11.setText(_translate("CNMFParmsWindow", "Merging threshold, max correlation allowed"))
+        self.label_11.setText(
+            _translate("CNMFParmsWindow", "Merging threshold, max correlation allowed")
+        )
         self.label_10.setText(_translate("CNMFParmsWindow", "merge_thresh:"))
-        self.label_24.setText(_translate("CNMFParmsWindow", "Half size of patch in pixels"))
+        self.label_24.setText(
+            _translate("CNMFParmsWindow", "Half size of patch in pixels")
+        )
         self.label_21.setText(_translate("CNMFParmsWindow", "rf:"))
-        self.checkBoxRfNone.setToolTip(_translate("CNMFParmsWindow", "Set `rf` as `None`"))
+        self.checkBoxRfNone.setToolTip(
+            _translate("CNMFParmsWindow", "Set `rf` as `None`")
+        )
         self.checkBoxRfNone.setText(_translate("CNMFParmsWindow", "None"))
-        self.label_13.setText(_translate("CNMFParmsWindow", "amount of overlap between the patches in pixels"))
+        self.label_13.setText(
+            _translate(
+                "CNMFParmsWindow", "amount of overlap between the patches in pixels"
+            )
+        )
         self.label_12.setText(_translate("CNMFParmsWindow", "stride_cnmf:"))
-        self.label_32.setText(_translate("CNMFParmsWindow", "Number of neurons/cell per patch"))
+        self.label_32.setText(
+            _translate("CNMFParmsWindow", "Number of neurons/cell per patch")
+        )
         self.label_31.setText(_translate("CNMFParmsWindow", "K:"))
-        self.label_33.setText(_translate("CNMFParmsWindow", "Expected half size of neurons (x, y)"))
+        self.label_33.setText(
+            _translate("CNMFParmsWindow", "Expected half size of neurons (x, y)")
+        )
         self.label_34.setText(_translate("CNMFParmsWindow", "gSig:"))
         self.label_35.setText(_translate("CNMFParmsWindow", "ssub:"))
         self.label_36.setText(_translate("CNMFParmsWindow", "tsub:"))
         self.label_4.setText(_translate("CNMFParmsWindow", "method_init"))
-        self.comboBox_method_init.setItemText(0, _translate("CNMFParmsWindow", "greedy_roi"))
-        self.comboBox_method_init.setItemText(1, _translate("CNMFParmsWindow", "sparse_nmf"))
-        self.groupBox_cnmf_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional kwargs to pass for CNMF instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
-        self.groupBox_cnmf_kwargs.setTitle(_translate("CNMFParmsWindow", "&Use additional CNMF params"))
-        self.plainTextEdit_cnmf_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional kwargs to pass for CNMF instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
-        self.label_20.setText(_translate("CNMFParmsWindow", "Signal to noise ratio for accepting a component"))
+        self.comboBox_method_init.setItemText(
+            0, _translate("CNMFParmsWindow", "greedy_roi")
+        )
+        self.comboBox_method_init.setItemText(
+            1, _translate("CNMFParmsWindow", "sparse_nmf")
+        )
+        self.groupBox_cnmf_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional kwargs to pass for CNMF instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
+        self.groupBox_cnmf_kwargs.setTitle(
+            _translate("CNMFParmsWindow", "&Use additional CNMF params")
+        )
+        self.plainTextEdit_cnmf_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional kwargs to pass for CNMF instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
+        self.label_20.setText(
+            _translate(
+                "CNMFParmsWindow", "Signal to noise ratio for accepting a component"
+            )
+        )
         self.label_23.setText(_translate("CNMFParmsWindow", "min_SNR:"))
-        self.label_14.setText(_translate("CNMFParmsWindow", "Space correlation threshold for accepting a component"))
+        self.label_14.setText(
+            _translate(
+                "CNMFParmsWindow",
+                "Space correlation threshold for accepting a component",
+            )
+        )
         self.label_15.setText(_translate("CNMFParmsWindow", "rval_thr:"))
-        self.label_25.setText(_translate("CNMFParmsWindow", "Threshold for CNN based classifier"))
+        self.label_25.setText(
+            _translate("CNMFParmsWindow", "Threshold for CNN based classifier")
+        )
         self.checkBoxUseCNN.setText(_translate("CNMFParmsWindow", "use_cnn"))
         self.label_26.setText(_translate("CNMFParmsWindow", "cnn_thr:"))
         self.label_3.setText(_translate("CNMFParmsWindow", "cnn_lowest"))
-        self.label_17.setText(_translate("CNMFParmsWindow", "Average decay time of calcium spikes (seconds)"))
+        self.label_17.setText(
+            _translate(
+                "CNMFParmsWindow", "Average decay time of calcium spikes (seconds)"
+            )
+        )
         self.label_16.setText(_translate("CNMFParmsWindow", "decay_time:"))
         self.label_19.setText(_translate("CNMFParmsWindow", "framerate of video"))
         self.label_18.setText(_translate("CNMFParmsWindow", "frate:"))
-        self.groupBox_eval_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional parameters to use for component evaluation.\n"
-"Use single quotes for strings, do not use double quotes"))
-        self.groupBox_eval_kwargs.setTitle(_translate("CNMFParmsWindow", "Use additional &quality (evaluation) params"))
-        self.plainTextEdit_eval_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional parameters to use for component evaluation.\n"
-"Use single quotes for strings, do not use double quotes"))
+        self.groupBox_eval_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional parameters to use for component evaluation.\n"
+                "Use single quotes for strings, do not use double quotes",
+            )
+        )
+        self.groupBox_eval_kwargs.setTitle(
+            _translate("CNMFParmsWindow", "Use additional &quality (evaluation) params")
+        )
+        self.plainTextEdit_eval_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional parameters to use for component evaluation.\n"
+                "Use single quotes for strings, do not use double quotes",
+            )
+        )
         self.label_29.setText(_translate("CNMFParmsWindow", "input movie:"))
-        self.label_2.setText(_translate("CNMFParmsWindow", "perform second iteration of cnmf by re-fitting the components"))
+        self.label_2.setText(
+            _translate(
+                "CNMFParmsWindow",
+                "perform second iteration of cnmf by re-fitting the components",
+            )
+        )
         self.checkBoxRefit.setText(_translate("CNMFParmsWindow", "refit"))
         self.lineEdName.setPlaceholderText(_translate("CNMFParmsWindow", "Enter name"))
         self.btnAddToBatchCNMF.setText(_translate("CNMFParmsWindow", "Add to batch"))
+
+
+if __name__ == "__main__":
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)
+    CNMFParmsWindow = QtWidgets.QMainWindow()
+    ui = Ui_CNMFParmsWindow()
+    ui.setupUi(CNMFParmsWindow)
+    CNMFParmsWindow.show()
+    sys.exit(app.exec_())
