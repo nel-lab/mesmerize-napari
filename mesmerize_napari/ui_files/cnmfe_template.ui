@@ -648,11 +648,14 @@
       </item>
       <item>
        <widget class="QDoubleSpinBox" name="doubleSpinBoxFrameRate">
+        <property name="minimum">
+         <double>-1.000000000000000</double>
+        </property>
         <property name="maximum">
          <double>140.000000000000000</double>
         </property>
         <property name="value">
-         <double>60.000000000000000</double>
+         <double>-1.000000000000000</double>
         </property>
        </widget>
       </item>

@@ -38,7 +38,6 @@ class CNMFWidget(QtWidgets.QMainWindow):
             "tsub": self.ui.spinBox_tsub.value(),
             "method_init": self.ui.comboBox_method_init.currentText(),
             # 'border_pix': bord_px,
-            'fr': self.ui.doubleSpinBoxFrameRate.value(),
         }
 
         # Any additional cnmf kwargs set in the text entry
@@ -58,7 +57,6 @@ class CNMFWidget(QtWidgets.QMainWindow):
             "min_cnn_thr": self.ui.doubleSpinBoxCNNThr.value(),
             "cnn_lowest": self.ui.doubleSpinBox_cnn_lowest.value(),
             "decay_time": self.ui.spinBoxDecayTime.value(),
-            'fr': self.ui.doubleSpinBoxFrameRate.value(),
         }
 
         # Any additional eval kwargs set in the text entry
@@ -69,6 +67,14 @@ class CNMFWidget(QtWidgets.QMainWindow):
                 eval_kwargs.update(eval_kwargs_add)
             except:
                 raise ValueError("Evaluation kwargs not formatted properly.")
+
+        # Add framerate key if a reasonable one (>0) is given
+        fr = self.ui.doubleSpinBoxFrameRate.value()
+        if fr <= 0:
+            pass
+        else:
+            cnmf_kwargs.update({'fr': fr})
+            eval_kwargs.update({'fr': fr})
 
         # Make the output dict
         d = dict()

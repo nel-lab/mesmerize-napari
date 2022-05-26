@@ -62,7 +62,6 @@ class CNMFEWidget(QtWidgets.QMainWindow):
             "method_deconvolution": method_deconvolution,
             "update_background_components": True,
             "del_duplicates": True,
-            "fr": self.ui.doubleSpinBoxFrameRate.value(),
         }
         # Any additional cnmfe kwargs set in the text entry
         if self.ui.groupBox_cnmf_kwargs.isChecked():
@@ -72,6 +71,13 @@ class CNMFEWidget(QtWidgets.QMainWindow):
                 cnmfe_kwargs.update(cnmfe_kwargs_add)
             except:
                 raise ValueError("CNMF-E kwargs not formatted properly.")
+
+        # Add framerate key if a reasonable one (>0) is given
+        fr = self.ui.doubleSpinBoxFrameRate.value()
+        if fr <= 0:
+            pass
+        else:
+            cnmfe_kwargs.update({'fr': fr})
 
         # Make the output dict
         d = dict()
