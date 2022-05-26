@@ -77,7 +77,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         if fr <= 0:
             pass
         else:
-            cnmfe_kwargs.update({'fr': fr})
+            cnmfe_kwargs.update({"fr": fr})
 
         # Make the output dict
         d = dict()
@@ -92,7 +92,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         if group_params:
             d.update(
                 {
-                    'cnmfe_kwargs': cnmfe_kwargs,
+                    "cnmfe_kwargs": cnmfe_kwargs,
                 }
             )
         else:

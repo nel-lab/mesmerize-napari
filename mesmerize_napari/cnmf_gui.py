@@ -73,8 +73,8 @@ class CNMFWidget(QtWidgets.QMainWindow):
         if fr <= 0:
             pass
         else:
-            cnmf_kwargs.update({'fr': fr})
-            eval_kwargs.update({'fr': fr})
+            cnmf_kwargs.update({"fr": fr})
+            eval_kwargs.update({"fr": fr})
 
         # Make the output dict
         d = dict()

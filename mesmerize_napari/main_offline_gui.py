@@ -416,14 +416,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
             plt.figure()
             for i in range(shifts.shape[2]):
-                plt.plot(x, shifts[0,:,i])
+                plt.plot(x, shifts[0, :, i])
             plt.title("Elastic MC Shifts (x)")
             plt.xlabel("Time")
             plt.ylabel("Pixels")
 
             plt.figure()
             for i in range(shifts.shape[2]):
-                plt.plot(x, shifts[1,:,i])
+                plt.plot(x, shifts[1, :, i])
             plt.title("Elastic MC Shifts (y)")
             plt.xlabel("Time")
             plt.ylabel("Pixels")
@@ -433,13 +433,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
             x = np.linspace(0, np.shape(shifts)[0], np.shape(shifts)[0])
 
             for i in range(shifts.shape[1]):
-                plt.plot(x, shifts[:,i])
+                plt.plot(x, shifts[:, i])
 
             plt.title("Rigid MC Shifts")
             plt.legend(["x-shifts", "y-shifts"])
             plt.xlabel("Time")
             plt.ylabel("Pixels")
-
 
 
 @napari_hook_implementation

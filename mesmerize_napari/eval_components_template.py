@@ -128,28 +128,52 @@ class Ui_EvalComponents(object):
 
         self.retranslateUi(EvalComponents)
         QtCore.QMetaObject.connectSlotsByName(EvalComponents)
-        EvalComponents.setTabOrder(self.doubleSpinBox_rval_lowest, self.doubleSpinBox_SNR_lowest)
-        EvalComponents.setTabOrder(self.doubleSpinBox_SNR_lowest, self.doubleSpinBox_cnn_lowest)
-        EvalComponents.setTabOrder(self.doubleSpinBox_cnn_lowest, self.doubleSpinBox_rval_thr)
-        EvalComponents.setTabOrder(self.doubleSpinBox_rval_thr, self.doubleSpinBox_min_SNR)
-        EvalComponents.setTabOrder(self.doubleSpinBox_min_SNR, self.doubleSpinBox_min_cnn_thr)
-        EvalComponents.setTabOrder(self.doubleSpinBox_min_cnn_thr, self.checkBox_update_live)
+        EvalComponents.setTabOrder(
+            self.doubleSpinBox_rval_lowest, self.doubleSpinBox_SNR_lowest
+        )
+        EvalComponents.setTabOrder(
+            self.doubleSpinBox_SNR_lowest, self.doubleSpinBox_cnn_lowest
+        )
+        EvalComponents.setTabOrder(
+            self.doubleSpinBox_cnn_lowest, self.doubleSpinBox_rval_thr
+        )
+        EvalComponents.setTabOrder(
+            self.doubleSpinBox_rval_thr, self.doubleSpinBox_min_SNR
+        )
+        EvalComponents.setTabOrder(
+            self.doubleSpinBox_min_SNR, self.doubleSpinBox_min_cnn_thr
+        )
+        EvalComponents.setTabOrder(
+            self.doubleSpinBox_min_cnn_thr, self.checkBox_update_live
+        )
         EvalComponents.setTabOrder(self.checkBox_update_live, self.pushButton_update)
         EvalComponents.setTabOrder(self.pushButton_update, self.pushButton_save_to_item)
 
     def retranslateUi(self, EvalComponents):
         _translate = QtCore.QCoreApplication.translate
         EvalComponents.setWindowTitle(_translate("EvalComponents", "Eval Components"))
-        self.label_10.setToolTip(_translate("EvalComponents", "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted"))
+        self.label_10.setToolTip(
+            _translate(
+                "EvalComponents",
+                "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted",
+            )
+        )
         self.label_10.setText(_translate("EvalComponents", "Low Thresholds"))
         self.label_11.setText(_translate("EvalComponents", "rval_lowest"))
         self.label_12.setText(_translate("EvalComponents", "SNR_lowest"))
         self.label_13.setText(_translate("EvalComponents", "cnn_lowest"))
-        self.label_14.setToolTip(_translate("EvalComponents", "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted"))
+        self.label_14.setToolTip(
+            _translate(
+                "EvalComponents",
+                "A component has to exceed ALL low thresholds as well as ONE high threshold to be accepted",
+            )
+        )
         self.label_14.setText(_translate("EvalComponents", "High Threshold"))
         self.label_15.setText(_translate("EvalComponents", "rval_thr"))
         self.label_16.setText(_translate("EvalComponents", "min_SNR"))
         self.label_17.setText(_translate("EvalComponents", "min_cnn_thr"))
         self.checkBox_update_live.setText(_translate("EvalComponents", "Update Live"))
         self.pushButton_update.setText(_translate("EvalComponents", "Update"))
-        self.pushButton_save_to_item.setText(_translate("EvalComponents", "Save to item"))
+        self.pushButton_save_to_item.setText(
+            _translate("EvalComponents", "Save to item")
+        )

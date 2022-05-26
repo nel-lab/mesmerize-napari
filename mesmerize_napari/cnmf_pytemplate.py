@@ -36,7 +36,9 @@ class Ui_CNMFParmsWindow(object):
         self.spinBoxP.setProperty("value", 2)
         self.spinBoxP.setObjectName("spinBoxP")
         self.horizontalLayout.addWidget(self.spinBoxP)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.label_28 = QtWidgets.QLabel(self.centralwidget)
@@ -52,7 +54,9 @@ class Ui_CNMFParmsWindow(object):
         self.spinBoxnb.setProperty("value", 1)
         self.spinBoxnb.setObjectName("spinBoxnb")
         self.horizontalLayout_19.addWidget(self.spinBoxnb)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_19.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout_19)
         self.label_11 = QtWidgets.QLabel(self.centralwidget)
@@ -69,7 +73,9 @@ class Ui_CNMFParmsWindow(object):
         self.doubleSpinBoxMergeThresh.setProperty("value", 0.7)
         self.doubleSpinBoxMergeThresh.setObjectName("doubleSpinBoxMergeThresh")
         self.horizontalLayout_7.addWidget(self.doubleSpinBoxMergeThresh)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_7.addItem(spacerItem2)
         self.verticalLayout.addLayout(self.horizontalLayout_7)
         self.label_24 = QtWidgets.QLabel(self.centralwidget)
@@ -88,7 +94,9 @@ class Ui_CNMFParmsWindow(object):
         self.checkBoxRfNone = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBoxRfNone.setObjectName("checkBoxRfNone")
         self.horizontalLayout_13.addWidget(self.checkBoxRfNone)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_13.addItem(spacerItem3)
         self.verticalLayout.addLayout(self.horizontalLayout_13)
         self.label_13 = QtWidgets.QLabel(self.centralwidget)
@@ -104,7 +112,9 @@ class Ui_CNMFParmsWindow(object):
         self.spinBoxStrideCNMF.setProperty("value", 30)
         self.spinBoxStrideCNMF.setObjectName("spinBoxStrideCNMF")
         self.horizontalLayout_8.addWidget(self.spinBoxStrideCNMF)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_8.addItem(spacerItem4)
         self.verticalLayout.addLayout(self.horizontalLayout_8)
         self.label_32 = QtWidgets.QLabel(self.centralwidget)
@@ -120,7 +130,9 @@ class Ui_CNMFParmsWindow(object):
         self.spinBoxK.setProperty("value", 10)
         self.spinBoxK.setObjectName("spinBoxK")
         self.horizontalLayout_21.addWidget(self.spinBoxK)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_21.addItem(spacerItem5)
         self.verticalLayout.addLayout(self.horizontalLayout_21)
         self.label_33 = QtWidgets.QLabel(self.centralwidget)
@@ -141,9 +153,13 @@ class Ui_CNMFParmsWindow(object):
         self.spinBox_gSig_y.setProperty("value", 5)
         self.spinBox_gSig_y.setObjectName("spinBox_gSig_y")
         self.horizontalLayout_22.addWidget(self.spinBox_gSig_y)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem6 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_22.addItem(spacerItem6)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_22.addItem(spacerItem7)
         self.verticalLayout.addLayout(self.horizontalLayout_22)
         self.horizontalLayout_23 = QtWidgets.QHBoxLayout()
@@ -170,7 +186,9 @@ class Ui_CNMFParmsWindow(object):
         self.spinBox_tsub.setProperty("value", 1)
         self.spinBox_tsub.setObjectName("spinBox_tsub")
         self.horizontalLayout_23.addWidget(self.spinBox_tsub)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem8 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_23.addItem(spacerItem8)
         self.verticalLayout.addLayout(self.horizontalLayout_23)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
@@ -183,7 +201,9 @@ class Ui_CNMFParmsWindow(object):
         self.comboBox_method_init.addItem("")
         self.comboBox_method_init.addItem("")
         self.horizontalLayout_4.addWidget(self.comboBox_method_init)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem9 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_4.addItem(spacerItem9)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
         self.groupBox_cnmf_kwargs = QtWidgets.QGroupBox(self.centralwidget)
@@ -193,7 +213,9 @@ class Ui_CNMFParmsWindow(object):
         self.groupBox_cnmf_kwargs.setObjectName("groupBox_cnmf_kwargs")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_cnmf_kwargs)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.plainTextEdit_cnmf_kwargs = QtWidgets.QPlainTextEdit(self.groupBox_cnmf_kwargs)
+        self.plainTextEdit_cnmf_kwargs = QtWidgets.QPlainTextEdit(
+            self.groupBox_cnmf_kwargs
+        )
         self.plainTextEdit_cnmf_kwargs.setObjectName("plainTextEdit_cnmf_kwargs")
         self.verticalLayout_3.addWidget(self.plainTextEdit_cnmf_kwargs)
         self.verticalLayout.addWidget(self.groupBox_cnmf_kwargs)
@@ -214,7 +236,9 @@ class Ui_CNMFParmsWindow(object):
         self.doubleSpinBoxMinSNR.setProperty("value", 2.5)
         self.doubleSpinBoxMinSNR.setObjectName("doubleSpinBoxMinSNR")
         self.horizontalLayout_14.addWidget(self.doubleSpinBoxMinSNR)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem10 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_14.addItem(spacerItem10)
         self.verticalLayout_2.addLayout(self.horizontalLayout_14)
         self.label_14 = QtWidgets.QLabel(self.centralwidget)
@@ -231,7 +255,9 @@ class Ui_CNMFParmsWindow(object):
         self.doubleSpinBoxRvalThr.setProperty("value", 0.8)
         self.doubleSpinBoxRvalThr.setObjectName("doubleSpinBoxRvalThr")
         self.horizontalLayout_9.addWidget(self.doubleSpinBoxRvalThr)
-        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem11 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_9.addItem(spacerItem11)
         self.verticalLayout_2.addLayout(self.horizontalLayout_9)
         self.label_25 = QtWidgets.QLabel(self.centralwidget)
@@ -266,7 +292,9 @@ class Ui_CNMFParmsWindow(object):
         self.doubleSpinBox_cnn_lowest.setProperty("value", 0.1)
         self.doubleSpinBox_cnn_lowest.setObjectName("doubleSpinBox_cnn_lowest")
         self.horizontalLayout_15.addWidget(self.doubleSpinBox_cnn_lowest)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem12 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_15.addItem(spacerItem12)
         self.verticalLayout_2.addLayout(self.horizontalLayout_15)
         self.label_17 = QtWidgets.QLabel(self.centralwidget)
@@ -282,7 +310,9 @@ class Ui_CNMFParmsWindow(object):
         self.spinBoxDecayTime.setProperty("value", 1.0)
         self.spinBoxDecayTime.setObjectName("spinBoxDecayTime")
         self.horizontalLayout_10.addWidget(self.spinBoxDecayTime)
-        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem13 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_10.addItem(spacerItem13)
         self.verticalLayout_2.addLayout(self.horizontalLayout_10)
         self.label_19 = QtWidgets.QLabel(self.centralwidget)
@@ -298,7 +328,9 @@ class Ui_CNMFParmsWindow(object):
         self.doubleSpinBoxFrameRate.setProperty("value", -1.0)
         self.doubleSpinBoxFrameRate.setObjectName("doubleSpinBoxFrameRate")
         self.horizontalLayout_3.addWidget(self.doubleSpinBoxFrameRate)
-        spacerItem14 = QtWidgets.QSpacerItem(37, 29, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem14 = QtWidgets.QSpacerItem(
+            37, 29, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem14)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
         self.groupBox_eval_kwargs = QtWidgets.QGroupBox(self.centralwidget)
@@ -307,7 +339,9 @@ class Ui_CNMFParmsWindow(object):
         self.groupBox_eval_kwargs.setObjectName("groupBox_eval_kwargs")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_eval_kwargs)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.plainTextEdit_eval_kwargs = QtWidgets.QPlainTextEdit(self.groupBox_eval_kwargs)
+        self.plainTextEdit_eval_kwargs = QtWidgets.QPlainTextEdit(
+            self.groupBox_eval_kwargs
+        )
         self.plainTextEdit_eval_kwargs.setObjectName("plainTextEdit_eval_kwargs")
         self.verticalLayout_5.addWidget(self.plainTextEdit_eval_kwargs)
         self.verticalLayout_2.addWidget(self.groupBox_eval_kwargs)
@@ -319,7 +353,9 @@ class Ui_CNMFParmsWindow(object):
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setObjectName("comboBox")
         self.horizontalLayout_5.addWidget(self.comboBox)
-        spacerItem15 = QtWidgets.QSpacerItem(34, 26, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem15 = QtWidgets.QSpacerItem(
+            34, 26, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_5.addItem(spacerItem15)
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
@@ -332,7 +368,9 @@ class Ui_CNMFParmsWindow(object):
         self.checkBoxRefit.setChecked(True)
         self.checkBoxRefit.setObjectName("checkBoxRefit")
         self.horizontalLayout_2.addWidget(self.checkBoxRefit)
-        spacerItem16 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem16 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem16)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout()
@@ -367,17 +405,31 @@ class Ui_CNMFParmsWindow(object):
         CNMFParmsWindow.setTabOrder(self.spinBox_gSig_y, self.spinBox_ssub)
         CNMFParmsWindow.setTabOrder(self.spinBox_ssub, self.spinBox_tsub)
         CNMFParmsWindow.setTabOrder(self.spinBox_tsub, self.comboBox_method_init)
-        CNMFParmsWindow.setTabOrder(self.comboBox_method_init, self.groupBox_cnmf_kwargs)
-        CNMFParmsWindow.setTabOrder(self.groupBox_cnmf_kwargs, self.plainTextEdit_cnmf_kwargs)
-        CNMFParmsWindow.setTabOrder(self.plainTextEdit_cnmf_kwargs, self.doubleSpinBoxMinSNR)
+        CNMFParmsWindow.setTabOrder(
+            self.comboBox_method_init, self.groupBox_cnmf_kwargs
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.groupBox_cnmf_kwargs, self.plainTextEdit_cnmf_kwargs
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.plainTextEdit_cnmf_kwargs, self.doubleSpinBoxMinSNR
+        )
         CNMFParmsWindow.setTabOrder(self.doubleSpinBoxMinSNR, self.doubleSpinBoxRvalThr)
         CNMFParmsWindow.setTabOrder(self.doubleSpinBoxRvalThr, self.checkBoxUseCNN)
         CNMFParmsWindow.setTabOrder(self.checkBoxUseCNN, self.doubleSpinBoxCNNThr)
-        CNMFParmsWindow.setTabOrder(self.doubleSpinBoxCNNThr, self.doubleSpinBox_cnn_lowest)
-        CNMFParmsWindow.setTabOrder(self.doubleSpinBox_cnn_lowest, self.spinBoxDecayTime)
+        CNMFParmsWindow.setTabOrder(
+            self.doubleSpinBoxCNNThr, self.doubleSpinBox_cnn_lowest
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.doubleSpinBox_cnn_lowest, self.spinBoxDecayTime
+        )
         CNMFParmsWindow.setTabOrder(self.spinBoxDecayTime, self.doubleSpinBoxFrameRate)
-        CNMFParmsWindow.setTabOrder(self.doubleSpinBoxFrameRate, self.groupBox_eval_kwargs)
-        CNMFParmsWindow.setTabOrder(self.groupBox_eval_kwargs, self.plainTextEdit_eval_kwargs)
+        CNMFParmsWindow.setTabOrder(
+            self.doubleSpinBoxFrameRate, self.groupBox_eval_kwargs
+        )
+        CNMFParmsWindow.setTabOrder(
+            self.groupBox_eval_kwargs, self.plainTextEdit_eval_kwargs
+        )
         CNMFParmsWindow.setTabOrder(self.plainTextEdit_eval_kwargs, self.comboBox)
         CNMFParmsWindow.setTabOrder(self.comboBox, self.checkBoxRefit)
         CNMFParmsWindow.setTabOrder(self.checkBoxRefit, self.lineEdName)
@@ -386,51 +438,117 @@ class Ui_CNMFParmsWindow(object):
     def retranslateUi(self, CNMFParmsWindow):
         _translate = QtCore.QCoreApplication.translate
         CNMFParmsWindow.setWindowTitle(_translate("CNMFParmsWindow", "cnmf params"))
-        self.label_22.setText(_translate("CNMFParmsWindow", "Order of the autoregressive system"))
+        self.label_22.setText(
+            _translate("CNMFParmsWindow", "Order of the autoregressive system")
+        )
         self.label.setText(_translate("CNMFParmsWindow", "p:"))
-        self.label_28.setText(_translate("CNMFParmsWindow", "Global number of background components"))
+        self.label_28.setText(
+            _translate("CNMFParmsWindow", "Global number of background components")
+        )
         self.label_27.setText(_translate("CNMFParmsWindow", "nb:"))
-        self.label_11.setText(_translate("CNMFParmsWindow", "Merging threshold, max correlation allowed"))
+        self.label_11.setText(
+            _translate("CNMFParmsWindow", "Merging threshold, max correlation allowed")
+        )
         self.label_10.setText(_translate("CNMFParmsWindow", "merge_thresh:"))
-        self.label_24.setText(_translate("CNMFParmsWindow", "Half size of patch in pixels"))
+        self.label_24.setText(
+            _translate("CNMFParmsWindow", "Half size of patch in pixels")
+        )
         self.label_21.setText(_translate("CNMFParmsWindow", "rf:"))
-        self.checkBoxRfNone.setToolTip(_translate("CNMFParmsWindow", "Set `rf` as `None`"))
+        self.checkBoxRfNone.setToolTip(
+            _translate("CNMFParmsWindow", "Set `rf` as `None`")
+        )
         self.checkBoxRfNone.setText(_translate("CNMFParmsWindow", "None"))
-        self.label_13.setText(_translate("CNMFParmsWindow", "amount of overlap between the patches in pixels"))
+        self.label_13.setText(
+            _translate(
+                "CNMFParmsWindow", "amount of overlap between the patches in pixels"
+            )
+        )
         self.label_12.setText(_translate("CNMFParmsWindow", "stride_cnmf:"))
-        self.label_32.setText(_translate("CNMFParmsWindow", "Number of neurons/cell per patch"))
+        self.label_32.setText(
+            _translate("CNMFParmsWindow", "Number of neurons/cell per patch")
+        )
         self.label_31.setText(_translate("CNMFParmsWindow", "K:"))
-        self.label_33.setText(_translate("CNMFParmsWindow", "Expected half size of neurons (x, y)"))
+        self.label_33.setText(
+            _translate("CNMFParmsWindow", "Expected half size of neurons (x, y)")
+        )
         self.label_34.setText(_translate("CNMFParmsWindow", "gSig:"))
         self.label_35.setText(_translate("CNMFParmsWindow", "ssub:"))
         self.label_36.setText(_translate("CNMFParmsWindow", "tsub:"))
         self.label_4.setText(_translate("CNMFParmsWindow", "method_init"))
-        self.comboBox_method_init.setItemText(0, _translate("CNMFParmsWindow", "greedy_roi"))
-        self.comboBox_method_init.setItemText(1, _translate("CNMFParmsWindow", "sparse_nmf"))
-        self.groupBox_cnmf_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional kwargs to pass for CNMF instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
-        self.groupBox_cnmf_kwargs.setTitle(_translate("CNMFParmsWindow", "&Use additional CNMF params"))
-        self.plainTextEdit_cnmf_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional kwargs to pass for CNMF instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
-        self.label_20.setText(_translate("CNMFParmsWindow", "Signal to noise ratio for accepting a component"))
+        self.comboBox_method_init.setItemText(
+            0, _translate("CNMFParmsWindow", "greedy_roi")
+        )
+        self.comboBox_method_init.setItemText(
+            1, _translate("CNMFParmsWindow", "sparse_nmf")
+        )
+        self.groupBox_cnmf_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional kwargs to pass for CNMF instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
+        self.groupBox_cnmf_kwargs.setTitle(
+            _translate("CNMFParmsWindow", "&Use additional CNMF params")
+        )
+        self.plainTextEdit_cnmf_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional kwargs to pass for CNMF instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
+        self.label_20.setText(
+            _translate(
+                "CNMFParmsWindow", "Signal to noise ratio for accepting a component"
+            )
+        )
         self.label_23.setText(_translate("CNMFParmsWindow", "min_SNR:"))
-        self.label_14.setText(_translate("CNMFParmsWindow", "Space correlation threshold for accepting a component"))
+        self.label_14.setText(
+            _translate(
+                "CNMFParmsWindow",
+                "Space correlation threshold for accepting a component",
+            )
+        )
         self.label_15.setText(_translate("CNMFParmsWindow", "rval_thr:"))
-        self.label_25.setText(_translate("CNMFParmsWindow", "Threshold for CNN based classifier"))
+        self.label_25.setText(
+            _translate("CNMFParmsWindow", "Threshold for CNN based classifier")
+        )
         self.checkBoxUseCNN.setText(_translate("CNMFParmsWindow", "use_cnn"))
         self.label_26.setText(_translate("CNMFParmsWindow", "cnn_thr:"))
         self.label_3.setText(_translate("CNMFParmsWindow", "cnn_lowest"))
-        self.label_17.setText(_translate("CNMFParmsWindow", "Average decay time of calcium spikes (seconds)"))
+        self.label_17.setText(
+            _translate(
+                "CNMFParmsWindow", "Average decay time of calcium spikes (seconds)"
+            )
+        )
         self.label_16.setText(_translate("CNMFParmsWindow", "decay_time:"))
         self.label_19.setText(_translate("CNMFParmsWindow", "framerate of video"))
         self.label_18.setText(_translate("CNMFParmsWindow", "frate:"))
-        self.groupBox_eval_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional parameters to use for component evaluation.\n"
-"Use single quotes for strings, do not use double quotes"))
-        self.groupBox_eval_kwargs.setTitle(_translate("CNMFParmsWindow", "Use additional &quality (evaluation) params"))
-        self.plainTextEdit_eval_kwargs.setToolTip(_translate("CNMFParmsWindow", "You can enter additional parameters to use for component evaluation.\n"
-"Use single quotes for strings, do not use double quotes"))
+        self.groupBox_eval_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional parameters to use for component evaluation.\n"
+                "Use single quotes for strings, do not use double quotes",
+            )
+        )
+        self.groupBox_eval_kwargs.setTitle(
+            _translate("CNMFParmsWindow", "Use additional &quality (evaluation) params")
+        )
+        self.plainTextEdit_eval_kwargs.setToolTip(
+            _translate(
+                "CNMFParmsWindow",
+                "You can enter additional parameters to use for component evaluation.\n"
+                "Use single quotes for strings, do not use double quotes",
+            )
+        )
         self.label_29.setText(_translate("CNMFParmsWindow", "input movie:"))
-        self.label_2.setText(_translate("CNMFParmsWindow", "perform second iteration of cnmf by re-fitting the components"))
+        self.label_2.setText(
+            _translate(
+                "CNMFParmsWindow",
+                "perform second iteration of cnmf by re-fitting the components",
+            )
+        )
         self.checkBoxRefit.setText(_translate("CNMFParmsWindow", "refit"))
         self.lineEdName.setPlaceholderText(_translate("CNMFParmsWindow", "Enter name"))
         self.btnAddToBatchCNMF.setText(_translate("CNMFParmsWindow", "Add to batch"))
@@ -438,6 +556,7 @@ class Ui_CNMFParmsWindow(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     CNMFParmsWindow = QtWidgets.QMainWindow()
     ui = Ui_CNMFParmsWindow()

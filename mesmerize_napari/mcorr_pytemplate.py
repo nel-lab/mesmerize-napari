@@ -72,7 +72,9 @@ class Ui_MCORRWidget(object):
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_12.addWidget(self.label_9)
         self.spinboxX = QtWidgets.QSpinBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.spinboxX.sizePolicy().hasHeightForWidth())
@@ -88,11 +90,15 @@ class Ui_MCORRWidget(object):
         self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.label_13 = QtWidgets.QLabel(self.centralwidget)
-        self.label_13.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_13.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_13.setObjectName("label_13")
         self.horizontalLayout_13.addWidget(self.label_13)
         self.spinboxY = QtWidgets.QSpinBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.spinboxY.sizePolicy().hasHeightForWidth())
@@ -108,7 +114,9 @@ class Ui_MCORRWidget(object):
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
@@ -119,7 +127,9 @@ class Ui_MCORRWidget(object):
         self.label_6.setObjectName("label_6")
         self.horizontalLayout_14.addWidget(self.label_6)
         self.spinboxIterRigid = QtWidgets.QSpinBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -162,7 +172,9 @@ class Ui_MCORRWidget(object):
         self.horizontalLayout_17 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_17.setObjectName("horizontalLayout_17")
         self.label_18 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_18.sizePolicy().hasHeightForWidth())
@@ -191,7 +203,9 @@ class Ui_MCORRWidget(object):
         self.horizontalLayout_18 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_18.setObjectName("horizontalLayout_18")
         self.label_19 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_19.sizePolicy().hasHeightForWidth())
@@ -251,7 +265,9 @@ class Ui_MCORRWidget(object):
         self.btnAddToBatchElastic.setObjectName("btnAddToBatchElastic")
         self.horizontalLayout_20.addWidget(self.btnAddToBatchElastic)
         self.verticalLayout.addLayout(self.horizontalLayout_20)
-        spacerItem8 = QtWidgets.QSpacerItem(10, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        spacerItem8 = QtWidgets.QSpacerItem(
+            10, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum
+        )
         self.verticalLayout.addItem(spacerItem8)
         MCORRWidget.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MCORRWidget)
@@ -268,11 +284,23 @@ class Ui_MCORRWidget(object):
     def retranslateUi(self, MCORRWidget):
         _translate = QtCore.QCoreApplication.translate
         MCORRWidget.setWindowTitle(_translate("MCORRWidget", "mcorr params"))
-        self.groupBox_motion_correction_kwargs.setToolTip(_translate("MCORRWidget", "You can enter additional kwargs to pass for MotionCorrect() instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
-        self.groupBox_motion_correction_kwargs.setTitle(_translate("MCORRWidget", "Use &motion correction kwargs"))
-        self.plainTextEdit_mc_kwargs.setToolTip(_translate("MCORRWidget", "You can enter additional kwargs to pass for CNMF instantiation.\n"
-"Use single quotes for strings, do not use double quotes."))
+        self.groupBox_motion_correction_kwargs.setToolTip(
+            _translate(
+                "MCORRWidget",
+                "You can enter additional kwargs to pass for MotionCorrect() instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
+        self.groupBox_motion_correction_kwargs.setTitle(
+            _translate("MCORRWidget", "Use &motion correction kwargs")
+        )
+        self.plainTextEdit_mc_kwargs.setToolTip(
+            _translate(
+                "MCORRWidget",
+                "You can enter additional kwargs to pass for CNMF instantiation.\n"
+                "Use single quotes for strings, do not use double quotes.",
+            )
+        )
         self.checkBoxRigidMC.setText(_translate("MCORRWidget", "Piecewise Rigid MC"))
         self.label_16.setToolTip(
             _translate(
