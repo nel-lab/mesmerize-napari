@@ -200,11 +200,17 @@ class CNMFViewer:
         ]
 
         sel_coors = [self.contours_coors[i] for i in sel_comps]
+        sel_coms = [self.contours_com[i] for i in sel_comps]
         print("selected coordinates:", sel_coors)
         face_color = [self.face_colors[i] for i in sel_comps]
 
         self.update_colors(sel_comps=sel_comps)
         self.temporal_layer.color = self.edge_colors
+
+        box_coors = list()
+        box_coors.append([self.cursor_position[0]-self.box_size, self.cursor_position[1]-self.box_size])
+        box_coors.append([self.cursor_position[0]+self.box_size, self.cursor_position[1]+self.box_size])
+
 
         if len(sel_coors) > 0:
             self.white_layer: Shapes = self.viewer.add_shapes(
@@ -215,6 +221,13 @@ class CNMFViewer:
                 face_color=face_color,
                 opacity=0.7,
                 name="Selected Components",
+            )
+
+            self.white_layer.add_rectangles(
+                data=box_coors,
+                edge_width=0.8,
+                edge_color="white",
+                face_color=face_color[0]
             )
 
             @self.white_layer.mouse_drag_callbacks.append
