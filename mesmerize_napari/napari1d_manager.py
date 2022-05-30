@@ -51,16 +51,14 @@ class CNMFViewer:
 
         self.cursor_position = []
 
-    def plot_spatial(self):
+    def plot_spatial(self, ixs_components: Optional[np.ndarray] = None):
         if self.roi_type == "outline":
             (
                 self.contours_coors,
                 self.contours_com,
-            ) = self.batch_item.cnmf.get_spatial_contours()
+            ) = self.batch_item.cnmf.get_spatial_contours(ixs_components=ixs_components)
 
             edge_colors, face_colors = self.get_colors()
-            print("edge colors:", edge_colors)
-            print("face_colors:", face_colors)
 
             self.spatial_layer: Shapes = self.viewer.add_shapes(
                 data=self.contours_coors,
@@ -71,9 +69,6 @@ class CNMFViewer:
                 opacity=0.7,
                 name="good components",
             )
-
-            print("new edge:", self.spatial_layer.edge_color)
-            print("new face:", self.spatial_layer.face_color)
 
             @self.spatial_layer.mouse_drag_callbacks.append
             def callback(layer, event):
@@ -111,8 +106,17 @@ class CNMFViewer:
 
     def update_visible_components(self):
         edge_colors, face_colors = self.get_colors()
-        self.spatial_layer.edge_color = edge_colors
-        self.temporal_layer.color = edge_colors
+        og_num, current_num = np.shape(edge_colors)[0], np.shape(self.spatial_layer.edge_color)[0]
+        ixs_comps = self.cnmf_obj.estimates.idx_components
+        if og_num != current_num:
+            self.viewer.layers.remove(self.spatial_layer)
+            self.plot_spatial(ixs_components=ixs_comps)
+            self.viewer1d.layers.remove(self.temporal_layer)
+            self._plot_temporal(ixs_components=ixs_comps)
+
+        else:
+            self.spatial_layer.edge_color = edge_colors
+            self.temporal_layer.color = edge_colors
 
     def get_colors(self, alpha_edge=0.8, alpha_face=0.0):
         n_components = len(self.cnmf_obj.estimates.idx_components)
@@ -141,17 +145,13 @@ class CNMFViewer:
     def show_bad_components(self, b: bool):
         pass
 
-    def plot_temporal(self):
+    def _plot_temporal(self, ixs_components: Optional[np.ndarray] = None):
         # Traces
-        good_traces = self.cnmf_obj.estimates.C[self.cnmf_obj.estimates.idx_components]
-
-        self.viewer1d = napari_plot.Viewer(show=False)
-        qt_viewer = QtViewer(self.viewer1d)
-        self.viewer1d.axis.y_label = "Intensity"
-        self.viewer1d.axis.x_label = "Time"
-        self.viewer1d.text_overlay.visible = True
-        self.viewer1d.text_overlay.position = "top_right"
-        self.viewer1d.text_overlay.font_size = 15
+        if ixs_components is None:
+            ixs = self.cnmf_obj.estimates.idx_components
+        else:
+            ixs = ixs_components
+        good_traces = self.cnmf_obj.estimates.C[ixs]
 
         edge_colors, face_colors = self.get_colors()
 
@@ -167,8 +167,18 @@ class CNMFViewer:
             data=dict(xs=xs, ys=ys), color=edge_colors, name="temporal"
         )
 
+    def plot_temporal(self, ixs_components: Optional[np.ndarray] = None):
+        self.viewer1d = napari_plot.Viewer(show=False)
+        qt_viewer = QtViewer(self.viewer1d)
+        self.viewer1d.axis.y_label = "Intensity"
+        self.viewer1d.axis.x_label = "Time"
+        self.viewer1d.text_overlay.visible = True
+        self.viewer1d.text_overlay.position = "top_right"
+        self.viewer1d.text_overlay.font_size = 15
+
         self.viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
+        self._plot_temporal(ixs_components=ixs_components)
         # Create layer for infinite line
         self.infline_layer = self.viewer1d.add_inf_line(
             data=[1], orientation="vertical", color="red", width=3, name="slider"
