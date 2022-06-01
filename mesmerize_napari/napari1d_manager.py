@@ -105,12 +105,18 @@ class CNMFViewer:
             # )
 
     def update_visible_components(self):
+        # Get updated edge and face colormap
         edge_colors, face_colors = self.get_colors()
-        og_num, current_num = np.shape(edge_colors)[0], np.shape(self.spatial_layer.edge_color)[0]
+        # find the original & current number of components
+        current_num_components, og_num_components = np.shape(edge_colors)[0], np.shape(self.spatial_layer.edge_color)[0]
+        # get indeces of good components
         ixs_comps = self.cnmf_obj.estimates.idx_components
-        if og_num != current_num:
+        # if original and updated component numbers don't match, remove existing layer, update input data, replot.
+        if og_num_components != current_num_components:
+            # Remove and update spatial layer
             self.viewer.layers.remove(self.spatial_layer)
             self.plot_spatial(ixs_components=ixs_comps)
+            # Remove and update temporal layer
             self.viewer1d.layers.remove(self.temporal_layer)
             self._plot_temporal(ixs_components=ixs_comps)
 
@@ -146,6 +152,7 @@ class CNMFViewer:
         pass
 
     def _plot_temporal(self, ixs_components: Optional[np.ndarray] = None):
+        # extract, format, and plot 'good' traces
         # Traces
         if ixs_components is None:
             ixs = self.cnmf_obj.estimates.idx_components
