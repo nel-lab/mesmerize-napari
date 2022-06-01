@@ -201,7 +201,10 @@ class CNMFViewer:
 
     def select_contours(self, box_size=None, update_box=False):
         if update_box:
-            self.viewer.layers.remove(self.white_layer)
+            try:
+                self.viewer.layers.remove(self.white_layer)
+            except:
+                print("White Layer doesn't exist")
         if box_size is None:
             pass
         else:
