@@ -205,7 +205,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.verticalLayout.addWidget(self.splitter)
 
         self.retranslateUi(MainOfflineGUIWidget)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.toolBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainOfflineGUIWidget)
         MainOfflineGUIWidget.setTabOrder(self.listWidgetItems, self.tabWidget)
