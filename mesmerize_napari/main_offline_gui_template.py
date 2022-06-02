@@ -62,9 +62,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.label.setObjectName("label")
         self.verticalLayout_5.addWidget(self.label)
         self.comboBoxRecentParentDataPaths = QtWidgets.QComboBox(self.page_3)
-        self.comboBoxRecentParentDataPaths.setObjectName(
-            "comboBoxRecentParentDataPaths"
-        )
+        self.comboBoxRecentParentDataPaths.setObjectName("comboBoxRecentParentDataPaths")
         self.verticalLayout_5.addWidget(self.comboBoxRecentParentDataPaths)
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
@@ -119,13 +117,11 @@ class Ui_MainOfflineGUIWidget(object):
         self.pushButtonViewInput = QtWidgets.QPushButton(self.page_3)
         self.pushButtonViewInput.setObjectName("pushButtonViewInput")
         self.verticalLayout_5.addWidget(self.pushButtonViewInput)
-        spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem)
         self.toolBox.addItem(self.page_3, "")
         self.page = QtWidgets.QWidget()
-        self.page.setGeometry(QtCore.QRect(0, 0, 315, 477))
+        self.page.setGeometry(QtCore.QRect(0, 0, 98, 88))
         self.page.setObjectName("page")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.page)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
@@ -134,7 +130,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.verticalLayout_6.addWidget(self.textBrowserParams)
         self.toolBox.addItem(self.page, "")
         self.page_2 = QtWidgets.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 315, 477))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 98, 88))
         self.page_2.setObjectName("page_2")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
@@ -156,9 +152,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.pushButtonViewProjection.setObjectName("pushButtonViewProjection")
         self.gridLayout_2.addWidget(self.pushButtonViewProjection, 0, 1, 1, 1)
         self.pushButtonVizCorrelationImage = QtWidgets.QPushButton(self.groupBox_2)
-        self.pushButtonVizCorrelationImage.setObjectName(
-            "pushButtonVizCorrelationImage"
-        )
+        self.pushButtonVizCorrelationImage.setObjectName("pushButtonVizCorrelationImage")
         self.gridLayout_2.addWidget(self.pushButtonVizCorrelationImage, 1, 0, 1, 2)
         self.comboBoxProjectionOpts = QtWidgets.QComboBox(self.groupBox_2)
         self.comboBoxProjectionOpts.setObjectName("comboBoxProjectionOpts")
@@ -167,34 +161,26 @@ class Ui_MainOfflineGUIWidget(object):
         self.comboBoxProjectionOpts.addItem("")
         self.gridLayout_2.addWidget(self.comboBoxProjectionOpts, 0, 0, 1, 1)
         self.verticalLayout_12.addWidget(self.groupBox_2)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            20, 131, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(20, 131, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_12.addItem(spacerItem1)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         self.label_5 = QtWidgets.QLabel(self.tab_visualize)
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
-        self.pushButtonViewDownsampledMCorrrMovie = QtWidgets.QPushButton(
-            self.tab_visualize
-        )
-        self.pushButtonViewDownsampledMCorrrMovie.setObjectName(
-            "pushButtonViewDownsampledMCorrrMovie"
-        )
-        self.gridLayout.addWidget(self.pushButtonViewDownsampledMCorrrMovie, 1, 0, 1, 1)
-        self.spinBoxDownsampleRatio = QtWidgets.QSpinBox(self.tab_visualize)
-        self.spinBoxDownsampleRatio.setMinimum(1)
-        self.spinBoxDownsampleRatio.setProperty("value", 4)
-        self.spinBoxDownsampleRatio.setObjectName("spinBoxDownsampleRatio")
-        self.gridLayout.addWidget(self.spinBoxDownsampleRatio, 1, 1, 1, 1)
+        self.pushButtonViewSubsampledMCorrrMovie = QtWidgets.QPushButton(self.tab_visualize)
+        self.pushButtonViewSubsampledMCorrrMovie.setObjectName("pushButtonViewSubsampledMCorrrMovie")
+        self.gridLayout.addWidget(self.pushButtonViewSubsampledMCorrrMovie, 1, 0, 1, 1)
+        self.spinBoxSubsampleRatio = QtWidgets.QSpinBox(self.tab_visualize)
+        self.spinBoxSubsampleRatio.setMinimum(1)
+        self.spinBoxSubsampleRatio.setProperty("value", 4)
+        self.spinBoxSubsampleRatio.setObjectName("spinBoxSubsampleRatio")
+        self.gridLayout.addWidget(self.spinBoxSubsampleRatio, 1, 1, 1, 1)
         self.pushButtonViewMCShifts = QtWidgets.QPushButton(self.tab_visualize)
         self.pushButtonViewMCShifts.setObjectName("pushButtonViewMCShifts")
         self.gridLayout.addWidget(self.pushButtonViewMCShifts, 2, 0, 1, 2)
         self.verticalLayout_12.addLayout(self.gridLayout)
-        spacerItem2 = QtWidgets.QSpacerItem(
-            20, 131, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem2 = QtWidgets.QSpacerItem(20, 131, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_12.addItem(spacerItem2)
         self.gridLayout_3 = QtWidgets.QGridLayout()
         self.gridLayout_3.setObjectName("gridLayout_3")
@@ -202,9 +188,7 @@ class Ui_MainOfflineGUIWidget(object):
         self.label_8.setObjectName("label_8")
         self.gridLayout_3.addWidget(self.label_8, 0, 0, 1, 1)
         self.pushButtonVizReconstructedMovie = QtWidgets.QPushButton(self.tab_visualize)
-        self.pushButtonVizReconstructedMovie.setObjectName(
-            "pushButtonVizReconstructedMovie"
-        )
+        self.pushButtonVizReconstructedMovie.setObjectName("pushButtonVizReconstructedMovie")
         self.gridLayout_3.addWidget(self.pushButtonVizReconstructedMovie, 1, 0, 1, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -221,87 +205,45 @@ class Ui_MainOfflineGUIWidget(object):
         self.verticalLayout.addWidget(self.splitter)
 
         self.retranslateUi(MainOfflineGUIWidget)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.toolBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainOfflineGUIWidget)
         MainOfflineGUIWidget.setTabOrder(self.listWidgetItems, self.tabWidget)
         MainOfflineGUIWidget.setTabOrder(self.tabWidget, self.lineEditParentDataPath)
-        MainOfflineGUIWidget.setTabOrder(
-            self.lineEditParentDataPath, self.pushButtonParentDataPath
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonParentDataPath, self.comboBoxRecentParentDataPaths
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.comboBoxRecentParentDataPaths, self.pushButtonOpenBatch
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonOpenBatch, self.pushButtonNewBatch
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonNewBatch, self.comboBoxRecentBatches
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.comboBoxRecentBatches, self.pushButtonOpenMovie
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonOpenMovie, self.pushButtonParamsMCorr
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonParamsMCorr, self.pushButtonParamsCNMF
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonParamsCNMF, self.pushButtonParamsCNMFE
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonParamsCNMFE, self.pushButtonDelItem
-        )
+        MainOfflineGUIWidget.setTabOrder(self.lineEditParentDataPath, self.pushButtonParentDataPath)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonParentDataPath, self.comboBoxRecentParentDataPaths)
+        MainOfflineGUIWidget.setTabOrder(self.comboBoxRecentParentDataPaths, self.pushButtonOpenBatch)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonOpenBatch, self.pushButtonNewBatch)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonNewBatch, self.comboBoxRecentBatches)
+        MainOfflineGUIWidget.setTabOrder(self.comboBoxRecentBatches, self.pushButtonOpenMovie)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonOpenMovie, self.pushButtonParamsMCorr)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonParamsMCorr, self.pushButtonParamsCNMF)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonParamsCNMF, self.pushButtonParamsCNMFE)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonParamsCNMFE, self.pushButtonDelItem)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonDelItem, self.pushButtonAbort)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonAbort, self.pushButtonStart)
         MainOfflineGUIWidget.setTabOrder(self.pushButtonStart, self.pushButtonStartItem)
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonStartItem, self.pushButtonViewInput
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonViewInput, self.textBrowserParams
-        )
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonStartItem, self.pushButtonViewInput)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonViewInput, self.textBrowserParams)
         MainOfflineGUIWidget.setTabOrder(self.textBrowserParams, self.textBrowserStdOut)
-        MainOfflineGUIWidget.setTabOrder(
-            self.textBrowserStdOut, self.comboBoxProjectionOpts
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.comboBoxProjectionOpts, self.pushButtonViewProjection
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonViewProjection, self.pushButtonVizCorrelationImage
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonVizCorrelationImage, self.pushButtonVizReconstructedMovie
-        )
-        MainOfflineGUIWidget.setTabOrder(
-            self.pushButtonVizReconstructedMovie, self.radioButtonROIMask
-        )
+        MainOfflineGUIWidget.setTabOrder(self.textBrowserStdOut, self.comboBoxProjectionOpts)
+        MainOfflineGUIWidget.setTabOrder(self.comboBoxProjectionOpts, self.pushButtonViewProjection)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonViewProjection, self.pushButtonVizCorrelationImage)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonVizCorrelationImage, self.pushButtonVizReconstructedMovie)
+        MainOfflineGUIWidget.setTabOrder(self.pushButtonVizReconstructedMovie, self.radioButtonROIMask)
 
     def retranslateUi(self, MainOfflineGUIWidget):
         _translate = QtCore.QCoreApplication.translate
         MainOfflineGUIWidget.setWindowTitle(_translate("MainOfflineGUIWidget", "Form"))
         self.label_2.setText(_translate("MainOfflineGUIWidget", "CaImAn Offline"))
         self.groupBox_3.setTitle(_translate("MainOfflineGUIWidget", "Batch Items"))
-        self.lineEditParentDataPath.setPlaceholderText(
-            _translate("MainOfflineGUIWidget", "Parent Data Path")
-        )
+        self.lineEditParentDataPath.setPlaceholderText(_translate("MainOfflineGUIWidget", "Parent Data Path"))
         self.pushButtonParentDataPath.setText(_translate("MainOfflineGUIWidget", "..."))
-        self.label.setText(
-            _translate("MainOfflineGUIWidget", "Recent Parent Data Paths")
-        )
-        self.pushButtonOpenBatch.setText(
-            _translate("MainOfflineGUIWidget", "Open Batch")
-        )
+        self.label.setText(_translate("MainOfflineGUIWidget", "Recent Parent Data Paths"))
+        self.pushButtonOpenBatch.setText(_translate("MainOfflineGUIWidget", "Open Batch"))
         self.pushButtonNewBatch.setText(_translate("MainOfflineGUIWidget", "New Batch"))
         self.label_3.setText(_translate("MainOfflineGUIWidget", "Recent Batches"))
-        self.pushButtonOpenMovie.setText(
-            _translate("MainOfflineGUIWidget", "Open Movie")
-        )
+        self.pushButtonOpenMovie.setText(_translate("MainOfflineGUIWidget", "Open Movie"))
         self.groupBox.setTitle(_translate("MainOfflineGUIWidget", "Parameter Setting"))
         self.pushButtonParamsMCorr.setText(_translate("MainOfflineGUIWidget", "MCorr"))
         self.pushButtonParamsCNMF.setText(_translate("MainOfflineGUIWidget", "CNMF"))
@@ -309,68 +251,30 @@ class Ui_MainOfflineGUIWidget(object):
         self.pushButtonDelItem.setText(_translate("MainOfflineGUIWidget", "Del Item"))
         self.pushButtonAbort.setText(_translate("MainOfflineGUIWidget", "Abort"))
         self.pushButtonStart.setText(_translate("MainOfflineGUIWidget", "Start"))
-        self.pushButtonStartItem.setText(
-            _translate("MainOfflineGUIWidget", "Start at item")
-        )
-        self.pushButtonViewInput.setText(
-            _translate("MainOfflineGUIWidget", "View Input")
-        )
-        self.toolBox.setItemText(
-            self.toolBox.indexOf(self.page_3),
-            _translate("MainOfflineGUIWidget", "Batch Management"),
-        )
-        self.toolBox.setItemText(
-            self.toolBox.indexOf(self.page),
-            _translate("MainOfflineGUIWidget", "Parameter Viewer"),
-        )
-        self.toolBox.setItemText(
-            self.toolBox.indexOf(self.page_2),
-            _translate("MainOfflineGUIWidget", "QProcess stdout"),
-        )
-        self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.tab_compute),
-            _translate("MainOfflineGUIWidget", "Compute"),
-        )
+        self.pushButtonStartItem.setText(_translate("MainOfflineGUIWidget", "Start at item"))
+        self.pushButtonViewInput.setText(_translate("MainOfflineGUIWidget", "View Input"))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.page_3), _translate("MainOfflineGUIWidget", "Batch Management"))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.page), _translate("MainOfflineGUIWidget", "Parameter Viewer"))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), _translate("MainOfflineGUIWidget", "QProcess stdout"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_compute), _translate("MainOfflineGUIWidget", "Compute"))
         self.groupBox_2.setTitle(_translate("MainOfflineGUIWidget", "General"))
-        self.pushButtonViewProjection.setText(
-            _translate("MainOfflineGUIWidget", "View Projection")
-        )
-        self.pushButtonVizCorrelationImage.setText(
-            _translate("MainOfflineGUIWidget", "Correlation Image")
-        )
-        self.comboBoxProjectionOpts.setItemText(
-            0, _translate("MainOfflineGUIWidget", "mean")
-        )
-        self.comboBoxProjectionOpts.setItemText(
-            1, _translate("MainOfflineGUIWidget", "std")
-        )
-        self.comboBoxProjectionOpts.setItemText(
-            2, _translate("MainOfflineGUIWidget", "max")
-        )
+        self.pushButtonViewProjection.setText(_translate("MainOfflineGUIWidget", "View Projection"))
+        self.pushButtonVizCorrelationImage.setText(_translate("MainOfflineGUIWidget", "Correlation Image"))
+        self.comboBoxProjectionOpts.setItemText(0, _translate("MainOfflineGUIWidget", "mean"))
+        self.comboBoxProjectionOpts.setItemText(1, _translate("MainOfflineGUIWidget", "std"))
+        self.comboBoxProjectionOpts.setItemText(2, _translate("MainOfflineGUIWidget", "max"))
         self.label_5.setText(_translate("MainOfflineGUIWidget", "MCorr"))
-        self.pushButtonViewDownsampledMCorrrMovie.setText(
-            _translate("MainOfflineGUIWidget", "Downsample MCorr Movie:")
-        )
-        self.pushButtonViewMCShifts.setText(
-            _translate("MainOfflineGUIWidget", "View MC Shifts")
-        )
+        self.pushButtonViewSubsampledMCorrrMovie.setText(_translate("MainOfflineGUIWidget", "Subsample MCorr Movie:"))
+        self.pushButtonViewMCShifts.setText(_translate("MainOfflineGUIWidget", "View MC Shifts"))
         self.label_8.setText(_translate("MainOfflineGUIWidget", "CNMF"))
-        self.pushButtonVizReconstructedMovie.setText(
-            _translate("MainOfflineGUIWidget", "Reconstructed post-CNMF movie")
-        )
+        self.pushButtonVizReconstructedMovie.setText(_translate("MainOfflineGUIWidget", "Reconstructed post-CNMF movie"))
         self.radioButtonROIMask.setText(_translate("MainOfflineGUIWidget", "Mask ROIS"))
-        self.radioButtonROIOutline.setText(
-            _translate("MainOfflineGUIWidget", "Outline ROIs")
-        )
-        self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.tab_visualize),
-            _translate("MainOfflineGUIWidget", "Visualize"),
-        )
+        self.radioButtonROIOutline.setText(_translate("MainOfflineGUIWidget", "Outline ROIs"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_visualize), _translate("MainOfflineGUIWidget", "Visualize"))
 
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     MainOfflineGUIWidget = QtWidgets.QWidget()
     ui = Ui_MainOfflineGUIWidget()

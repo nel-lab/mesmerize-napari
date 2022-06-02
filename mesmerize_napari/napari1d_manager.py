@@ -6,7 +6,8 @@ import napari_plot
 from napari_plot._qt.qt_viewer import QtViewer
 from mesmerize_core.utils import *
 import pandas as pd
-from .cnmf_viz_gui import VizWidget
+from .cnmf_viz_gui import CNMFVizWidget
+from .mcorr_viz_gui import MCORRVizWidget
 from typing import *
 
 
@@ -26,7 +27,7 @@ class CNMFViewer:
         self.batch_item = batch_item
         self.viewer = napari.Viewer(title="CNMF Visualization")
 
-        self.viz_gui = VizWidget(cnmf_viewer=self, batch_item=batch_item)
+        self.viz_gui = CNMFVizWidget(cnmf_viewer=self, batch_item=batch_item)
         self.viewer.window.add_dock_widget(
             self.viz_gui, area="bottom", name="Visualization"
         )
@@ -261,6 +262,10 @@ class MCORRViewer:
     def __init__(self, batch_item: pd.Series):
         self.batch_item = batch_item
         self.viewer = napari.Viewer(title="MCORR Visualization")
+        self.viz_gui = MCORRVizWidget(mcorr_viewer=self, batch_item=batch_item)
+        self.viewer.window.add_dock_widget(
+            self.viz_gui, area="bottom", name="Visualization"
+        )
 
         # Load input movie optional: Create checkbox
         # Load correlation map first

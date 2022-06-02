@@ -50,9 +50,9 @@ class CNMFWidget(QtWidgets.QMainWindow):
         # Component evaluation kwargs
         eval_kwargs = {
             "min_SNR": self.ui.doubleSpinBoxMinSNR.value(),
-            "rval_thr": self.ui.doubleSpinBoxRvalThr.value(),
+            "rval_thr": round(self.ui.doubleSpinBoxRvalThr.value(),2),
             "use_cnn": self.ui.checkBoxUseCNN.isChecked(),
-            "min_cnn_thr": self.ui.doubleSpinBoxCNNThr.value(),
+            "min_cnn_thr": round(self.ui.doubleSpinBoxCNNThr.value(),2),
             "cnn_lowest": self.ui.doubleSpinBox_cnn_lowest.value(),
             "decay_time": self.ui.spinBoxDecayTime.value(),
         }
