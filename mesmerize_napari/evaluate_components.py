@@ -25,6 +25,8 @@ class EvalComponentsWidgets(QtWidgets.QMainWindow):
         self.ui.pushButton_update.clicked.connect(self.update_components)
         self.ui.checkBox_update_live.toggled.connect(self.set_live_update)
 
+        self.ui.pushButton_save_to_item.clicked.connect(self.save_components)
+
     def set_live_update(self, b: bool):
         if b:
             self.sig_param_changed.connect(self.update_components)
@@ -52,3 +54,8 @@ class EvalComponentsWidgets(QtWidgets.QMainWindow):
         )
 
         self.cnmf_viewer.update_visible_components()
+        
+    def save_components(self):
+        cnmf_obj: CNMF = self.cnmf_viewer.cnmf_obj
+        good_components = cnmf_obj.estimates.idx_components
+        self.cnmf_viewer.batch_item.cnmf.save_hdf5_file(good_components)
