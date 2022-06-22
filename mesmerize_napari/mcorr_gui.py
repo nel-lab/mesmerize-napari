@@ -54,7 +54,7 @@ class MCORRWidget(QtWidgets.QMainWindow):
 
         # Group the kwargs of the two parts separately
         if group_params:
-            d.update({"mcorr_kwargs": mcorr_kwargs})
+            d.update({"main": mcorr_kwargs})
 
         # or not
         else:

@@ -110,12 +110,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.ui.lineEditParentDataPath.setStyleSheet(
                 f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}"
             )
-            set_parent_data_path(path)
+            set_parent_raw_data_path(path)
 
     @use_open_dir_dialog("Select Parent Data Directory")
     def set_parent_data_path_dialog(self, path):
         self.ui.lineEditParentDataPath.setText(path)
-        self.set_parent_data_path()
+        self.set_parent_raw_data_path()
 
     @use_open_file_dialog(
         "Choose image file", "", ["*.tiff", "*.tif", "*.btf", "*.mmap"]
@@ -410,7 +410,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def view_shifts(self):
         s = self.selected_series()
-        if s["params"]["mcorr_kwargs"]["pw_rigid"]:
+        if s["params"]["main"]["pw_rigid"]:
             xs, ys = s.mcorr.get_shifts(pw_rigid=True)
 
             plt.figure()
