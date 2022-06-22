@@ -243,7 +243,6 @@ class MainOfflineGUI(QtWidgets.QWidget):
         std_out = self._print_qprocess_std_out
 
         self.qprocess = self.dataframe.iloc[index].caiman.run(
-            batch_path=self.dataframe.paths.get_batch_path(),
             backend=COMPUTE_BACKEND_QPROCESS,
             callbacks_finished=callbacks,
             callback_std_out=std_out,
