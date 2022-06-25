@@ -35,7 +35,7 @@ class VizWidget(QtWidgets.QDockWidget):
 
     def view_input(self):
         path = self.batch_item.caiman.get_input_movie_path()
-        full_path = get_full_data_path(path)
+        full_path = get_full_raw_data_path(path)
         self._open_movie(full_path)
 
     def load_correlation_image(self):
