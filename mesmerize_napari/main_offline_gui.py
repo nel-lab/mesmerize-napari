@@ -400,19 +400,24 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def view_downsample_mcorr(self):
         s = self.selected_series()
-        downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
+        w = self.ui.spinBoxDownsampleRatio.value()
+
         self.video = s.mcorr.get_output()
-        image = np.average(self.video[0:2 * downsample_ratio, :, :], axis=0)
+
+        frame0 = np.nanmean(self.video[0:w], axis=0)
         self.viewer.add_image(
-                    image,
+                    frame0,
                     name='Downsampled MC Movie')
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def update_slider(self, event):
-        downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
-        slider = self.viewer.dims.current_step[0]
-        image = np.average(self.video[slider-downsample_ratio:slider+downsample_ratio, :, :], axis=0)
-        self.viewer.layers['Downsampled MC Movie'].data = image
+        w = self.ui.spinBoxDownsampleRatio.value()
+        ix = self.viewer.dims.current_step[0]
+        start = max(0, ix - w)
+        end = min(self.video.shape[0], ix + w)
+
+        ds_frame = np.nanmean(self.video[start:end], axis=0)
+        self.viewer.layers['Downsampled MC Movie'].data = ds_frame
 
     def view_shifts(self):
         s = self.selected_series()
