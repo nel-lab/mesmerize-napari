@@ -403,6 +403,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
         w = self.ui.spinBoxDownsampleRatio.value()
 
         self.video = s.mcorr.get_output()
+        
+        self.video.add_image(
+            self.video,
+            name = 'MC Movie'
+        )
 
         frame0 = np.nanmean(self.video[0:w], axis=0)
         self.viewer.add_image(
