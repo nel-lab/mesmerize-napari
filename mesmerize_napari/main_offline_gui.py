@@ -400,13 +400,20 @@ class MainOfflineGUI(QtWidgets.QWidget):
         )
 
     def view_downsample_mcorr(self):
-        # TODO: average set of x frames, not skip
         s = self.selected_series()
         downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
-        images = s.mcorr.get_output()[::downsample_ratio, :, :]
-        self.viewer.add_image(images)
-        # Set input movie path to mcorr output path so cnmf can automatically use vid
-        self.input_movie_path = str(s.mcorr.get_output_path())
+        self.video = s.mcorr.get_output()
+        image = np.average(self.video[0:2 * downsample_ratio, :, :], axis=0)
+        self.viewer.add_image(
+                    image,
+                    name='Downsampled MC Movie')
+        self.viewer.dims.events.current_step.connect(self.update_slider)
+
+    def update_slider(self, event):
+        downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
+        slider = self.viewer.dims.current_step[0]
+        image = np.average(self.video[slider-downsample_ratio:slider+downsample_ratio, :, :], axis=0)
+        self.viewer.layers['Downsampled MC Movie'].data = image
 
     def view_shifts(self):
         s = self.selected_series()
