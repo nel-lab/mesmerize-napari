@@ -254,7 +254,7 @@ class MCORRViewer:
         )
 
         # plot shifts
-        if batch_item["params"]["mcorr_kwargs"]["pw_rigid"] == False:
+        if batch_item["params"]["main"]["pw_rigid"] == False:
             self.plot_rig_shifts()
         else:
             self.plot_els_shifts()
