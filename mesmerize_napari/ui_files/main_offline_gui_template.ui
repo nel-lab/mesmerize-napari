@@ -232,8 +232,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>88</height>
+             <width>315</width>
+             <height>477</height>
             </rect>
            </property>
            <attribute name="label">
@@ -250,8 +250,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>88</height>
+             <width>315</width>
+             <height>477</height>
             </rect>
            </property>
            <attribute name="label">
@@ -337,9 +337,9 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="pushButtonViewSubsampledMCorrrMovie">
+           <widget class="QPushButton" name="pushButtonViewDownsampledMCorrrMovie">
             <property name="text">
-             <string>Subsample MCorr Movie:</string>
+             <string>Downsample MCorr Movie:</string>
             </property>
            </widget>
           </item>

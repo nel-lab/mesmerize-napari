@@ -87,8 +87,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.load_correlation_image
         )
 
-        self.ui.pushButtonViewSubsampledMCorrrMovie.clicked.connect(
-            self.view_subsample_mcorr
+        self.ui.pushButtonViewDownsampledMCorrrMovie.clicked.connect(
+            self.view_downsample_mcorr
         )
 
         self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
@@ -399,7 +399,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
             projection, name=f'{proj_type}: projection {s["name"]}', colormap="gnuplot2"
         )
 
-    def view_subsample_mcorr(self):
+    def view_downsample_mcorr(self):
         # TODO: average set of x frames, not skip
         s = self.selected_series()
         subsample_ratio = self.ui.spinBoxSubsampleRatio.value()
