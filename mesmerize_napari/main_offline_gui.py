@@ -402,13 +402,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def view_downsample_mcorr(self):
         # TODO: average set of x frames, not skip
         s = self.selected_series()
-        subsample_ratio = self.ui.spinBoxSubsampleRatio.value()
-        images = s.mcorr.get_output()[::subsample_ratio, :, :]
-        self.viewer.add_image(
-            images,
-            name=f"Subsampled MC Movie: {subsample_ratio}",
-            colormap="gray",
-        )
+        downsample_ratio = self.ui.spinBoxDownsampleRatio.value()
+        images = s.mcorr.get_output()[::downsample_ratio, :, :]
+        self.viewer.add_image(images)
         # Set input movie path to mcorr output path so cnmf can automatically use vid
         self.input_movie_path = str(s.mcorr.get_output_path())
 
