@@ -140,6 +140,16 @@
              </widget>
             </item>
             <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Recent Input Movies</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBoxRecentInputMovies"/>
+            </item>
+            <item>
              <widget class="QGroupBox" name="groupBox">
               <property name="title">
                <string>Parameter Setting</string>
