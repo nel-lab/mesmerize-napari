@@ -26,12 +26,12 @@
     <string>Vizualization Widget</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>30</y>
-     <width>232</width>
+     <width>246</width>
      <height>90</height>
     </rect>
    </property>
@@ -77,9 +77,9 @@
      </widget>
     </item>
     <item row="2" column="0" colspan="2">
-     <widget class="QPushButton" name="pushButtonSubsampleMCMovie">
+     <widget class="QPushButton" name="pushButtonDownsampleMCMovie">
       <property name="text">
-       <string>Subsampled MC Movie</string>
+       <string>Downsampled MC Movie</string>
       </property>
      </widget>
     </item>
