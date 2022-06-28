@@ -342,6 +342,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
             if self.dataframe.iloc[ix]["outputs"]["success"]:
                 self._set_list_widget_item_color(ix, "green")
+                if self.dataframe.iloc[ix]["algo"] == "mcorr":
+                    input_movie_path = self.dataframe.iloc[ix].mcorr.get_output_path()
+                    self.ui.comboBoxRecentInputMovies.addItem(f"MC Outputs: {input_movie_path}", str(input_movie_path))
             else:
                 self._set_list_widget_item_color(ix, "red")
 
