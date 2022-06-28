@@ -130,6 +130,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.input_movie_path = str(path)
         self.ui.comboBoxRecentInputMovies.addItem(f"User Accessed: {path}", self.input_movie_path)
         self.ui.comboBoxRecentInputMovies.setCurrentIndex(self.ui.comboBoxRecentInputMovies.count()-1)
+        print(f"current movie: {self.ui.comboBoxRecentInputMovies.currentData()}")
         file_ext = Path(self.input_movie_path).suffix
         if file_ext == ".mmap":
             Yr, dims, T = cm.load_memmap(self.input_movie_path)
@@ -190,11 +191,14 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.set_list_widget_item_color(i)
 
             if algo == 'mcorr' and r["outputs"]["success"]:
-                self.ui.comboBoxRecentInputMovies.addItem(f"MC Outputs: {r.mcorr.get_output_path()}", str(r.mcorr.get_output_path))
+                input_movie_path = r.mcorr.get_output_path()
+                self.ui.comboBoxRecentInputMovies.addItem(f"MC Outputs: {input_movie_path}", str(input_movie_path))
+        self.ui.comboBoxRecentInputMovies.setCurrentIndex(-1)
 
     def add_item(
         self, algo: str, parameters: dict, name: str, input_movie_path: str = None
     ):
+        self.input_movie_path = self.ui.comboBoxRecentInputMovies.currentData()
         if self.dataframe is None:
             QtWidgets.QMessageBox.warning(
                 "No Batch", "You must open or create a batch before adding items."
@@ -207,8 +211,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             )
             return
 
-        if input_movie_path is None:
-            input_movie_path = self.ui.comboBoxRecentInputMovies.currentData()
+        # Input movie path should always be shown in input movie box
+        input_movie_path = self.input_movie_path
 
         self.dataframe.caiman.add_item(
             algo=algo, name=name, input_movie_path=input_movie_path, params=parameters
