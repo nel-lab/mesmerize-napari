@@ -344,7 +344,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBoxDownsampleRatio">
+           <widget class="QSpinBox" name="spinBoxSubsampleRatio">
             <property name="minimum">
              <number>1</number>
             </property>

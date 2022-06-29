@@ -4,9 +4,9 @@ from .evaluate_components import EvalComponentsWidgets
 from mesmerize_core.utils import *
 from mesmerize_core import *
 import caiman as cm
+import numpy as np
 
-
-class VizWidget(QtWidgets.QDockWidget):
+class CNMFVizWidget(QtWidgets.QDockWidget):
     def __init__(self, cnmf_viewer, batch_item):
         QtWidgets.QDockWidget.__init__(self, parent=None)
         self.ui = Ui_VizualizationWidget()
