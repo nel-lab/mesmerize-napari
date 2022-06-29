@@ -97,6 +97,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self.cnmf_params_gui = None
         self.cnmfe_params_gui = None
 
+        # On event of Recent input movie selection, update self.input_movie_path
+        self.ui.comboBoxRecentInputMovies.activated.connect(self.set_input_movie_path)
         # self.evaluate_components_window = EvalComponentsWidgets(parent=self)
         # self.ui.pushButtonEvaluateCNMFComponents.clicked.connect(self.evaluate_components_window.show)
 
@@ -127,7 +129,11 @@ class MainOfflineGUI(QtWidgets.QWidget):
         self._open_movie(path)
 
     def _open_movie(self, path: Union[Path, str], name: str = None):
-        self.input_movie_path = str(path)
+        # Add movie to recent movie list, set to self.input_movie_path
+        self.ui.comboBoxRecentInputMovies.addItem(f"User Accessed: {path}", str(path))
+        self.ui.comboBoxRecentInputMovies.setCurrentIndex(self.ui.comboBoxRecentInputMovies.count()-1)
+        self.set_input_movie_path()
+
         file_ext = Path(self.input_movie_path).suffix
         if file_ext == ".mmap":
             Yr, dims, T = cm.load_memmap(self.input_movie_path)
@@ -135,6 +141,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.viewer.add_image(images, name=name, colormap="gnuplot2")
         else:
             self.viewer.open(self.input_movie_path, colormap="gnuplot2")
+
+    def set_input_movie_path(self):
+        self.input_movie_path = self.ui.comboBoxRecentInputMovies.currentData()
 
     def view_input(self):
         path = self.selected_series().caiman.get_input_movie_path()
@@ -187,6 +196,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
             self.set_list_widget_item_color(i)
 
+            if algo == 'mcorr' and r["outputs"]:
+                if r["outputs"]["success"]:
+                    input_movie_path = r.mcorr.get_output_path()
+                    self.ui.comboBoxRecentInputMovies.addItem(f"MC Outputs: {input_movie_path}", str(input_movie_path))
+        self.ui.comboBoxRecentInputMovies.setCurrentIndex(-1)
+
     def add_item(
         self, algo: str, parameters: dict, name: str, input_movie_path: str = None
     ):
@@ -202,8 +217,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             )
             return
 
-        if input_movie_path is None:
-            input_movie_path = self.input_movie_path
+        # Input movie path should always be shown in input movie box
+        input_movie_path = self.input_movie_path
 
         self.dataframe.caiman.add_item(
             algo=algo, name=name, input_movie_path=input_movie_path, params=parameters
@@ -327,6 +342,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
             if self.dataframe.iloc[ix]["outputs"]["success"]:
                 self._set_list_widget_item_color(ix, "green")
+                if self.dataframe.iloc[ix]["algo"] == "mcorr":
+                    input_movie_path = self.dataframe.iloc[ix].mcorr.get_output_path()
+                    self.ui.comboBoxRecentInputMovies.addItem(f"MC Outputs: {input_movie_path}", str(input_movie_path))
             else:
                 self._set_list_widget_item_color(ix, "red")
 
