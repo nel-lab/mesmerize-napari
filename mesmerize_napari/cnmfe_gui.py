@@ -20,7 +20,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         d.update(
             {
                 "do_cnmfe": False,
-                "cnmfe_kwargs": cnmfe_kwargs,
+                "main": cnmfe_kwargs,
                 "downsample_ratio": downsample_ratio,
             }
         )
@@ -92,7 +92,7 @@ class CNMFEWidget(QtWidgets.QMainWindow):
         if group_params:
             d.update(
                 {
-                    'cnmfe_kwargs': cnmfe_kwargs,
+                    'main': cnmfe_kwargs,
                 }
             )
         else:
