@@ -14,7 +14,8 @@ class CNMFVizWidget(QtWidgets.QDockWidget):
         self.cnmf_obj = batch_item.cnmf.get_output()
         self.batch_item = batch_item
         self.cnmf_viewer = cnmf_viewer
-        self.eval_gui = EvalComponentsWidgets(cnmf_viewer=cnmf_viewer)
+        self.eval_gui = EvalComponentsWidgets(
+            cnmf_viewer=cnmf_viewer, batch_item=batch_item)
 
         self.ui.pushButtonInputMovie.clicked.connect(self.view_input)
         self.ui.pushButtonCnImage.clicked.connect(self.load_correlation_image)
