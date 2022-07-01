@@ -188,17 +188,16 @@ class CNMFViewer:
 
         self._plot_temporal(ixs_components=ixs_components)
         # Create layer for infinite line
-        self.infline_layer = self.viewer1d.add_inf_line(
-            data=[1], orientation="vertical", color="red", width=3, name="slider"
+        self.cnmf_infline_layer = self.viewer1d.add_inf_line(
+            data=[1], orientation="vertical", color="red", width=3, name="cnmf slider"
         )
-        self.infline_layer.move(index=0, pos=[1])
-        self.viewer1d.add_layer(layer=self.infline_layer)
-        self.viewer.dims.events.current_step.connect(self.update_slider)
+        self.cnmf_infline_layer.move(index=0, pos=[1])
+        self.viewer.dims.events.current_step.connect(self.update_cnmf_slider)
 
-    def update_slider(self, event):
+    def update_cnmf_slider(self, event):
         time = self.viewer.dims.current_step[0]
         print(time)
-        self.infline_layer.move(index=0, pos=[time])
+        self.cnmf_infline_layer.move(index=0, pos=[time])
 
     def select_contours(self, box_size=None, update_box=False):
         if update_box:
@@ -306,11 +305,10 @@ class MCORRViewer:
         self.viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
         # Create layer for infinite line
-        self.infline_layer = self.viewer1d.add_inf_line(
-            data=[1], orientation="vertical", color="red", width=3, name="slider"
+        self.mcorr_infline_layer = self.viewer1d.add_inf_line(
+            data=[1], orientation="vertical", color="red", width=3, name="mcorr slider"
         )
-        self.infline_layer.move(index=0, pos=[1])
-        self.viewer1d.add_layer(layer=self.infline_layer)
+        self.mcorr_infline_layer.move(index=0, pos=[1])
         self.viewer.dims.events.current_step.connect(self.update_slider)
 
     def plot_els_shifts(self):
@@ -335,12 +333,11 @@ class MCORRViewer:
         self.viewer.window.add_dock_widget(qt_viewer, area="bottom", name="Line Widget")
 
         # Create layer for infinite line
-        self.infline_layer = self.viewer1d.add_inf_line(
-            data=[1], orientation="vertical", color="red", width=3, name="slider"
+        self.mcorr_infline_layer = self.viewer1d.add_inf_line(
+            data=[1], orientation="vertical", color="red", width=3, name="mcorr slider"
         )
-        self.infline_layer.move(index=0, pos=[1])
-        self.viewer1d.add_layer(layer=self.infline_layer)
-        self.viewer.dims.events.current_step.connect(self.update_slider)
+        self.mcorr_infline_layer.move(index=0, pos=[1])
+        self.viewer.dims.events.current_step.connect(self.update_mcorr_slider)
 
     def get_colors(self, n_components):
         colors = np.vstack(
@@ -348,7 +345,7 @@ class MCORRViewer:
         )
         return colors
 
-    def update_slider(self, event):
+    def update_mcorr_slider(self, event):
         time = self.viewer.dims.current_step[0]
         print(time)
-        self.infline_layer.move(index=0, pos=[time])
+        self.mcorr_infline_layer.move(index=0, pos=[time])

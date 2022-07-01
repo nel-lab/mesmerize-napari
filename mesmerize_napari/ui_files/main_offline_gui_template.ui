@@ -123,16 +123,6 @@
              </layout>
             </item>
             <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Recent Batches</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="comboBoxRecentBatches"/>
-            </item>
-            <item>
              <widget class="QPushButton" name="pushButtonOpenMovie">
               <property name="text">
                <string>Open Movie</string>
@@ -354,7 +344,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBoxSubsampleRatio">
+           <widget class="QSpinBox" name="spinBoxDownsampleWindow">
             <property name="minimum">
              <number>1</number>
             </property>
@@ -439,8 +429,8 @@
   <tabstop>comboBoxRecentParentDataPaths</tabstop>
   <tabstop>pushButtonOpenBatch</tabstop>
   <tabstop>pushButtonNewBatch</tabstop>
-  <tabstop>comboBoxRecentBatches</tabstop>
   <tabstop>pushButtonOpenMovie</tabstop>
+  <tabstop>comboBoxRecentInputMovies</tabstop>
   <tabstop>pushButtonParamsMCorr</tabstop>
   <tabstop>pushButtonParamsCNMF</tabstop>
   <tabstop>pushButtonParamsCNMFE</tabstop>
@@ -454,8 +444,12 @@
   <tabstop>comboBoxProjectionOpts</tabstop>
   <tabstop>pushButtonViewProjection</tabstop>
   <tabstop>pushButtonVizCorrelationImage</tabstop>
+  <tabstop>pushButtonViewDownsampledMCorrrMovie</tabstop>
+  <tabstop>spinBoxDownsampleWindow</tabstop>
+  <tabstop>pushButtonViewMCShifts</tabstop>
   <tabstop>pushButtonVizReconstructedMovie</tabstop>
   <tabstop>radioButtonROIMask</tabstop>
+  <tabstop>radioButtonROIOutline</tabstop>
  </tabstops>
  <resources/>
  <connections/>

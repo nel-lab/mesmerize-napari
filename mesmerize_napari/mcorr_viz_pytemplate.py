@@ -39,19 +39,24 @@ class Ui_VizualizationWidget(object):
         self.pushButtonCnImage = QtWidgets.QPushButton(self.layoutWidget)
         self.pushButtonCnImage.setObjectName("pushButtonCnImage")
         self.gridLayout.addWidget(self.pushButtonCnImage, 1, 1, 1, 2)
-        self.pushButtonDownsampleMCMovie = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButtonDownsampleMCMovie.setObjectName("pushButtonDownsampleMCMovie")
-        self.gridLayout.addWidget(self.pushButtonDownsampleMCMovie, 2, 0, 1, 2)
-        self.spinBoxSubsampleRatio = QtWidgets.QSpinBox(self.layoutWidget)
-        self.spinBoxSubsampleRatio.setMaximum(200)
-        self.spinBoxSubsampleRatio.setSingleStep(1)
-        self.spinBoxSubsampleRatio.setProperty("value", 4)
-        self.spinBoxSubsampleRatio.setDisplayIntegerBase(10)
-        self.spinBoxSubsampleRatio.setObjectName("spinBoxSubsampleRatio")
-        self.gridLayout.addWidget(self.spinBoxSubsampleRatio, 2, 2, 1, 1)
+        self.pushButtonViewDownsampleMCMovie = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButtonViewDownsampleMCMovie.setObjectName("pushButtonViewDownsampleMCMovie")
+        self.gridLayout.addWidget(self.pushButtonViewDownsampleMCMovie, 2, 0, 1, 2)
+        self.spinBoxDownsampleWindow = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spinBoxDownsampleWindow.setMaximum(200)
+        self.spinBoxDownsampleWindow.setSingleStep(1)
+        self.spinBoxDownsampleWindow.setProperty("value", 4)
+        self.spinBoxDownsampleWindow.setDisplayIntegerBase(10)
+        self.spinBoxDownsampleWindow.setObjectName("spinBoxDownsampleWindow")
+        self.gridLayout.addWidget(self.spinBoxDownsampleWindow, 2, 2, 1, 1)
 
         self.retranslateUi(VizualizationWidget)
         QtCore.QMetaObject.connectSlotsByName(VizualizationWidget)
+        VizualizationWidget.setTabOrder(self.comboBoxProjection, self.pushButtonViewProjection)
+        VizualizationWidget.setTabOrder(self.pushButtonViewProjection, self.pushButtonInputMovie)
+        VizualizationWidget.setTabOrder(self.pushButtonInputMovie, self.pushButtonCnImage)
+        VizualizationWidget.setTabOrder(self.pushButtonCnImage, self.pushButtonViewDownsampleMCMovie)
+        VizualizationWidget.setTabOrder(self.pushButtonViewDownsampleMCMovie, self.spinBoxDownsampleWindow)
 
     def retranslateUi(self, VizualizationWidget):
         _translate = QtCore.QCoreApplication.translate
@@ -63,7 +68,7 @@ class Ui_VizualizationWidget(object):
         self.pushButtonViewProjection.setText(_translate("VizualizationWidget", "View Projection"))
         self.pushButtonInputMovie.setText(_translate("VizualizationWidget", "Input Movie"))
         self.pushButtonCnImage.setText(_translate("VizualizationWidget", "Correlation Image"))
-        self.pushButtonDownsampleMCMovie.setText(_translate("VizualizationWidget", "Downsampled MC Movie"))
+        self.pushButtonViewDownsampleMCMovie.setText(_translate("VizualizationWidget", "Downsampled MC Movie"))
 
 
 if __name__ == "__main__":
