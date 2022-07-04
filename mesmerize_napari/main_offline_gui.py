@@ -418,20 +418,20 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def view_downsample_mcorr(self):
         s = self.selected_series()
-        downsample_window = self.ui.spinBoxDownsampleRatio.value()
+        downsample_window = self.ui.spinBoxDownsampleWindow.value()
         self.video = s.mcorr.get_output()
-        self.video.add_image(
+        self.viewer.add_image(
             self.video,
-            name = 'MC Movie'
+            name='MC Movie'
         )
         frame0 = np.nanmean(self.video[0:downsample_window], axis=0)
         self.viewer.add_image(
                     frame0,
                     name='Downsampled MC Movie')
-        self.viewer.dims.events.current_step.connect(self.update_slider)
+        self.viewer.dims.events.current_step.connect(self.update_ds_slider)
 
-    def update_slider(self, event):
-        downsample_window = self.ui.spinBoxDownsampleRatio.value()
+    def update_ds_slider(self, event):
+        downsample_window = self.ui.spinBoxDownsampleWindow.value()
         ix = self.viewer.dims.current_step[0]
         start = max(0, ix - downsample_window)
         end = min(self.video.shape[0], ix + downsample_window)

@@ -17,7 +17,7 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
         self.ui.pushButtonInputMovie.clicked.connect(self.view_input)
         self.ui.pushButtonCnImage.clicked.connect(self.load_correlation_image)
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
-        self.ui.pushButtonSubsampleMCMovie.clicked.connect(self.view_downsample_mcorr)
+        self.ui.pushButtonViewDownsampleMCMovie.clicked.connect(self.view_downsample_mcorr)
 
     def _open_movie(self, path: Union[Path, str]):
         file_ext = Path(path).suffix
@@ -50,7 +50,7 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
         )
 
     def view_downsample_mcorr(self):
-        downsample_window = self.ui.spinBoxSubsampleRatio.value()
+        downsample_window = self.ui.spinBoxDownsampleWindow.value()
         self.video = self.batch_item.mcorr.get_output()
         frame0 = np.nanmean(self.video[0:downsample_window], axis=0)
         self.mcorr_viewer.viewer.add_image(
@@ -59,7 +59,7 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
         self.mcorr_viewer.viewer.dims.events.current_step.connect(self.update_slider)
 
     def update_slider(self, event):
-        downsample_window = self.ui.spinBoxSubsampleRatio.value()
+        downsample_window = self.ui.spinBoxDownsampleWindow.value()
         ix = self.mcorr_viewer.viewer.dims.current_step[0]
         start = max(0, ix - downsample_window)
         end = min(self.video.shape[0], ix + downsample_window)
