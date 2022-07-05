@@ -87,7 +87,7 @@ For example, if I need to install version 1.22 of numpy, I can run the following
 
 ``pip install numpy==1.22``
 
-To install packages within a specific conda environment, just active the conda environment and then run
+To install packages within a specific conda environment, just activate the conda environment and then run
 your pip commands
 
 Installation
