@@ -5,7 +5,7 @@ Background Information
 ========================
 The following section provides some background information on conda environments, git commands,
 and a package installation manager for python: PIP. If you've set these up already, you can skip directly to
-the *Installation* section
+the **Installation** section
 
 
 Conda Environments
@@ -81,7 +81,7 @@ For example, if I need to install numpy, I can run the following:
 
 To install a specific version of a package run the following:
 
-``pip install <package name> == <version #>``
+``pip install <package name>==<version #>``
 
 For example, if I need to install version 1.22 of numpy, I can run the following:
 
@@ -97,7 +97,7 @@ Linux OS
 ----------
 Create a virtual environment specific to this project:
 
-.. code-block:: python
+.. code-block:: bash
 
     conda create -n mesmerize python=3.9
     source activate mesmerize
@@ -107,7 +107,7 @@ Then navigate the directory in which you wish to install CaImAn
 CaImAn
 ~~~~~~~~~~~~
 
-.. code-block:: python
+.. code-block:: bash
 
     git clone https://github.com/flatironinstitute/CaImAn
     cd CaImAn
@@ -120,7 +120,7 @@ Next, navigate into the directory in which you wish to install Napari
 Napari
 ~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+.. code-block:: bash
 
     git clone https://github.com/napari.napari.git
     cd napari
@@ -131,7 +131,7 @@ Next, navigate into the directory in which you wish to install napari-1d, a plot
 Napari-1d
 ~~~~~~~~~~~~~~
 
-.. code-block:: python
+.. code-block:: bash
 
     git clone https://github.com/lukasz-migas/napari-1d.git
     cd napari-1d
@@ -142,7 +142,7 @@ Next, navigate into the directory in which you wish to install mesmerize-core an
 mesmerize-core
 ~~~~~~~~~~~~~~
 
-.. code-block:: python
+.. code-block:: bash
 
     git clone https://github.com/nel-lab/mesmerize-core
     pip install -e mesmerize-core/
@@ -150,7 +150,7 @@ mesmerize-core
 mesmerize-napari
 ~~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+.. code-block:: bash
 
     git clone https://github.com/nel-lab/mesmerize-napari
     pip install -e mesmerize-napari/
@@ -160,7 +160,7 @@ Finally, we will install specific versions of some miscellaneous packages
 Miscellaneous Packages
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+.. code-block:: bash
 
     pip install qtawesome
     conda install -c conda-forge h5py=2.10.0
