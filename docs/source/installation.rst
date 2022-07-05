@@ -97,50 +97,70 @@ Linux OS
 ----------
 Create a virtual environment specific to this project:
 
-``conda create -n mesmerize python=3.9``
-``source activate mesmerize``
+.. code-block:: python
+
+    conda create -n mesmerize python=3.9
+    source activate mesmerize
 
 Then navigate the directory in which you wish to install CaImAn
 
 CaImAn
 ~~~~~~~~~~~~
-``git clone https://github.com/flatironinstitute/CaImAn``
-``cd CaImAn``
-``pip install -r requirements.txt``
-``pip install -e .``
-``python caimanmanager.py install --inplace``
+
+.. code-block:: python
+
+    git clone https://github.com/flatironinstitute/CaImAn
+    cd CaImAn
+    pip install -r requirements.txt
+    pip install -e .
+    python caimanmanager.py install --inplace
 
 Next, navigate into the directory in which you wish to install Napari
 
 Napari
 ~~~~~~~~~~~~~~~~
-``git clone https://github.com/napari.napari.git``
-``cd napari``
-``pip install -e ".[all]"``
+
+.. code-block:: python
+
+    git clone https://github.com/napari.napari.git
+    cd napari
+    pip install -e ".[all]"
 
 Next, navigate into the directory in which you wish to install napari-1d, a plotting library for Napari
 
 Napari-1d
 ~~~~~~~~~~~~~~
-``git clone https://github.com/lukasz-migas/napari-1d.git``
-``cd napari-1d``
-``pip install -e ".[all]"``
+
+.. code-block:: python
+
+    git clone https://github.com/lukasz-migas/napari-1d.git
+    cd napari-1d
+    pip install -e ".[all]"
 
 Next, navigate into the directory in which you wish to install mesmerize-core and mesmerize-napari
 
 mesmerize-core
 ~~~~~~~~~~~~~~
-``git clone https://github.com/nel-lab/mesmerize-core``
-``pip install -e mesmerize-core/``
+
+.. code-block:: python
+
+    git clone https://github.com/nel-lab/mesmerize-core
+    pip install -e mesmerize-core/
 
 mesmerize-napari
 ~~~~~~~~~~~~~~~~~
-``git clone https://github.com/nel-lab/mesmerize-napari``
-``pip install -e mesmerize-napari/``
+
+.. code-block:: python
+
+    git clone https://github.com/nel-lab/mesmerize-napari
+    pip install -e mesmerize-napari/
 
 Finally, we will install specific versions of some miscellaneous packages
 
 Miscellaneous Packages
 ~~~~~~~~~~~~~~~~~~~~~
-``pip install qtawesome``
-``conda install -c conda-forge h5py=2.10.0``
+
+.. code-block:: python
+
+    pip install qtawesome
+    conda install -c conda-forge h5py=2.10.0
