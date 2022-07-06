@@ -33,11 +33,22 @@ You should see the following when you click the mesmerize plugin
 
 .. figure:: ./images/tutorial/main_gui_intro.png
 
-The first thing you should do is define your parent data path. If your full data path to your input movie
-is */home/arjun/CaImAn/example_movies/demoMovie.tif*, and the sub-directory */CaImAn/* is consistent across
-all systems you use, then you can set the parent data path to */home/arjun/*, making the relative
-data path for the movie just */CaImAn/example_movies/demoMovie.tif*. Doing so makes it easier to transfer and
-access input movies and output files from CaImAn between systems. To set a parent data path, do the following:
+The first thing you should do is define your parent data path. The reason we necessitate defining a parent
+data path is for the following scenario:
+
+If you are analysing the same movies on multiple devices - let's call them Computer A and Computer B - then you
+will likely be using the same file organization system to manage the movies you wish to analyse. Let's say your movies
+are recorded in multiple sessions - *session_1*, *session_2* - and are stored in the directory
+**example_movies**. In this case, all movies in session_1 are located in *./example_movies/session_1/*. In both
+Computer A and Computer B, this file system **/example_movies/** is the same, but the path leading to the
+directory **/example_movies/** will differ. To reference movies within Session 1 in Computer A,
+the full path may be */home/computer_A/example_movies/session_1/*, while in Computer B it may be
+*/home/computer_B/example_movies/session_1/*. To ensure the same file system **/example_movies/** can be reliably
+used between both computer, we will set the parent data path of Computer A to **/home/computer_A** and the
+parent data path of Computer B to **/home/computer_B/**. As a result, the relative path of each movie to the
+**/example_movies/** directory is preserved without being affected by differences in the parent directory.
+
+To set the parent data path, do the following:
 
 .. figure:: ./images/tutorial/set_parent_data_path.png
 
