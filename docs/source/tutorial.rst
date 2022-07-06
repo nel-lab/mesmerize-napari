@@ -54,8 +54,24 @@ To set the parent data path, do the following:
 
 **NOTE:** The text box will turn green when the parent data path is valid, and red when it is invalid.
 
+Next, open a new batch by clicking the following button:
 
+FIGURE
 
+A window will launch allowing you to choose a directory to store the batch file (.pikle) within.
+Make sure to choose a directory that comes *after* the parent directory.
+
+FIGURE
+
+Once you've created a new batch, select an input movie to use. In this case, we will use the
+demoMovie.tif from the example_movies folder. To select a movie, click the **Input Movie** button:
+
+FIGURE
+
+Once you've selected a movie, you should also see the combo box below *Recent Input Movies* has
+updated to contain the path to the input movie file. This will allow you to quickly set the
+input movie path for each process (MCORR, CNMF(E)) you want to run. For now, the most recently
+opened movie will be the input movie path used for a process you create, so no change is necessary.
 
 Motion Correction (MCORR)
 ==============
