@@ -58,7 +58,7 @@ Next, open a new batch by clicking the following button:
 
 FIGURE
 
-A window will launch allowing you to choose a directory to store the batch file (.pikle) within.
+A window will launch allowing you to choose a directory to store the batch file (.pikl) within.
 Make sure to choose a directory that comes *after* the parent directory.
 
 FIGURE
@@ -74,5 +74,5 @@ input movie path for each process (MCORR, CNMF(E)) you want to run. For now, the
 opened movie will be the input movie path used for a process you create, so no change is necessary.
 
 Motion Correction (MCORR)
-==============
+========================
 
