@@ -80,3 +80,67 @@ opened movie will be the input movie path used for a process you create, so no c
 Motion Correction (MCORR)
 ========================
 
+Now, we can add some motion correction (MCORR) items to run. To add an MCORR item, click the **MCORR**
+button under *Parameter Settings*. It will launch a separate window as shown below.
+
+.. figure:: ./images/tutorial/select_mcorr_param.png
+
+We can define the parameters needed for motion correcting the demo movie as shown below. Once
+the parameters are set, we can choose a name to identify this item with, and click the **Add to Batch**
+button.
+
+.. figure:: ./images/tutorial/mcorr_opt1_item.png
+
+Clicking the button will result in the Batch Items Box in the main gui to have an item added. Selecting
+the item in the main gui, and opening the **Parameter Viewer** below allows you to see the parameters you've
+defined for a given item (in this case, the motion correction item).
+
+.. figure:: ./images/tutorial/mcorr_opt1_params.png
+
+Since the purpose of this batch system is to test out multiple hyperparameter options, we will add a second
+item with different parameters. Specifically, we will make this option use rigid motion correction, where
+before we used nonrigid (piecewise) motion correction.
+
+.. figure:: ./images/tutorial/mcorr_opt2_item.png
+
+You can see that if select the second mcorr item in the **Batch Items** list, the **Parameter Viewer**
+will display the parameters defined uniquely for the selected item.
+
+.. figure:: ./images/tutorial/mcorr_opt2_params.png
+
+To run all batch items, simply click the **Start** button in the **Batch Management** tab. When you do so,
+the first item in the batch will turn yellow in colour.
+
+.. figure:: ./images/tutorial/mcorr_start.png
+
+Once an item is completed, it will turn green if it ran successfully, and red if it failed. Once all items
+in the batch have been run, the following screen will be shown.
+
+.. figure:: ./images/tutorial/mcorr_done.png
+
+In this case, both items are green, and so ran successfully. To view the outputs of each item, navigate
+to the **Visualize** tab of the main gui.
+
+.. figure:: ./images/tutorial/mcorr_visualize_tab.png
+
+There are three sections to the **Visualize** tab: *General*, *Mcorr*, and *CNMF(e)*. The *General*
+section allows you to visualize outputs common to all items (Mcorr, CNMF, and CNMFE). These include
+projections - can be the mean, max, or standard deviation of pixel intensity across the entire output
+movie (in this case, the motion corrected movie) - and correlation image - the average correlation of
+each pixel across time to it's neighbours. All of these items are pre-computed, and so load instantly.
+Both can also serve as metrics of the success of motion correction.
+
+To open the mean projection for the first item (named *opt1*), select the item in the **Batch Items**
+list, select the **mean** option for projections, and then click the **View Projections** button.
+
+.. figure:: ./images/tutorial/mcorr_mean_projection.png
+
+The mean projection image will appear in the main viewer in a layer named *mean: projection opt1*.
+To view the correlation image, just click the **Correlation Image** button. This will instantiate
+another layer named, in this case, *corr: opt1*.
+
+.. figure:: ./images/tutorial/mcorr_cn_image.png
+
+For motion correction specifically, you also have the option of obtaining a downsampled movie - a
+rolling average of the motion corrected output for a given window size - and viewing the x and y shifts
+performed by the motion correction algorithm to stabilize the movie.
