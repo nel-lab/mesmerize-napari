@@ -44,7 +44,7 @@ Computer A and Computer B, this file system **/example_movies/** is the same, bu
 directory **/example_movies/** will differ. To reference movies within Session 1 in Computer A,
 the full path may be */home/computer_A/example_movies/session_1/*, while in Computer B it may be
 */home/computer_B/example_movies/session_1/*. To ensure the same file system **/example_movies/** can be reliably
-used between both computer, we will set the parent data path of Computer A to **/home/computer_A** and the
+used between both computer, we will set the parent data path of Computer A to **/home/computer_A/** and the
 parent data path of Computer B to **/home/computer_B/**. As a result, the relative path of each movie to the
 **/example_movies/** directory is preserved without being affected by differences in the parent directory.
 
@@ -56,20 +56,24 @@ To set the parent data path, do the following:
 
 Next, open a new batch by clicking the following button:
 
-FIGURE
+.. figure:: ./images/tutorial/open_new_batch.png
 
 A window will launch allowing you to choose a directory to store the batch file (.pikl) within.
 Make sure to choose a directory that comes *after* the parent directory.
 
-FIGURE
+.. figure:: ./images/tutorial/save_new_batch.png
 
 Once you've created a new batch, select an input movie to use. In this case, we will use the
 demoMovie.tif from the example_movies folder. To select a movie, click the **Input Movie** button:
 
-FIGURE
+.. figure:: ./images/tutorial/select_input_movie.png
 
 Once you've selected a movie, you should also see the combo box below *Recent Input Movies* has
-updated to contain the path to the input movie file. This will allow you to quickly set the
+updated to contain the path to the input movie file.
+
+.. figure:: ./images/tutorial/recent_input_movies.png
+
+This will allow you to quickly set the
 input movie path for each process (MCORR, CNMF(E)) you want to run. For now, the most recently
 opened movie will be the input movie path used for a process you create, so no change is necessary.
 
