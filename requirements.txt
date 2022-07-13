@@ -1,8 +1,8 @@
 setuptools
 wheel
 PyQt5
-pandas
 numpy
+pandas
 psutil
 QtPy
 napari
