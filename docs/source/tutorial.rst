@@ -144,3 +144,30 @@ another layer named, in this case, *corr: opt1*.
 For motion correction specifically, you also have the option of obtaining a downsampled movie - a
 rolling average of the motion corrected output for a given window size - and viewing the x and y shifts
 performed by the motion correction algorithm to stabilize the movie.
+
+Once you click the **Downsample Mcorr Movie** button, you can set the window size (by default set to 4, but
+below I've changed it to 32), and scroll through the movie.
+
+.. figure:: ./images/tutorial/downsampled_movie.gif
+
+When you click the **View MC Shifts** button, the output will depend upon whether you ran rigid
+or nonrigid (pw_rigid) motion correction. If you ran the former (set *pw_rigid* to false), as
+we did with **opt 2**, the following will be your output. In this case, both x and y shifts are plotted
+in the same canvas.
+
+.. figure:: ./images/tutorial/rigid_mc_shifts.png
+
+If you ran nonrigid motion correction (set *pw_rigid* to true), as we did with
+**opt 1**, the following will be your output.
+In this case, the x and y shifts are plotted in separate canvases.
+
+.. figure:: ./images/tutorial/nonrigid_mc_shifts.png
+
+For more advanced visualizations for motion correction, see the **Motion Correction (in-depth)** tab
+under **Contents**
+
+CNMF (Constrained Non-Negative Matrix Factorization)
+=====================================================
+Now that we have some outputs for motion correction, we can run CNMF on these outputs to extract
+spatial and temporal components of neuron activity. 
+
