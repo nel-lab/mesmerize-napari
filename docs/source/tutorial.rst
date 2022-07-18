@@ -77,7 +77,7 @@ This will allow you to quickly set the
 input movie path for each process (MCORR, CNMF(E)) you want to run. For now, the most recently
 opened movie will be the input movie path used for a process you create, so no change is necessary.
 
-Motion Correction (MCORR)
+MCORR (Motion Correction)
 ========================
 
 Now, we can add some motion correction (MCORR) items to run. To add an MCORR item, click the **MCORR**
@@ -169,5 +169,38 @@ under **Contents**
 CNMF (Constrained Non-Negative Matrix Factorization)
 =====================================================
 Now that we have some outputs for motion correction, we can run CNMF on these outputs to extract
-spatial and temporal components of neuron activity. 
+spatial and temporal components of neuron activity.
+
+Generally, nonrigid motion correction will perform better than rigid motion correction,
+so we will use the output from **opt1** to run CNMF. There are two ways to select this output
+as the input movie for the next item. The first way will require that you select the mcorr item,
+go to the parameter viewer, and find the uuid.
+
+.. figure:: ./images/tutorial/find_uuid.png
+
+Then, navigate to the batch management tab, click **Open Movie**, and find a folder with the same
+uuid as the mcorr item you selected.
+
+..figure:: ./images/tutorial/uuid_folder.png
+
+Once you access this directory, you should see a .mmap file. This is the output video from the mcorr
+item, you can open it and it will load the movie within your viewer as well as define this video as
+your input movie for future items you add.
+
+.. figure:: ./images/tutorial/select_mcorr_output_file.png
+
+You can also select the input movie without loading the movie into your viewer by selecting the file
+from the **Recent Input Movies** list. This list contains the mcorr outputs from the batch you
+load, and any recent movies you've opened while using napari.
+
+.. figure:: ./images/tutorial/recent_movie_list.png
+
+As you can see, there is a *user accessed* movie, as well as a *MC Outputs*
+movie, that matches my desired UUID. You can simply select a movie you want, and it will set the
+chosen file as the input movie path to future items without loading the movie into the viewer.
+
+To create a cnmf item, click the **CNMF** button under **Parameter Setting**, and the following window
+should pop up.
+
+.. figure:: ./images/tutorial/select_cnmf_param.png
 
