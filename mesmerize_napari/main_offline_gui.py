@@ -9,6 +9,7 @@ from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
 from mesmerize_core.utils import *
 from mesmerize_core import *
+from .napari_extensions import CaimanNapariSeriesExtensions
 import pandas as pd
 from functools import partial
 import pprint
@@ -257,7 +258,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         callbacks = [partial(self.item_finished, index)]
         std_out = self._print_qprocess_std_out
 
-        self.qprocess = self.dataframe.iloc[index].caiman.run(
+        self.qprocess = self.dataframe.iloc[index].caiman_napari.run(
             backend=COMPUTE_BACKEND_QPROCESS,
             callbacks_finished=callbacks,
             callback_std_out=std_out,
