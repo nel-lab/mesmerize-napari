@@ -11,7 +11,11 @@ Welcome to mesmerize-napari's documentation!
    :glob:
    :caption: Contents:
    
-   ./api/*
+   ./installation
+   ./tutorial
+   ./mcorr
+   ./cnmf
+   ./cnmfe
 
 
 
