@@ -4,6 +4,12 @@ Tutorial
 Setup
 =============
 
+
+.. toctree::
+    installation
+    exps_dir/
+
+
 If you ran the following command when installing CaImAn:
 
 ``python caimanmanager.py install --inplace``
@@ -78,7 +84,7 @@ input movie path for each process (MCORR, CNMF(E)) you want to run. For now, the
 opened movie will be the input movie path used for a process you create, so no change is necessary.
 
 MCORR (Motion Correction)
-========================
+===========================
 
 Now, we can add some motion correction (MCORR) items to run. To add an MCORR item, click the **MCORR**
 button under *Parameter Settings*. It will launch a separate window as shown below.
@@ -89,7 +95,7 @@ We can define the parameters needed for motion correcting the demo movie as show
 the parameters are set, we can choose a name to identify this item with, and click the **Add to Batch**
 button.
 
-.. figure:: ./images/tutorial/mcorr_opt1_item.png
+.. figure:: ./images/tutorial/mcorr_opt1_params.png
 
 Clicking the button will result in the Batch Items Box in the main gui to have an item added. Selecting
 the item in the main gui, and opening the **Parameter Viewer** below allows you to see the parameters you've
