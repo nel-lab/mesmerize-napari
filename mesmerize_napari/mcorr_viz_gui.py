@@ -3,6 +3,7 @@ from .mcorr_viz_pytemplate import Ui_VizualizationWidget
 import caiman as cm
 from mesmerize_core import *
 from mesmerize_core.utils import *
+from mesmerize_core.batch_utils import *
 import numpy as np
 
 class MCORRVizWidget(QtWidgets.QDockWidget):
@@ -31,11 +32,11 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
 
     def view_input(self):
         path = self.batch_item.caiman.get_input_movie_path()
-        full_path = get_full_data_path(path)
+        full_path = get_full_raw_data_path(path)
         self._open_movie(full_path)
 
     def load_correlation_image(self):
-        corr_img = self.batch_item.caiman.get_correlation_image()
+        corr_img = self.batch_item.caiman.get_corr_image()
         self.mcorr_viewer.viewer.add_image(
             corr_img, name=f'corr: {self.batch_item["name"]}', colormap="gray"
         )

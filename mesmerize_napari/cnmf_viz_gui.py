@@ -40,7 +40,7 @@ class CNMFVizWidget(QtWidgets.QDockWidget):
         self._open_movie(full_path)
 
     def load_correlation_image(self):
-        corr_img = self.batch_item.caiman.get_correlation_image()
+        corr_img = self.batch_item.caiman.get_corr_image()
         self.cnmf_viewer.viewer.add_image(
             corr_img, name=f'corr: {self.batch_item["name"]}', colormap="gray"
         )

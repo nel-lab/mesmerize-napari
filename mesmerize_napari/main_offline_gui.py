@@ -397,7 +397,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def load_correlation_image(self):
         s = self.selected_series()
-        corr_img = s.caiman.get_correlation_image()
+        corr_img = s.caiman.get_corr_image()
         if s["algo"] == "cnmfe":
             pnr_img = s.caiman.get_pnr_image()
             self.viewer.add_image(
@@ -437,7 +437,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def view_shifts(self):
         s = self.selected_series()
-        if s["params"]["main"]["pw_rigid"]:
+        if s["params"]['mcorr_kwargs']["pw_rigid"]:
             xs, ys = s.mcorr.get_shifts(pw_rigid=True)
 
             plt.figure()

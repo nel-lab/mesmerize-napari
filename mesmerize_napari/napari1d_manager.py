@@ -35,7 +35,7 @@ class CNMFViewer:
         self.box_size = 10
 
         # Load correlation map first
-        corr_img = batch_item.caiman.get_correlation_image()
+        corr_img = batch_item.caiman.get_corr_image()
 
         self.viewer.add_image(
             corr_img, name=f'corr: {batch_item["name"]}', colormap="gray"
@@ -47,17 +47,17 @@ class CNMFViewer:
         self.napari_spatial_layer_good = None
         self.napari_spatial_layer_bad = None
 
-        self.plot_spatial()
+        self.plot_spatial(component_indices="good")
         self.plot_temporal()
 
         self.cursor_position = []
 
-    def plot_spatial(self, ixs_components: Optional[np.ndarray] = None):
+    def plot_spatial(self, component_indices: Union[np.ndarray, str] = None):
         if self.roi_type == "outline":
             (
                 self.contours_coors,
                 self.contours_com,
-            ) = self.batch_item.cnmf.get_spatial_contours(ixs_components=ixs_components)
+            ) = self.batch_item.cnmf.get_contours(component_indices=component_indices)
 
             edge_colors, face_colors = self.get_colors()
 
@@ -268,7 +268,7 @@ class MCORRViewer:
 
         # Load input movie optional: Create checkbox
         # Load correlation map first
-        corr_img = batch_item.caiman.get_correlation_image()
+        corr_img = batch_item.caiman.get_corr_image()
 
         # self.viewer.add_image(corr_img, name=f'corr: {batch_item["name"]}', colormap='gray')
 
