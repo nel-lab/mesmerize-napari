@@ -1,5 +1,4 @@
 import time
-from PyQt5.QtWidgets import QFileDialog
 from PyQt5.uic.properties import QtGui
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
@@ -22,6 +21,7 @@ from .napari1d_manager import CNMFViewer, MCORRViewer
 from pathlib import Path
 from PyQt5 import QtCore
 import matplotlib.pyplot as plt
+from .pyqt_decorators import *
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -116,6 +116,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
                 f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}"
             )
             set_parent_raw_data_path(path)
+
+    @use_open_dir_dialog("Select Parent Data Directory")
     def set_parent_data_path_dialog(self, path):
         self.ui.lineEditParentDataPath.setText(path)
         self.set_parent_raw_data_path()
@@ -124,8 +126,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             return
 
         self._open_movie(path)
-
-    def _open_movie(self, path: Union[Path, str], name: str = None):
+    @use_open_file_dialog("choose file", "", ["*.tiff", "*.tif", "*.btf", "*.mmap"])
+    def _open_movie(self, path: str, name: str = None):
         # Add movie to recent movie list, set to self.input_movie_path
         self.ui.comboBoxRecentInputMovies.addItem(f"User Accessed: {path}", str(path))
         self.ui.comboBoxRecentInputMovies.setCurrentIndex(self.ui.comboBoxRecentInputMovies.count()-1)
@@ -166,16 +168,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.viewer.layers.remove(layer)
 
         return True
-    def create_new_batch(self, path, *args, **kwargs):
-        "Choose location to save batch file", "", ".pickle"
-        QFileDialog.getSaveFileName(
-            self,
-            "Choose location to save batch file",
-            "",
-            ".pickle")
+    @use_save_file_dialog("Choose location to save batch file", "", ".pickle")
+    def create_new_batch(self, path: str, *args, **kwargs):
         self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
+
+    @use_open_file_dialog("Choose batch", "", ["*.pickle"])
     def open_batch(self, path: str, *args, **kwargs):
         self.dataframe = load_batch(path)
         self.dataframe_file_path = path
