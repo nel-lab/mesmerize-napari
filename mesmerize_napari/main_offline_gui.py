@@ -1,4 +1,5 @@
 import time
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.uic.properties import QtGui
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
@@ -166,6 +167,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         return True
     def create_new_batch(self, path, *args, **kwargs):
+        "Choose location to save batch file", "", ".pickle"
+        QFileDialog.getSaveFileName(
+            self,
+            "Choose location to save batch file",
+            "",
+            ".pickle")
         self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
