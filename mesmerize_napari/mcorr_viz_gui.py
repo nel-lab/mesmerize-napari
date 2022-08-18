@@ -52,8 +52,8 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
 
     def view_downsample_mcorr(self):
         downsample_window = self.ui.spinBoxDownsampleWindow.value()
-        self.video = self.batch_item.mcorr.get_output()
-        frame0 = np.nanmean(self.video[0:downsample_window], axis=0)
+        self.ds_video = self.batch_item.mcorr.get_output()
+        frame0 = np.nanmean(self.ds_video[0:downsample_window], axis=0)
         self.mcorr_viewer.viewer.add_image(
                     frame0,
                     name='Downsampled MC Movie')
@@ -63,6 +63,6 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
         downsample_window = self.ui.spinBoxDownsampleWindow.value()
         ix = self.mcorr_viewer.viewer.dims.current_step[0]
         start = max(0, ix - downsample_window)
-        end = min(self.video.shape[0], ix + downsample_window)
-        ds_frame = np.nanmean(self.video[start:end], axis=0)
+        end = min(self.ds_video.shape[0], ix + downsample_window)
+        ds_frame = np.nanmean(self.ds_video[start:end], axis=0)
         self.mcorr_viewer.viewer.layers['Downsampled MC Movie'].data = ds_frame

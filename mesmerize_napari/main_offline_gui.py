@@ -96,6 +96,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
 
+        self.ui.pushButtonVizReconstructedMovie.clicked.connect(self.view_reconstructed_movie)
+
         self.mcorr_params_gui = None
         self.cnmf_params_gui = None
         self.cnmfe_params_gui = None
@@ -416,12 +418,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def view_downsample_mcorr(self):
         s = self.selected_series()
         downsample_window = self.ui.spinBoxDownsampleWindow.value()
-        self.video = s.mcorr.get_output()
+        self.ds_video = s.mcorr.get_output()
         self.viewer.add_image(
-            self.video,
+            self.ds_video,
             name='MC Movie'
         )
-        frame0 = np.nanmean(self.video[0:downsample_window], axis=0)
+        frame0 = np.nanmean(self.ds_video[0:downsample_window], axis=0)
         self.viewer.add_image(
                     frame0,
                     name='Downsampled MC Movie')
@@ -431,8 +433,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
         downsample_window = self.ui.spinBoxDownsampleWindow.value()
         ix = self.viewer.dims.current_step[0]
         start = max(0, ix - downsample_window)
-        end = min(self.video.shape[0], ix + downsample_window)
-        ds_frame = np.nanmean(self.video[start:end], axis=0)
+        end = min(self.ds_video.shape[0], ix + downsample_window)
+        ds_frame = np.nanmean(self.ds_video[start:end], axis=0)
         self.viewer.layers['Downsampled MC Movie'].data = ds_frame
 
     def view_shifts(self):
@@ -467,6 +469,21 @@ class MainOfflineGUI(QtWidgets.QWidget):
             plt.legend(["x-shifts", "y-shifts"])
             plt.xlabel("Time")
             plt.ylabel("Pixels")
+    def view_reconstructed_movie(self):
+        s = self.selected_series()
+        self.rcm = s.cnmf.get_rcm(
+            component_indices="good",
+        )
+        frame0 = self.rcm[0]
+        self.viewer.add_image(
+            frame0,
+            name='Reconstructed Movie'
+        )
+        self.viewer.dims.events.current_step.connect(self.update_rcm_slider)
+    def update_rcm_slider(self, event):
+        ix = self.viewer.dims.current_step[0]
+        rcm_frame = self.rcm[ix]
+        self.viewer.layers['Reconstructed Movie'].data = rcm_frame
 
 
 
