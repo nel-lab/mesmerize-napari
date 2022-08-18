@@ -116,7 +116,7 @@ class CNMFViewer:
         if og_num_components != current_num_components:
             # Remove and update spatial layer
             self.viewer.layers.remove(self.spatial_layer)
-            self.plot_spatial(ixs_components=ixs_comps)
+            self.plot_spatial(component_indices=ixs_comps)
             # Remove and update temporal layer
             self.viewer1d.layers.remove(self.temporal_layer)
             self._plot_temporal(ixs_components=ixs_comps)
@@ -130,13 +130,13 @@ class CNMFViewer:
 
         self.edge_colors = np.vstack(
             auto_colormap(
-                n_colors=n_components, cmap="hsv", output="mpl", alpha=alpha_edge
+                n_colors=n_components, cmap="hsv", output="float", alpha=alpha_edge
             )
         )
 
         self.face_colors = np.vstack(
             auto_colormap(
-                n_colors=n_components, cmap="hsv", output="mpl", alpha=alpha_face
+                n_colors=n_components, cmap="hsv", output="float", alpha=alpha_face
             )
         )
         return self.edge_colors, self.face_colors

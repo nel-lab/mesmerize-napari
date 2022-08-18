@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from .cnmf_viz_pytemplate import Ui_VizualizationWidget
 from .evaluate_components import EvalComponentsWidgets
 from mesmerize_core.utils import *
+from mesmerize_core.batch_utils import *
 from mesmerize_core import *
 import caiman as cm
 import numpy as np
