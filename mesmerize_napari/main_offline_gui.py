@@ -1,4 +1,5 @@
 import time
+from PyQt5.uic.properties import QtGui
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
@@ -114,15 +115,9 @@ class MainOfflineGUI(QtWidgets.QWidget):
                 f"QLineEdit {{background: {COLORS_HEX['dark-green']}}}"
             )
             set_parent_raw_data_path(path)
-
-    @use_open_dir_dialog("Select Parent Data Directory")
     def set_parent_data_path_dialog(self, path):
         self.ui.lineEditParentDataPath.setText(path)
         self.set_parent_raw_data_path()
-
-    @use_open_file_dialog(
-        "Choose image file", "", ["*.tiff", "*.tif", "*.btf", "*.mmap"]
-    )
     def open_movie(self, path: str, *args, **kwargs):
         if not self.clear_viewer():
             return
@@ -170,14 +165,10 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.viewer.layers.remove(layer)
 
         return True
-
-    @use_save_file_dialog("Choose location to save batch file", "", ".pickle")
     def create_new_batch(self, path, *args, **kwargs):
         self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
-
-    @use_open_file_dialog("Choose batch", "", ["*.pickle"])
     def open_batch(self, path: str, *args, **kwargs):
         self.dataframe = load_batch(path)
         self.dataframe_file_path = path
@@ -259,7 +250,6 @@ class MainOfflineGUI(QtWidgets.QWidget):
         std_out = self._print_qprocess_std_out
 
         self.qprocess = self.dataframe.iloc[index].caiman_napari.run(
-            backend=COMPUTE_BACKEND_QPROCESS,
             callbacks_finished=callbacks,
             callback_std_out=std_out,
         )

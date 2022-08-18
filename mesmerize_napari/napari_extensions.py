@@ -3,14 +3,8 @@ from functools import partial
 from typing import Union, List, Optional
 from subprocess import Popen
 import pandas as pd
-from mesmerize_core.batch_utils import (
-    HAS_PYQT,
-)
 from mesmerize_core.utils import IS_WINDOWS
-
-if HAS_PYQT:
-    from PyQt5 import QtCore
-
+from PyQt5 import QtCore
 @pd.api.extensions.register_series_accessor("caiman_napari")
 class CaimanNapariSeriesExtensions(CaimanSeriesExtensions):
     """
