@@ -471,20 +471,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
             plt.ylabel("Pixels")
     def view_reconstructed_movie(self):
         s = self.selected_series()
-        self.rcm = s.cnmf.get_rcm(
+        rcm = s.cnmf.get_rcm(
             component_indices="good",
         )
-        frame0 = self.rcm[0]
         self.viewer.add_image(
-            frame0,
+            rcm,
             name='Reconstructed Movie'
         )
-        self.viewer.dims.events.current_step.connect(self.update_rcm_slider)
-    def update_rcm_slider(self, event):
-        ix = self.viewer.dims.current_step[0]
-        rcm_frame = self.rcm[ix]
-        self.viewer.layers['Reconstructed Movie'].data = rcm_frame
-
 
 
 @napari_hook_implementation

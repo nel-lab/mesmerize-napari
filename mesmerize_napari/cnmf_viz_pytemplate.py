@@ -35,9 +35,9 @@ class Ui_VizualizationWidget(object):
         self.pushButtonInputMovie = QtWidgets.QPushButton(self.dockWidgetContents)
         self.pushButtonInputMovie.setGeometry(QtCore.QRect(10, 40, 91, 25))
         self.pushButtonInputMovie.setObjectName("pushButtonInputMovie")
-        self.pushButtonCnmfMovie = QtWidgets.QPushButton(self.dockWidgetContents)
-        self.pushButtonCnmfMovie.setGeometry(QtCore.QRect(10, 70, 231, 25))
-        self.pushButtonCnmfMovie.setObjectName("pushButtonCnmfMovie")
+        self.pushButtonReconstructedCnmfMovie = QtWidgets.QPushButton(self.dockWidgetContents)
+        self.pushButtonReconstructedCnmfMovie.setGeometry(QtCore.QRect(10, 70, 231, 25))
+        self.pushButtonReconstructedCnmfMovie.setObjectName("pushButtonReconstructedCnmfMovie")
         self.spinBoxBoxSize = QtWidgets.QSpinBox(self.dockWidgetContents)
         self.spinBoxBoxSize.setGeometry(QtCore.QRect(10, 130, 81, 26))
         self.spinBoxBoxSize.setMaximum(200)
@@ -54,37 +54,20 @@ class Ui_VizualizationWidget(object):
 
     def retranslateUi(self, VizualizationWidget):
         _translate = QtCore.QCoreApplication.translate
-        VizualizationWidget.setWindowTitle(
-            _translate("VizualizationWidget", "Vizualization Widget")
-        )
-        self.pushButtonEvalGui.setText(
-            _translate("VizualizationWidget", "Show Evaluation GUI")
-        )
-        self.comboBoxProjection.setItemText(
-            0, _translate("VizualizationWidget", "mean")
-        )
+        VizualizationWidget.setWindowTitle(_translate("VizualizationWidget", "Vizualization Widget"))
+        self.pushButtonEvalGui.setText(_translate("VizualizationWidget", "Show Evaluation GUI"))
+        self.comboBoxProjection.setItemText(0, _translate("VizualizationWidget", "mean"))
         self.comboBoxProjection.setItemText(1, _translate("VizualizationWidget", "std"))
         self.comboBoxProjection.setItemText(2, _translate("VizualizationWidget", "max"))
-        self.pushButtonViewProjection.setText(
-            _translate("VizualizationWidget", "View Projection")
-        )
-        self.pushButtonCnImage.setText(
-            _translate("VizualizationWidget", "Correlation Image")
-        )
-        self.pushButtonInputMovie.setText(
-            _translate("VizualizationWidget", "Input Movie")
-        )
-        self.pushButtonCnmfMovie.setText(
-            _translate("VizualizationWidget", "Reconstructed post-CNMF Movie")
-        )
-        self.pushButtonUpdateBoxSize.setText(
-            _translate("VizualizationWidget", "Update Box Size")
-        )
+        self.pushButtonViewProjection.setText(_translate("VizualizationWidget", "View Projection"))
+        self.pushButtonCnImage.setText(_translate("VizualizationWidget", "Correlation Image"))
+        self.pushButtonInputMovie.setText(_translate("VizualizationWidget", "Input Movie"))
+        self.pushButtonReconstructedCnmfMovie.setText(_translate("VizualizationWidget", "Reconstructed post-CNMF Movie"))
+        self.pushButtonUpdateBoxSize.setText(_translate("VizualizationWidget", "Update Box Size"))
 
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     VizualizationWidget = QtWidgets.QDockWidget()
     ui = Ui_VizualizationWidget()

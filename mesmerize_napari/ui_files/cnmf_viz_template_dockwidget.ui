@@ -91,7 +91,7 @@
      <string>Input Movie</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonCnmfMovie">
+   <widget class="QPushButton" name="pushButtonReconstructedCnmfMovie">
     <property name="geometry">
      <rect>
       <x>10</x>
