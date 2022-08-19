@@ -35,7 +35,7 @@ class CNMFViewer:
         self.box_size = 10
 
         # Load correlation map first
-        corr_img = batch_item.caiman.get_correlation_image()
+        corr_img = batch_item.caiman.get_corr_image()
 
         self.viewer.add_image(
             corr_img, name=f'corr: {batch_item["name"]}', colormap="gray"
@@ -47,17 +47,17 @@ class CNMFViewer:
         self.napari_spatial_layer_good = None
         self.napari_spatial_layer_bad = None
 
-        self.plot_spatial()
+        self.plot_spatial(component_indices="good")
         self.plot_temporal()
 
         self.cursor_position = []
 
-    def plot_spatial(self, ixs_components: Optional[np.ndarray] = None):
+    def plot_spatial(self, component_indices: Union[np.ndarray, str] = None):
         if self.roi_type == "outline":
             (
                 self.contours_coors,
                 self.contours_com,
-            ) = self.batch_item.cnmf.get_spatial_contours(ixs_components=ixs_components)
+            ) = self.batch_item.cnmf.get_contours(component_indices=component_indices)
 
             edge_colors, face_colors = self.get_colors()
 
@@ -116,7 +116,7 @@ class CNMFViewer:
         if og_num_components != current_num_components:
             # Remove and update spatial layer
             self.viewer.layers.remove(self.spatial_layer)
-            self.plot_spatial(ixs_components=ixs_comps)
+            self.plot_spatial(component_indices=ixs_comps)
             # Remove and update temporal layer
             self.viewer1d.layers.remove(self.temporal_layer)
             self._plot_temporal(ixs_components=ixs_comps)
@@ -130,13 +130,13 @@ class CNMFViewer:
 
         self.edge_colors = np.vstack(
             auto_colormap(
-                n_colors=n_components, cmap="hsv", output="mpl", alpha=alpha_edge
+                n_colors=n_components, cmap="hsv", output="float", alpha=alpha_edge
             )
         )
 
         self.face_colors = np.vstack(
             auto_colormap(
-                n_colors=n_components, cmap="hsv", output="mpl", alpha=alpha_face
+                n_colors=n_components, cmap="hsv", output="float", alpha=alpha_face
             )
         )
         return self.edge_colors, self.face_colors
@@ -268,7 +268,7 @@ class MCORRViewer:
 
         # Load input movie optional: Create checkbox
         # Load correlation map first
-        corr_img = batch_item.caiman.get_correlation_image()
+        corr_img = batch_item.caiman.get_corr_image()
 
         # self.viewer.add_image(corr_img, name=f'corr: {batch_item["name"]}', colormap='gray')
 
@@ -278,7 +278,7 @@ class MCORRViewer:
         )
 
         # plot shifts
-        if batch_item["params"]["main"]["pw_rigid"] == False:
+        if batch_item["params"]["mcorr_kwargs"]["pw_rigid"] == False:
             self.plot_rig_shifts()
         else:
             self.plot_els_shifts()
@@ -341,7 +341,7 @@ class MCORRViewer:
 
     def get_colors(self, n_components):
         colors = np.vstack(
-            auto_colormap(n_colors=n_components, cmap="hsv", output="mpl", alpha=1)
+            auto_colormap(n_colors=n_components, cmap="hsv", output="float", alpha=1)
         )
         return colors
 

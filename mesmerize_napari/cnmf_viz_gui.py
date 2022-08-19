@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from .cnmf_viz_pytemplate import Ui_VizualizationWidget
 from .evaluate_components import EvalComponentsWidgets
 from mesmerize_core.utils import *
+from mesmerize_core.batch_utils import *
 from mesmerize_core import *
 import caiman as cm
 import numpy as np
@@ -21,6 +22,7 @@ class CNMFVizWidget(QtWidgets.QDockWidget):
         self.ui.pushButtonCnImage.clicked.connect(self.load_correlation_image)
         self.ui.pushButtonViewProjection.clicked.connect(self.view_projections)
         self.ui.pushButtonEvalGui.clicked.connect(self.show_eval_gui)
+        self.ui.pushButtonReconstructedCnmfMovie.clicked.connect(self.view_reconstructed_movie)
 
         self.ui.pushButtonUpdateBoxSize.clicked.connect(self.select_contours)
 
@@ -40,7 +42,7 @@ class CNMFVizWidget(QtWidgets.QDockWidget):
         self._open_movie(full_path)
 
     def load_correlation_image(self):
-        corr_img = self.batch_item.caiman.get_correlation_image()
+        corr_img = self.batch_item.caiman.get_corr_image()
         self.cnmf_viewer.viewer.add_image(
             corr_img, name=f'corr: {self.batch_item["name"]}', colormap="gray"
         )
@@ -60,3 +62,12 @@ class CNMFVizWidget(QtWidgets.QDockWidget):
     def select_contours(self):
         box_size = self.ui.spinBoxBoxSize.value()
         self.cnmf_viewer.select_contours(box_size=box_size, update_box=True)
+
+    def view_reconstructed_movie(self):
+        rcm = self.batch_item.cnmf.get_rcm(
+            component_indices="good",
+        )
+        self.cnmf_viewer.viewer.add_image(
+            rcm,
+            name='Reconstructed Movie'
+        )

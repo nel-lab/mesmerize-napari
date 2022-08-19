@@ -1,4 +1,5 @@
 import time
+from PyQt5.uic.properties import QtGui
 from .main_offline_gui_template import Ui_MainOfflineGUIWidget
 from .mcorr_gui import MCORRWidget
 from .cnmf_gui import CNMFWidget
@@ -9,6 +10,7 @@ from napari_plugin_engine import napari_hook_implementation
 from napari import Viewer
 from mesmerize_core.utils import *
 from mesmerize_core import *
+from .napari_extensions import CaimanNapariSeriesExtensions
 import pandas as pd
 from functools import partial
 import pprint
@@ -19,6 +21,7 @@ from .napari1d_manager import CNMFViewer, MCORRViewer
 from pathlib import Path
 from PyQt5 import QtCore
 import matplotlib.pyplot as plt
+from .pyqt_decorators import *
 
 if not IS_WINDOWS:
     from signal import SIGKILL
@@ -93,6 +96,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
         self.ui.pushButtonViewMCShifts.clicked.connect(self.view_shifts)
 
+        self.ui.pushButtonVizReconstructedMovie.clicked.connect(self.view_reconstructed_movie)
+
         self.mcorr_params_gui = None
         self.cnmf_params_gui = None
         self.cnmfe_params_gui = None
@@ -118,17 +123,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def set_parent_data_path_dialog(self, path):
         self.ui.lineEditParentDataPath.setText(path)
         self.set_parent_raw_data_path()
-
-    @use_open_file_dialog(
-        "Choose image file", "", ["*.tiff", "*.tif", "*.btf", "*.mmap"]
-    )
     def open_movie(self, path: str, *args, **kwargs):
         if not self.clear_viewer():
             return
 
         self._open_movie(path)
-
-    def _open_movie(self, path: Union[Path, str], name: str = None):
+    @use_open_file_dialog("choose file", "", ["*.tiff", "*.tif", "*.btf", "*.mmap"])
+    def _open_movie(self, path: str, name: str = None):
         # Add movie to recent movie list, set to self.input_movie_path
         self.ui.comboBoxRecentInputMovies.addItem(f"User Accessed: {path}", str(path))
         self.ui.comboBoxRecentInputMovies.setCurrentIndex(self.ui.comboBoxRecentInputMovies.count()-1)
@@ -169,9 +170,8 @@ class MainOfflineGUI(QtWidgets.QWidget):
             self.viewer.layers.remove(layer)
 
         return True
-
     @use_save_file_dialog("Choose location to save batch file", "", ".pickle")
-    def create_new_batch(self, path, *args, **kwargs):
+    def create_new_batch(self, path: str, *args, **kwargs):
         self.ui.listWidgetItems.clear()
         self.dataframe = create_batch(path)
         self.dataframe_file_path = path
@@ -257,8 +257,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         callbacks = [partial(self.item_finished, index)]
         std_out = self._print_qprocess_std_out
 
-        self.qprocess = self.dataframe.iloc[index].caiman.run(
-            backend=COMPUTE_BACKEND_QPROCESS,
+        self.qprocess = self.dataframe.iloc[index].caiman_napari.run(
             callbacks_finished=callbacks,
             callback_std_out=std_out,
         )
@@ -400,7 +399,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
 
     def load_correlation_image(self):
         s = self.selected_series()
-        corr_img = s.caiman.get_correlation_image()
+        corr_img = s.caiman.get_corr_image()
         if s["algo"] == "cnmfe":
             pnr_img = s.caiman.get_pnr_image()
             self.viewer.add_image(
@@ -419,12 +418,12 @@ class MainOfflineGUI(QtWidgets.QWidget):
     def view_downsample_mcorr(self):
         s = self.selected_series()
         downsample_window = self.ui.spinBoxDownsampleWindow.value()
-        self.video = s.mcorr.get_output()
+        self.ds_video = s.mcorr.get_output()
         self.viewer.add_image(
-            self.video,
+            self.ds_video,
             name='MC Movie'
         )
-        frame0 = np.nanmean(self.video[0:downsample_window], axis=0)
+        frame0 = np.nanmean(self.ds_video[0:downsample_window], axis=0)
         self.viewer.add_image(
                     frame0,
                     name='Downsampled MC Movie')
@@ -434,13 +433,13 @@ class MainOfflineGUI(QtWidgets.QWidget):
         downsample_window = self.ui.spinBoxDownsampleWindow.value()
         ix = self.viewer.dims.current_step[0]
         start = max(0, ix - downsample_window)
-        end = min(self.video.shape[0], ix + downsample_window)
-        ds_frame = np.nanmean(self.video[start:end], axis=0)
+        end = min(self.ds_video.shape[0], ix + downsample_window)
+        ds_frame = np.nanmean(self.ds_video[start:end], axis=0)
         self.viewer.layers['Downsampled MC Movie'].data = ds_frame
 
     def view_shifts(self):
         s = self.selected_series()
-        if s["params"]["main"]["pw_rigid"]:
+        if s["params"]['mcorr_kwargs']["pw_rigid"]:
             xs, ys = s.mcorr.get_shifts(pw_rigid=True)
 
             plt.figure()
@@ -470,7 +469,15 @@ class MainOfflineGUI(QtWidgets.QWidget):
             plt.legend(["x-shifts", "y-shifts"])
             plt.xlabel("Time")
             plt.ylabel("Pixels")
-
+    def view_reconstructed_movie(self):
+        s = self.selected_series()
+        rcm = s.cnmf.get_rcm(
+            component_indices="good",
+        )
+        self.viewer.add_image(
+            rcm,
+            name='Reconstructed Movie'
+        )
 
 
 @napari_hook_implementation

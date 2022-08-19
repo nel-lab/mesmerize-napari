@@ -16,12 +16,14 @@ class EvalComponentsWidgets(QtWidgets.QMainWindow):
         self.cnmf_viewer = cnmf_viewer
         self.batch_item = batch_item
 
+        print(batch_item)
+
         for obj in self.ui.__dict__.keys():
             if obj.startswith("doubleSpinBox_"):
                 param = obj.partition("doubleSpinBox_")[2]
-                if param in self.batch_item['params']['main'].keys():
+                if param in self.batch_item['params'].keys():
                     getattr(self.ui, obj).setValue(
-                        self.batch_item['params']['main'][f'{param}']
+                        self.batch_item['params'][f'{param}']
                     )
                 getattr(self.ui, obj).valueChanged.connect(self.sig_param_changed)
 
