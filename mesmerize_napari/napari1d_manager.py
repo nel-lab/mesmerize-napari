@@ -38,7 +38,7 @@ class CNMFViewer:
         corr_img = batch_item.caiman.get_corr_image()
 
         self.viewer.add_image(
-            corr_img, name=f'corr: {batch_item["name"]}', colormap="gray"
+            corr_img, name=f'corr: {batch_item["item_name"]}', colormap="gray"
         )
 
         self.cnmf_obj = batch_item.cnmf.get_output()
@@ -274,7 +274,7 @@ class MCORRViewer:
 
         self.mcorr_obj = batch_item.mcorr.get_output()
         self.viewer.add_image(
-            self.mcorr_obj, name=f'MC Movie: {batch_item["name"]}', colormap="gray"
+            self.mcorr_obj, name=f'MC Movie: {batch_item["item_name"]}', colormap="gray"
         )
 
         # plot shifts

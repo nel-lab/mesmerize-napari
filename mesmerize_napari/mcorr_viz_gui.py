@@ -38,7 +38,7 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
     def load_correlation_image(self):
         corr_img = self.batch_item.caiman.get_corr_image()
         self.mcorr_viewer.viewer.add_image(
-            corr_img, name=f'corr: {self.batch_item["name"]}', colormap="gray"
+            corr_img, name=f'corr: {self.batch_item["item_name"]}', colormap="gray"
         )
 
     def view_projections(self):
@@ -46,7 +46,7 @@ class MCORRVizWidget(QtWidgets.QDockWidget):
         projection = self.batch_item.caiman.get_projection(proj_type=proj_type)
         self.mcorr_viewer.viewer.add_image(
             projection,
-            name=f'{proj_type} projection: {self.batch_item["name"]}',
+            name=f'{proj_type} projection: {self.batch_item["item_name"]}',
             colormap="gray",
         )
 
