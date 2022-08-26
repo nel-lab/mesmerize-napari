@@ -187,7 +187,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         ## For now, instead of name I'm adding the uuid
         for i, r in self.dataframe.iterrows():
             algo = r["algo"]
-            name = r["name"]
+            name = r["item_name"]
             uuid = r["uuid"]
             self.ui.listWidgetItems.addItem(f"{algo}: {name}")
 
@@ -221,7 +221,7 @@ class MainOfflineGUI(QtWidgets.QWidget):
         input_movie_path = self.input_movie_path
 
         self.dataframe.caiman.add_item(
-            algo=algo, name=name, input_movie_path=input_movie_path, params=parameters
+            algo=algo, item_name=name, input_movie_path=input_movie_path, params=parameters
         )
         print(f"Added <{algo}> item to batch!")
 
@@ -403,16 +403,16 @@ class MainOfflineGUI(QtWidgets.QWidget):
         if s["algo"] == "cnmfe":
             pnr_img = s.caiman.get_pnr_image()
             self.viewer.add_image(
-                pnr_img, name=f'pnr: {s["name"]}', colormap="gnuplot2"
+                pnr_img, name=f'pnr: {s["item_name"]}', colormap="gnuplot2"
             )
-        self.viewer.add_image(corr_img, name=f'corr: {s["name"]}', colormap="gnuplot2")
+        self.viewer.add_image(corr_img, name=f'corr: {s["item_name"]}', colormap="gnuplot2")
 
     def view_projections(self):
         proj_type = self.ui.comboBoxProjectionOpts.currentText()
         s = self.selected_series()
         projection = s.caiman.get_projection(proj_type=proj_type)
         self.viewer.add_image(
-            projection, name=f'{proj_type}: projection {s["name"]}', colormap="gnuplot2"
+            projection, name=f'{proj_type}: projection {s["item_name"]}', colormap="gnuplot2"
         )
 
     def view_downsample_mcorr(self):
